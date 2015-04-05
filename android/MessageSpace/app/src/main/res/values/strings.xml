@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MessageSpace</string>
+    <string name="test">Enter the test message and the phone number</string>
+    <string name="reg_id">GCM Registration ID</string>
+    <string name="server">Enter the IP address for local server</string>
+    <string name="port">Enter the Port for local server</string>
+    <string name="message">Enter Message</string>
+    <string name="number">Enter Phone Number</string>
+    <string name="send">Send To User</string>
+    <string name="send_to_server">Send To Server</string>
+    <string name="copy">Copy To Clipboard</string>
+    <string name="save_server">Save Server Address</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

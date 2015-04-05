@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:shrinkColumns="1"
+    android:stretchColumns="1">
+    <TableRow>
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"    	  
+        android:text="@string/pref_frequency_title"/>                
+     <Spinner
+        android:id="@+id/pref_frequency_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/pref_frequency_array"
+        android:prompt="@string/task_frequency_prompt" />             
+    </TableRow>
+    <TableRow>   
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"    	  
+        android:text="@string/pref_start_time_title"/>                
+     <Spinner
+        android:id="@+id/pref_start_time_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:prompt="@string/task_frequency_prompt" />             
+     </TableRow>
+     <TableRow> 
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"    	  
+        android:text="@string/pref_end_time_title"/>                
+     <Spinner
+        android:id="@+id/pref_end_time_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:prompt="@string/task_frequency_prompt" />     
+     </TableRow>
+     <Button
+        android:id="@+id/pref_button"
+    android:layout_width="match_parent" 
+    android:layout_height="40sp"
+    android:layout_margin="3dp"
+    android:gravity="center"
+    android:background="@drawable/button"
+    android:textColor="@android:color/white"
+    android:textSize="18sp"
+    android:shadowRadius="1"
+    android:shadowDx="1"
+    android:shadowDy="1"
+    android:shadowColor="@android:color/black"
+ 	android:layout_weight="0"
+    android:text="Submit" />   
+</TableLayout>

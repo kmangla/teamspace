@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/list_background" >
+
+    <include layout="@layout/employee_list_header"
+        android:id="@+id/employee_list_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+    </include>
+
+    <com.fortysevendeg.swipelistview.SwipeListView
+        android:id="@+id/swipe_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/employee_list_header"
+        android:listSelector="#00000000"
+        swipe:swipeActionLeft="reveal"
+        swipe:swipeAnimationTime="300"
+        swipe:swipeBackView="@+id/back"
+        swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeDrawableChecked="@drawable/choice_selected"
+        swipe:swipeDrawableUnchecked="@drawable/choice_unselected"
+        swipe:swipeFrontView="@+id/front"
+        swipe:swipeMode="both"
+        swipe:swipeOffsetLeft="100dp"
+        swipe:swipeOffsetRight="400dp"
+        swipe:swipeOpenOnLongPress="false" />
+
+</RelativeLayout>

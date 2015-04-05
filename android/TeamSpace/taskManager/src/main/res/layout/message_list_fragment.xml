@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/list_background" >
+
+    <include layout="@layout/message_list_header"
+        android:id="@+id/message_list_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+    </include>
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/message_list_header"
+        android:layout_above="@+id/message_list_footer"
+        android:clipToPadding="false"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:paddingBottom="48dp" />
+
+    <include layout="@layout/message_list_footer"
+        android:id="@id/message_list_footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+    </include>
+
+</RelativeLayout>

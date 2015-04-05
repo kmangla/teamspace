@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.example.taskmanager.R"/>
+<fullyQualifiedTypeName name="com.android.teamspace.R"/>
+<fullyQualifiedTypeName name="com.android.volley.Response.Listener"/>
+<fullyQualifiedTypeName name="com.android.teamspace.networking.NetworkRoutes"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="org.json.JSONException"/>
+<fullyQualifiedTypeName name="android.text.format.DateFormat"/>
+<fullyQualifiedTypeName name="android.net.ParseException"/>
+<fullyQualifiedTypeName name="org.apache.http.ParseException"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="com.android.volley.Request"/>
+<fullyQualifiedTypeName name="com.android.teamspace.caching.dataupdaters.TaskUpdater"/>
+<fullyQualifiedTypeName name="com.android.teamspace.utils.ISO8601DateParser"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+</qualifiedTypeNameHistroy>

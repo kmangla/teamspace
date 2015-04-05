@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/TeamSpace.iml" filepath="$PROJECT_DIR$/TeamSpace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libswipelistview/libswipelistview.iml" filepath="$PROJECT_DIR$/libswipelistview/libswipelistview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taskManager/taskManager.iml" filepath="$PROJECT_DIR$/taskManager/taskManager.iml" />
+    </modules>
+  </component>
+</project>
+

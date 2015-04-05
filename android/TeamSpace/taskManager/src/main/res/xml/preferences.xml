@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_key_default_tab_category"
+        android:title="@string/default_tab" >
+        <ListPreference
+            android:defaultValue="@string/tabs_default_value"
+            android:dialogTitle="@string/choose_default_tab"
+            android:entries="@array/tabs"
+            android:entryValues="@array/tabs"
+            android:key="pref_key_default_tab"
+            android:title="@string/choose_default_tab" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="pref_key_sync_settings"
+        android:title="@string/pref_sync_title" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_sync"
+            android:summary="@string/pref_sync_summary"
+            android:title="@string/pref_sync" />
+
+        <ListPreference
+            android:defaultValue="@string/frequency_default"
+            android:dependency="pref_sync"
+            android:dialogTitle="@string/pref_sync_dialog"
+            android:entries="@array/frequency"
+            android:entryValues="@array/frequency"
+            android:key="pref_syncFrequency"
+            android:title="@string/pref_sync_freq" />
+    </PreferenceCategory>
+    <!--<PreferenceCategory-->
+        <!--android:key="pref_key_employee_color_settings"-->
+        <!--android:title="@string/employee_tab_color" >-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_background_color"-->
+            <!--android:dialogTitle="@string/background_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_employee_background_color"-->
+            <!--android:title="@string/background_color_title" />-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_text_color"-->
+            <!--android:dialogTitle="@string/text_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_employee_text_color"-->
+            <!--android:title="@string/text_color_title" />-->
+    <!--</PreferenceCategory>-->
+    <!--<PreferenceCategory-->
+        <!--android:key="pref_key_task_color_settings"-->
+        <!--android:title="@string/task_tab_color" >-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_background_color"-->
+            <!--android:dialogTitle="@string/background_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_task_background_color"-->
+            <!--android:title="@string/background_color_title" />-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_text_color"-->
+            <!--android:dialogTitle="@string/text_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_task_text_color"-->
+            <!--android:title="@string/text_color_title" />-->
+    <!--</PreferenceCategory>-->
+    <!--<PreferenceCategory-->
+        <!--android:key="pref_key_todo_color_settings"-->
+        <!--android:title="@string/todo_tab_color" >-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_background_color"-->
+            <!--android:dialogTitle="@string/background_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_todo_background_color"-->
+            <!--android:title="@string/background_color_title" />-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_text_color"-->
+            <!--android:dialogTitle="@string/text_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_todo_text_color"-->
+            <!--android:title="@string/text_color_title" />-->
+    <!--</PreferenceCategory>-->
+    <!--<PreferenceCategory-->
+        <!--android:key="pref_key_chat_color_settings"-->
+        <!--android:title="@string/chat_tab_color" >-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_background_color"-->
+            <!--android:dialogTitle="@string/background_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_chat_sender_background_color"-->
+            <!--android:title="@string/chat_sender_background_color_title" />-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_text_color"-->
+            <!--android:dialogTitle="@string/text_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_chat_sender_text_color"-->
+            <!--android:title="@string/chat_sender_text_color_title" />-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_other_chat_background_color"-->
+            <!--android:dialogTitle="@string/background_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_chat_other_background_color"-->
+            <!--android:title="@string/chat_other_background_color_title" />-->
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/default_other_chat_text_color"-->
+            <!--android:dialogTitle="@string/text_color"-->
+            <!--android:entries="@array/colors"-->
+            <!--android:entryValues="@array/colors"-->
+            <!--android:key="pref_chat_other_text_color"-->
+            <!--android:title="@string/chat_other_text_color_title" />-->
+    <!--</PreferenceCategory>-->
+    
+    <!-- <PreferenceCategory
+        android:key="pref_key_sort_color_settings"
+        android:title="@string/sort_header_color" >
+        <ListPreference
+            android:defaultValue="@string/default_sort_color"
+            android:dialogTitle="@string/background_color"
+            android:entries="@array/colors"
+            android:entryValues="@array/colors"
+            android:key="pref_sort_background_color"
+            android:title="@string/background_color_title" />
+        <ListPreference
+            android:defaultValue="@string/default_sort_text_color"
+            android:dialogTitle="@string/text_color"
+            android:entries="@array/colors"
+            android:entryValues="@array/colors"
+            android:key="pref_sort_text_color"
+            android:title="@string/text_color_title" />
+    </PreferenceCategory> -->
+
+</PreferenceScreen>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TaskIT</string>
+    <string name="sample_text">Sample Text</string>
+    <string name="hint_message">Add a message</string>
+    <string name="messages">Messages</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="task_employee_title">Employee Name</string>
+    <string name="add_employee">Add new employee</string>
+    <string name="task_detail_page">Task Details</string>
+    <string name="task_status_page">Task Status</string>
+    <string name="import_from_contacts">Import From Contacts</string>
+    
+	<string name="save">Save</string>
+	<string name="tasks_assigned">Tasks Assigned</string>
+	<string name="last_updated">Last Updated</string>
+    <string name="task_employee"></string>
+    <string name="task_description_title">Description</string>
+    <string name="task_description_hint"></string>
+    <string name="task_is_completed_title">Completed </string>
+    <string name="task_is_completed_hint"></string>
+    <string name="task_frequency_title">Frequency </string>
+    <string name="employee_name_title">Employee Name</string>
+    <string name="employee_name_hint"></string>
+    <string name="employee_number_title">Employee Number</string>
+    <string name="employee_number_hint"></string>
+    <string name="task_frequency_prompt">Choose a frequency</string>
+    <string name="task_title">Title*</string>
+    <string name="task_details">Task Details</string>
+    <string name="task_frequency">Status Updates Needed*</string>
+    <string name="assigned_to">Assigned To*</string>
+    <string name="edit">Edit</string>
+    <string name="send">Send</string>
+    <string name="delete">Delete</string>
+    <string name="call">Call</string>
+    <string name="pause_task">Pause</string>
+    <string name="unpause_task">Unpause</string>
+    <string name="menu_settings">Settings</string>
+    <string name="pref_frequency_title">Reminder Frequency</string>
+    <string name="pref_start_time_title">Starting Time</string>
+    <string name="pref_end_time_title">Ending Time</string>
+    <string name="task_day_title">Day</string>
+    <string name="dummy_section_text">Section %1d is just a dummy section.</string>
+    <string name="demo_external_activity">Demo External Activity</string>
+    <string name="demo_collection">Demo Collection</string>
+    <string name="activity_dynamiclistview_header">Touch the grip or long press an item to drag.\nSwipe to dismiss.\nTap an item to insert a new item.</string>
+    <string name="itemdeleted">Item deleted</string>
+    <string name="taptoundo">Tap to undo</string>
+    <string name="newly_added_item">This is newly added item %d</string>
+    <string name="moved">\'%1$s\' moved to position %2$s</string>
+    <string name="removed_positions">Removed positions: %s</string>
+    <string name="employee_number">Employee number %d</string>
+    <string name="task_number">Task number %d</string>
+    <string name="chat_manager">Manager: </string>
+    <string name="chat_employee">Employee: </string>
+    <string name="todo_number">My task number %d</string>
+    <string name="status_question">What is the status of task number %d?</string>
+    <string name="status_answer1">It is on track</string>
+    <string name="status_answer2">It is delayed</string>
+    <string name="sort_by">Sort By -></string>
+    <string name="country">Country</string>
+    <string name="action_search">Search</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_add">Add</string>
+    
+    <!-- ERROR MESSAGES  -->
+    <string name="error_employee_deletion_failed">Sorry, could not delete the employee due to server error.</string>
+    <string name="error_employee_update_failed">Sorry, could not update the employee due to server error.</string>
+    <string name="error_task_update_failed">Sorry, could not save the task due to server error.</string>
+    <string name="error_missing_country_code">Error, missing country code for phone number.</string>
+
+    <string-array name="country_array">
+        <item>India</item>
+        <item>USA</item>
+    </string-array>
+    
+    <string-array name="frequency_array">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>BiWeekly</item>
+        <item>Monthly</item>
+    </string-array>
+
+    <!-- Note: If +91 and +9 are two valid country codes, make sure +91 occurs before +9 in this array -->
+    <string-array name="country_code_array">
+        <item>+91</item>
+        <item>+1</item>
+    </string-array>
+    
+    <string-array name="frequence_array">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+    <string-array name="repeated_frequency_array">
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+    <string-array name="weekly_task_day_array">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+    <string-array name="monthly_task_day_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+    </string-array>
+    <string-array name="pref_frequency_array">
+        <item>Once a day</item>
+        <item>Twice a day</item>
+        <item>Every three hours</item>
+        <item>Every hour</item>
+    </string-array>
+    <string-array name="nav_array">
+        <item>Employees</item>
+        <item>Scores</item>
+        <item>Settings</item>
+    </string-array>
+    <string-array name="employee_sort_options">
+        <item>Name</item>
+        <item>Pending Tasks</item>
+        <item>Last Updated</item>
+        <item>Notifications</item>
+    </string-array>
+    <string-array name="task_sort_options">
+        <item>Employee</item>
+        <item>Last Updated</item>
+        <item>Frequency</item>
+        <item>Notifications</item>
+        <item>Title</item>
+    </string-array>
+    <string-array name="task_for_emp_sort_options">
+        <item>Last Updated</item>
+        <item>Frequency</item>
+        <item>Category</item>
+        <item>Notifications</item>
+        <item>Title</item>
+    </string-array>
+    <string-array name="todo_sort_options">
+        <item>Title</item>
+        <item>Last Updated</item>
+        <item>Frequency</item>
+        <item>Category</item>
+        <item>Notifications</item>
+    </string-array>
+    
+    <!-- Settings Screen -->
+    <string name="pref_sync_summary">Sync the content of the app periodically in background</string>
+    <string name="pref_sync">Sync In Background</string>
+    <string name="pref_sync_title">Sync Settings</string>
+    <string name="pref_sync_freq">Sync Frequency</string>
+    <string name="pref_sync_dialog">How frequently should the app try to sync?</string>
+    <string name="frequency_default">2 hours</string>
+    <string-array name="frequency">
+        <item>30 minutes</item>
+        <item>2 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>        
+    </string-array>
+    
+    <string name="employee_tab_color">Employee Screen Color</string>
+    <string name="sort_header_color">Sort Section Color</string>
+    <string name="task_tab_color">Task Screen Color</string>
+    <string name="todo_tab_color">ToDo Screen Color</string>
+    <string name="chat_tab_color">Chat Screen Color</string>
+    <string name="chat_sender_background_color_title">Your Chat Box Color</string>
+    <string name="chat_other_background_color_title">Other\'s Chat Box Color</string>
+    <string name="chat_sender_text_color_title">Your Chat Text Color</string>
+    <string name="chat_other_text_color_title">Other\'s Chat Text Color</string>
+    
+    <string name="background_color_title">Background Color</string>
+    <string name="text_color_title">Text Color</string>
+    <string name="background_color">Choose Background Color</string>
+    <string name="text_color">Choose Text Color</string>
+    <string name="default_background_color">White</string>
+    <string name="default_text_color">Black</string>
+    <string name="default_other_chat_background_color">Dark Gray</string>
+    <string name="default_other_chat_text_color">White</string>
+    <string name="default_sort_color">Default</string>
+    <string name="default_sort_text_color">White</string>
+    
+    <string-array name="colors">
+        <item>Default</item>
+        <item>Red</item>
+        <item>White</item>
+        <item>Dark Blue</item>
+        <item>Light Blue</item>
+        <item>Black</item>
+        <item>Light Green</item>
+        <item>Dark Green</item>
+        <item>Purple</item>
+        <item>Dark Gray</item>
+        <item>Light Gray</item>
+        <item>Gray</item>
+        <item>Light Orange</item>
+        <item>Orange</item>
+        <item>Dark Orange</item>
+    </string-array>
+    
+    <string name="default_tab">Default Tab</string>
+    <string name="choose_default_tab">Choose Default Tab</string>
+    <string name="tabs_default_value">All Tasks</string>
+    <string-array name="tabs">
+        <item>All Tasks</item>
+		<item>Employees</item>
+        <item>My Tasks</item>
+        <item>Chat</item>        
+    </string-array>
+
+    <color name="list_background">#E0EBEB</color>
+    <color name="header_background">#3059AC</color>
+    <color name="button_color">#75A3FF</color>
+    
+    
+</resources>

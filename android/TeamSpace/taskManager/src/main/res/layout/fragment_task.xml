@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:shrinkColumns="1"
+    android:stretchColumns="1">
+    <TableRow>
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/task_description_title"
+        />
+        <EditText android:id="@+id/task_description"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:singleLine="false"
+    	  android:minLines="1"
+    	  android:maxLines="5"
+    	  android:scrollHorizontally="false"
+          android:hint="@string/task_description_hint"
+        />  
+    </TableRow>
+    <TableRow>    
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="10dp"    	          
+          android:text="@string/task_employee_title"
+ 		/>
+        <TextView
+          android:id="@+id/task_employee"            
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="10dp"
+      	  android:textSize="18sp"
+          android:text="@string/task_employee"
+        />
+     </TableRow>
+     <TableRow> 
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"    	  
+        android:text="@string/task_frequency_title"/>                
+     <Spinner
+        android:id="@+id/task_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/frequence_array"
+        android:prompt="@string/task_frequency_prompt" />     
+     </TableRow>
+     <TableRow>
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/task_is_completed_title"/>         
+     <CheckBox
+        android:id="@+id/task_is_completed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/task_is_completed_hint" />
+     </TableRow>
+     <Button
+        android:id="@+id/task_button"
+    android:layout_width="match_parent" 
+    android:layout_height="40sp"
+    android:layout_margin="3dp"
+    android:gravity="center"
+    android:background="@drawable/button"
+    android:textColor="@android:color/white"
+    android:textSize="18sp"
+    android:shadowRadius="1"
+    android:shadowDx="1"
+    android:shadowDy="1"
+    android:shadowColor="@android:color/black"
+ 	android:layout_weight="0"
+    android:text="Submit" />
+   
+</TableLayout>

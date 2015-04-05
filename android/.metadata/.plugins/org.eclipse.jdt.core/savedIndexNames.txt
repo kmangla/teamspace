@@ -1,0 +1,8 @@
+INDEX VERSION 1.126+/Users/karanmangla/Documents/UBiTask/android/.metadata/.plugins/org.eclipse.jdt.core
+2380145761.index
+87880493.index
+3603916868.index
+191415208.index
+1901479841.index
+2755903773.index
+1270315800.index

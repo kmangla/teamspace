@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+  <LinearLayout 
+      android:id="@+id/taskListContainer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"      
+      android:orientation="horizontal"/>
+  <Button 
+    android:id="@+id/tb"
+    android:layout_width="match_parent" 
+    android:layout_height="40sp"
+    android:layout_margin="3dp"
+    android:gravity="center"
+    android:background="@drawable/button"
+    android:textColor="@android:color/white"
+    android:textSize="18sp"
+    android:shadowRadius="1"
+    android:shadowDx="1"
+    android:shadowDy="1"
+    android:shadowColor="@android:color/black"
+ 	android:layout_weight="0"
+    android:text="Create a new task"/>
+</LinearLayout>

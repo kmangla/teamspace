@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_orange_light" >
+
+    <RelativeLayout
+        android:id="@+id/employee_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <QuickContactBadge
+            android:id="@+id/employee_image_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            android:src="@drawable/user_profile" />
+
+        <TextView
+            android:id="@+id/employee_initials"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLines="1"
+            android:layout_margin="5dp"
+            android:background="@android:color/holo_blue_bright"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:text="EN" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/text_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@id/employee_unread_replies"
+        android:layout_toRightOf="@id/employee_image"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/list_row_draganddrop_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/task_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/last_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/employee_unread_replies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/notification_circle"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dummy_view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/text_container"
+        android:textSize="2sp" />
+
+</RelativeLayout>
