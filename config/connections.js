@@ -57,20 +57,20 @@ module.exports.connections = {
   *                                                                          *
   ***************************************************************************/
   
+   someMongodbServer: {
+     adapter: 'sails-mongo',
+     url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ts',
+     //url: 'mongodb://heroku_app35149535:stpk0eqhnu8jkunnr8eprtokkr@ds045531.mongolab.com:45531/heroku_app35149535',
+   },
+
   // someMongodbServer: {
   //   adapter: 'sails-mongo',
-  //   url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ts', //process.env.DB_URL,
-  //   //url: 'mongodb://heroku_app35149535:stpk0eqhnu8jkunnr8eprtokkr@ds045531.mongolab.com:45531/heroku_app35149535',
+  //   host: 'ds045531.mongolab.com',
+  //   port: 45531,
+  //   user: 'heroku_app35149535',
+  //   password: 'stpk0eqhnu8jkunnr8eprtokkr',
+  //   database: 'heroku_app35149535'
   // },
-
-  someMongodbServer: {
-    adapter: 'sails-mongo',
-    host: 'ds045531.mongolab.com',
-    port: 45531,
-    user: 'heroku_app35149535',
-    password: 'stpk0eqhnu8jkunnr8eprtokkr',
-    database: 'heroku_app35149535'
-  },
 
   /***************************************************************************
   *                                                                          *
