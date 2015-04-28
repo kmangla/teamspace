@@ -13,6 +13,47 @@ module.exports.bootstrap = function(cb) {
   var reminder = require('../crontab/reminders.js');
   var sender = require('../crontab/sendReminders.js');
 
+  OTP.native(function(err, collection) {
+    collection.ensureIndex('phoneNumber', {
+      unique: true
+    }, function(err, result) {
+      if (err) {
+        sails.log.error(err);
+      }
+    });
+  });
+
+
+  Reminder.native(function(err, collection) {
+    collection.ensureIndex('task', {
+      unique: true
+    }, function(err, result) {
+      if (err) {
+        sails.log.error(err);
+      }
+    });
+  });
+
+  User.native(function(err, collection) {
+    collection.ensureIndex('phone', {
+      unique: true
+    }, function(err, result) {
+      if (err) {
+        sails.log.error(err);
+      }
+    });
+  });
+
+  UserStatus.native(function(err, collection) {
+    collection.ensureIndex('user', {
+      unique: true
+    }, function(err, result) {
+      if (err) {
+        sails.log.error(err);
+      }
+    });
+  });
+
   setInterval(reminder.run, 1000 * 60 * 15);
   setInterval(sender.run, 1000 * 60 * 2);
  
