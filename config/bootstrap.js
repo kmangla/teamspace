@@ -49,7 +49,7 @@ module.exports.bootstrap = function(cb) {
       unique: true
     }, function(err, result) {
       if (err) {
-        sails.log.error(err);
+        console.log(err);
       }
     });
   });

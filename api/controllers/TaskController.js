@@ -80,6 +80,10 @@ module.exports = {
     if (req.param('employeeID')) {
       taskUpdateObj.assignedTo = req.param('employeeID');
     }
+
+    if (req.param('forceReminder')) {
+      taskUpdateObj.forceReminder = true;
+    }
     taskUpdateObj.id = req.params.id;
     Task.update({id: req.params.id}, taskUpdateObj).exec(function(err, task) {
       if (err) return res.send(err);

@@ -61,14 +61,24 @@ module.exports = {
           model: 'message',
         },
 
-    messages: {
-      collection: 'message',
-      via: 'forTask'
-   },
+        messages: {
+          collection: 'message',
+          via: 'forTask'
+        },
+
+        forceReminder: {
+          type: 'boolean',
+          defaultsTo: true
+        },
+
+   
 	
    // Custom attribute methods
 
    reminderIsDue: function() {
+     if (this.forceReminder) {
+       return true;
+     }
      var date = new Date();
      var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
      console.log(timeSinceLastUpdateSec);

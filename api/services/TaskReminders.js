@@ -22,6 +22,10 @@ module.exports = {
                 return;
               }
               Task.reminderMessage(userStatus.taskSent, function (err, message) {
+                userStatus.taskSent.forceReminder = false;
+                userStatus.taskSent.save(function (err, task) {
+                  console.log(err);
+                });
                 Reminder.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
          	  if (err) {
                     console.log(err);
@@ -51,6 +55,10 @@ module.exports = {
                   return;
                 }
                 Task.reminderMessage(task, function (err, message) {
+                  task.forceReminder = false;
+                  task.save(function (err, taskSaved) {
+                    console.log(err);
+                  });
                   Reminder.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
       	            if (err) {
                       console.log(err);
