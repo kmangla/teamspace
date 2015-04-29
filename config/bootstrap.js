@@ -23,7 +23,6 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
-
   Reminder.native(function(err, collection) {
     collection.ensureIndex('task', {
       unique: true
@@ -59,9 +58,9 @@ module.exports.bootstrap = function(cb) {
  
   var http = require("http");
   http.get("http://teamspace.herokuapp.com");
-setInterval(function() {
+  setInterval(function() {
     http.get("http://teamspace.herokuapp.com");
-}, 300000); 
+  }, 300000); 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   cb();
