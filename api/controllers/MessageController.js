@@ -32,22 +32,6 @@ module.exports = {
       }
       message.save(function(err, message) {
         if (err) return res.send(err);
-        //TODO: need to add counter for user and employee
-        //TODO: really ugly
-        Task.find({id: req.param('taskID')}).exec(function(err, task) {
-      		if(err) return res.send(err);
-      		Task.update({id: req.param('taskID')}, {id: req.param('taskID'), updateCount: task[0].updateCount+1}).exec(function(err, task) {
-          	if (err) return res.send(err);
-        	});
-    		});
-
-        User.find({id: req.param('sentBy')}).exec(function(err, employee) {
-      		if(err) return res.send(err);
-      		User.update({id: req.param('sentBy')}, {id: req.param('sentBy'), updateCount: employee[0].updateCount+1}).exec(function(err, employee) {
-          	if (err) return res.send(err);
-
-        	});
-    		});
       	return res.json(message); 
       });
     });

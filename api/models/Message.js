@@ -27,14 +27,31 @@ module.exports = {
 
   
    afterCreate: function(message, cb) {
-     Task.update({id: message.forTask}, {id: message.forTask, lastMessage: message.id, lastUpdate: new Date()}, function (err, task) {
-       if (err) {
-         cb(err);
+     Task.findOne({id: message.forTask}).exec(function(err, task) {
+       if(err) {
+         console.log(err);
          return;
        }
-       Message.sendCreateNotification(message);
-       cb();
+       var updateCount = task.updateCount;
+       if (message.sentBy != task.assignedBy) {
+         updateCount = updateCount+1;
+       }
+       Task.update({id: message.forTask}, {updateCount: updateCount, lastMessage: message.id, lastUpdate: new Date()}).exec(function(err, updatedTask) {
+       });
+       User.findOne({id: message.sentBy}).exec(function(err, employee) {
+         if(err) {
+           console.log(err);
+           return;
+         }
+         var employeeUpdateCount = employee.updateCount;
+         if (message.sentBy != task.assignedBy) {
+           employeeUpdateCount = employeeUpdateCount+1;
+         }
+         User.update({id: message.sentBy}, {updateCount: employee.updateCount}).exec(function(err, updatedEmployee) {
+       });
      });
+     Message.sendCreateNotification(message);
+     cb();
    },
  
    sendCreateNotification: function(message) {
