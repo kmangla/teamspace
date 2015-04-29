@@ -48,6 +48,7 @@ module.exports = {
            employeeUpdateCount = employeeUpdateCount+1;
          }
          User.update({id: message.sentBy}, {updateCount: employee.updateCount}).exec(function(err, updatedEmployee) {
+         });
        });
      });
      Message.sendCreateNotification(message);
