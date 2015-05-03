@@ -137,11 +137,11 @@ module.exports = {
       }
       cb();
     });
-    StartUpTasks.makeTasksAndEmployees(user, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    // StartUpTasks.makeTasksAndEmployees(user, function (err) {
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    // });
   },
 
   updateTaskCount: function(id, inc, cb) {
