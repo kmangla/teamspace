@@ -29,7 +29,8 @@ module.exports = {
       user.designation = 'Saheb'
       user.save(function(err, user) {
         if (err) return next(err);
-				res.json(user); 
+      StatsService.sendStats("user.create_count", 1);
+			res.json(user);
       });
     });
   },
@@ -55,7 +56,8 @@ module.exports = {
       employee.accountType = 'employee';
       employee.save(function(err, employee) {
         if (err) return res.send(err)
-	res.send(employee.id); 
+	    StatsService.sendStats("employee.create_count", 1);
+      res.send(employee.id); 
       });
     });
   },

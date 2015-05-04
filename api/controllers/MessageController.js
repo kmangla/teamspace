@@ -15,6 +15,7 @@ module.exports = {
           console.log(err);
           return res.send(err);
         }
+        StatsService.sendStats("message.receive_count.type_sms", 1);
         return res.json(message);
       });
       return;
@@ -26,6 +27,7 @@ module.exports = {
     }
 
     Message.create(messageObj, function (err, message) {
+      StatsService.sendStats("message.receive_count.type_app", 1);
       if (err) {
         console.log(err);
         return res.send(err);

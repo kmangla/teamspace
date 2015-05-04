@@ -29,7 +29,7 @@ module.exports = {
         	return res.send(err);
         }
       	task.employeeName = task.assignedTo.name;
-        
+        StatsService.sendStats("task.create_count", 1);
       	return res.json(task); 
       });
     });
