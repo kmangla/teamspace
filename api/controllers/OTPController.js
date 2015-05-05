@@ -57,8 +57,9 @@ module.exports = {
         res.send('Incorrect OTP');
         return;
       }
+      var name = req.param('name') ? req.param('name') : 'User';
       var userObj = {
-        name: 'User',
+        name: name,
         phone: phoneNumber,
         accountType: 'accountOwner', 
       };
