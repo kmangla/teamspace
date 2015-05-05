@@ -13,7 +13,7 @@ module.exports = {
           console.log('No userStatus object for user ' + user.id);
           return;
         }
-        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSend.assignedTo == user.id) {
+        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id) {
           if (userStatus.repeatReminderIsDue()) {
             console.log('send repeat reminder');
             PushToken.findOrAssignToken(user, function (err, token) {
