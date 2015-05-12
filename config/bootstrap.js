@@ -43,8 +43,8 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
-  setInterval(reminder.run, 1000 * 60 * 15);
-  setInterval(sender.run, 1000 * 60 * 2);
+  setInterval(reminder.run, 1000 * 60 * 5);
+  setInterval(sender.run, 1000 * 60 * 1);
  
   var http = require("http");
   http.get("http://teamspace.herokuapp.com");
