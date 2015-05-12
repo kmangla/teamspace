@@ -33,17 +33,15 @@ module.exports = {
          return;
        }
        if (message.sentBy == task.assignedBy.id) {
-         Message.enqueueNotification(message, task);
-       }
-       var updateCount = task.updateCount;
-       var forceReminder = task.forceReminder;
-       if (message.sentBy != task.assignedBy.id) {
-         updateCount = updateCount+1;
+         Message.enqueueNotification(message, task, function (shouldForceReminder) {
+           var forceReminder = task.forceReminder || shouldForceReminder;
+           Task.update({id: message.forTask}, {forceReminder: forceReminder, lastMessage: message.id, lastUpdate: new Date()}).exec(function(err, updatedTask) {});
+         });
        } else {
-         forceReminder = true;
+         var updateCount = task.updateCount;
+         updateCount = updateCount+1;
+         Task.update({id: message.forTask}, {updateCount: updateCount, lastMessage: message.id, lastUpdate: new Date()}).exec(function(err, updatedTask) {});
        }
-       Task.update({id: message.forTask}, {updateCount: updateCount, lastMessage: message.id, forceReminder: forceReminder, lastUpdate: new Date()}).exec(function(err, updatedTask) {
-       });
        User.findOne({id: message.sentBy}).exec(function(err, employee) {
          if(err) {
            console.log(err);
@@ -61,18 +59,19 @@ module.exports = {
      cb();
    },
 
-   enqueueNotification: function(message, task) {
+   enqueueNotification: function(message, task, cb) {
      var notifMessage = task.assignedBy.name + ' has said:\n' + message.description;
      UserStatus.findOne({user: task.assignedTo.id}, function (err, status) {
-       console.log(status);
-       console.log(task.assignedTo);
        if (status.taskSent == task.id) { 
          PushToken.findOrAssignToken(task.assignedTo, function (err, token) {
            var user = task.assignedTo;
            SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: notifMessage}, function (err, reminder) {});
+           cb(false);
        });
       } else {
-        Notification.create({user: task.assignedBy.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {});
+        Notification.create({user: task.assignedBy.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {
+          cb(true);
+        });
       }
      });
    },
