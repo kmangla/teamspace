@@ -30,6 +30,7 @@ module.exports = {
                   console.log(reminder);
                   var statusUpdateObj = {}; 
                   statusUpdateObj.timeReminderSent = new Date();
+                  statusUpdateObj.timeMessageSent = new Date();
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
                   Task.update({id:userStatus.taskSent.id}, {forceReminder: false}, function (err, newTask) {});
                   for(var i = 0; i < notifications.length; i++) {
@@ -38,6 +39,9 @@ module.exports = {
                   }
                 });
                 } else {
+                  var statusUpdateObj = {}; 
+                  statusUpdateObj.timeMessageSent = new Date();
+                  UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
                   for(var i = 0; i < notifications.length; i++) {
                     SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
                     });
@@ -45,6 +49,9 @@ module.exports = {
                 }
               });
             });
+          return;
+        }
+        if (!userStatus.canStartNewTaskThread()) {
           return;
         }
         Task.find({assignedTo: user.id, status: 'open'}).exec(function(err, tasks) {
@@ -70,6 +77,7 @@ module.exports = {
                     console.log(reminder);
                     var statusUpdateObj = {}; 
                     statusUpdateObj.timeReminderSent = new Date();
+                    statusUpdateObj.timeMessageSent = new Date();
                     statusUpdateObj.timeFirstReminderSent = new Date();
                     statusUpdateObj.replyPending = true;
                     statusUpdateObj.taskSent = task.id;

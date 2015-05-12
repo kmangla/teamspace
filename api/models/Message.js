@@ -65,6 +65,7 @@ module.exports = {
        if (status.taskSent == task.id) { 
          PushToken.findOrAssignToken(task.assignedTo, function (err, token) {
            var user = task.assignedTo;
+           UserStatus.update({id: status.id}, {timeMessageSent: new Date()}).exec(function (err, userStatusUpdate) {});
            SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: notifMessage}, function (err, reminder) {});
            cb(false);
        });
