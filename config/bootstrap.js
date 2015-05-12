@@ -23,16 +23,6 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
-  Reminder.native(function(err, collection) {
-    collection.ensureIndex('task', {
-      unique: true
-    }, function(err, result) {
-      if (err) {
-        sails.log.error(err);
-      }
-    });
-  });
-
   User.native(function(err, collection) {
     collection.ensureIndex('phone', {
       unique: true
