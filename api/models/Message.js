@@ -63,7 +63,17 @@ module.exports = {
 
    enqueueNotification: function(message, task) {
      var notifMessage = task.assignedBy.name + ' has said:\n' + message.description;
-     Notification.create({user: task.assignedBy.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {
+     UserStatus.findOne({user: task.assignedTo.id}, function (err, status) {
+       console.log(status);
+       console.log(task.assignedTo);
+       if (status.taskSent == task.id) { 
+         PushToken.findOrAssignToken(task.assignedTo, function (err, token) {
+           var user = task.assignedTo;
+           SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: notifMessage}, function (err, reminder) {});
+       });
+      } else {
+        Notification.create({user: task.assignedBy.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {});
+      }
      });
    },
  
