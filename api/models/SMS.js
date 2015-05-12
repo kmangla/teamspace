@@ -1,5 +1,5 @@
 /**
-* Reminder.js
+* SMS.js
 *
 */
 
@@ -10,7 +10,6 @@ module.exports = {
   attributes: {
     task: {
       model: 'Task',
-      unique: true,
     },
  
     phone: {

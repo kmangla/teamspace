@@ -22,21 +22,27 @@ module.exports = {
   	sentBy: { 
   		model: 'user',
   		required: true
-  	}
+  	},
   },
 
   
    afterCreate: function(message, cb) {
-     Task.findOne({id: message.forTask}).exec(function(err, task) {
+     Task.findOne({id: message.forTask}).populate('assignedTo').populate('assignedBy').exec(function(err, task) {
        if(err) {
          console.log(err);
          return;
        }
-       var updateCount = task.updateCount;
-       if (message.sentBy != task.assignedBy) {
-         updateCount = updateCount+1;
+       if (message.sentBy == task.assignedBy.id) {
+         Message.enqueueNotification(message, task);
        }
-       Task.update({id: message.forTask}, {updateCount: updateCount, lastMessage: message.id, lastUpdate: new Date()}).exec(function(err, updatedTask) {
+       var updateCount = task.updateCount;
+       var forceReminder = task.forceReminder;
+       if (message.sentBy != task.assignedBy.id) {
+         updateCount = updateCount+1;
+       } else {
+         forceReminder = true;
+       }
+       Task.update({id: message.forTask}, {updateCount: updateCount, lastMessage: message.id, forceReminder: forceReminder, lastUpdate: new Date()}).exec(function(err, updatedTask) {
        });
        User.findOne({id: message.sentBy}).exec(function(err, employee) {
          if(err) {
@@ -44,7 +50,7 @@ module.exports = {
            return;
          }
          var employeeUpdateCount = employee.updateCount;
-         if (message.sentBy != task.assignedBy) {
+         if (message.sentBy != task.assignedBy.id) {
            employeeUpdateCount = employeeUpdateCount+1;
          }
          User.update({id: message.sentBy}, {updateCount: employee.updateCount}).exec(function(err, updatedEmployee) {
@@ -53,6 +59,12 @@ module.exports = {
      });
      Message.sendCreateNotification(message);
      cb();
+   },
+
+   enqueueNotification: function(message, task) {
+     var notifMessage = task.assignedBy.name + ' has said:\n' + message.description;
+     Notification.create({user: task.assignedBy.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {
+     });
    },
  
    sendCreateNotification: function(message) {

@@ -34,14 +34,10 @@ module.exports = {
     	//enum: ['daily', 'alterateday', 'weekly', 'biweekly', 'monthly']
   	},
   	
-  	lastReminder: {
-    	type: 'datetime'
-  	},
-  	
-    updateCount: {
-      type: 'integer',
-      defaultsTo: 0
-    },
+        updateCount: {
+          type: 'integer',
+          defaultsTo: 0
+        },
 
   	lastUpdate: {
     	type: 'datetime'
@@ -68,7 +64,7 @@ module.exports = {
 
         forceReminder: {
           type: 'boolean',
-          defaultsTo: true
+          defaultsTo: false
         },
 
    
@@ -121,6 +117,15 @@ module.exports = {
        } else {
          cb();
        }
+     });
+   },
+   
+   reminderMessageAndNotifications: function (task, cb) {
+     Notification.destroy({task: task.id}).exec(function (err, notifications) {
+       console.log(notifications);
+       Task.reminderMessage(task, function (err, message) {
+         cb(err, message, notifications);
+       });
      });
    },
 

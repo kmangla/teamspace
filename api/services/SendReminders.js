@@ -2,7 +2,7 @@ module.exports = {
   run : function() {
     PushToken.find({appID: '1'}, function (err, tokens) {
       for (var j = 0; j < tokens.length; j++) {
-        Reminder.find({where: {tokenID: tokens[j].id}, sort: 'timeQueued ASC'}).populate('task').populate('tokenID').exec(function (err, reminders) {
+        SMS.find({where: {tokenID: tokens[j].id}, sort: 'timeQueued ASC'}).populate('tokenID').exec(function (err, reminders) {
           if (err) {
             console.log(err);
             return;
@@ -22,7 +22,7 @@ module.exports = {
               phone: reminders[i].phone,
               message: reminders[i].message,
             };
-            Reminder.destroy({id: reminder.id}, function (err) {
+            SMS.destroy({id: reminder.id}, function (err) {
             });
           }
           if (messages.length) {

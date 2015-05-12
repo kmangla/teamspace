@@ -14,19 +14,15 @@ module.exports = {
           return;
         }
         if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id) {
-          if (userStatus.repeatReminderIsDue()) {
-            console.log('send repeat reminder');
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
                 console.log(err);
                 return;
               }
-              Task.reminderMessage(userStatus.taskSent, function (err, message) {
-                userStatus.taskSent.forceReminder = false;
-                userStatus.taskSent.save(function (err, task) {
-                  console.log(err);
-                });
-                Reminder.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
+              Task.reminderMessageAndNotifications(userStatus.taskSent, function (err, message, notifications) {
+                if (userStatus.repeatReminderIsDue()) {
+                  console.log('send repeat reminder');
+                SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
          	  if (err) {
                     console.log(err);
                     return;
@@ -34,14 +30,21 @@ module.exports = {
                   console.log(reminder);
                   var statusUpdateObj = {}; 
                   statusUpdateObj.timeReminderSent = new Date();
-                  UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {
-                  });
+                  UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
+                  Task.update({id:userStatus.taskSent.id}, {forceReminder: false}, function (err, newTask) {});
+                  for(var i = 0; i < notifications.length; i++) {
+                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
+                    });
+                  }
                 });
+                } else {
+                  for(var i = 0; i < notifications.length; i++) {
+                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
+                    });
+                  }
+                }
               });
             });
-          } else {
-            console.log('do not send repeat reminder');
-          }
           return;
         }
         Task.find({assignedTo: user.id, status: 'open'}).exec(function(err, tasks) {
@@ -54,12 +57,12 @@ module.exports = {
                   console.log(err);
                   return;
                 }
-                Task.reminderMessage(task, function (err, message) {
+                Task.reminderMessageAndNotifications(task, function (err, message, notifications) {
                   task.forceReminder = false;
                   task.save(function (err, taskSaved) {
                     console.log(err);
                   });
-                  Reminder.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
+                  SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
       	            if (err) {
                       console.log(err);
                       return;
@@ -72,6 +75,10 @@ module.exports = {
                     statusUpdateObj.taskSent = task.id;
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function(err, userStatusUpdate) {
                     });
+                    for(var j = 0; j < notifications.length; j++) {
+                      SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: notifications[j].message}, function (err, reminder) {
+                    });
+                  }
                   });
                 });
               });
