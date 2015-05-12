@@ -35,13 +35,6 @@ module.exports = {
               return;
             }
             console.log(userStatusUpdate);
-            Reminder.destroy({task: message.forTask}, function (err) {
-              if (err) {
-                cb(err);
-                return;
-              }
-              cb(null, message);
-            });
           });
         });
       });
