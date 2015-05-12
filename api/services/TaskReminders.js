@@ -90,6 +90,7 @@ module.exports = {
                   });
                 });
               });
+              break;
             } else {
               console.log(tasks[i] + 'reminder not due');
             }

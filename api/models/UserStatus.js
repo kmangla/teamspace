@@ -45,6 +45,9 @@ module.exports = {
     },
     canStartNewTaskThread: function() {
       var date = new Date();
+      if (!this.timeMessageSent) {
+        return true;
+      }
       var timeSinceLastMessageSec = Math.round((date-this.timeMessageSent)/1000);
       if (timeSinceLastMessageSec > 60 * 30) {
         return true;
