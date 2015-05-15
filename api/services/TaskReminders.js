@@ -50,6 +50,8 @@ module.exports = {
               });
             });
           return;
+        } else {
+          console.log('reminder already sent');
         }
         if (!userStatus.canStartNewTaskThread()) {
           return;

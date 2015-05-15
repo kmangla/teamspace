@@ -44,17 +44,10 @@ module.exports = {
         res.send('No OTP generated');
         return;
       }
-      var date = new Date();
-      var timeSinceOTPGenerationSec = Math.round((date-this.otptimeOTPWasGenerated)/1000);
-      if (timeSinceOTPGenerationSec > 3600) {
-        console.log('OTP has expired');
-        res.send('OTP has expired');
-        return;
-      }
-
-      if (otp.OTP != req.param('otp')) {
-        console.log('Incorrect OTP');
-        res.send('Incorrect OTP');
+      var otpCheck = otp.passOTPVerification(req.param('otp'), phoneNumber);
+      if (!otpCheck) {
+        console.log('OTP Verification Failed');
+        res.send('OTP Verification Failed');
         return;
       }
       var name = req.param('name') ? req.param('name') : 'User';
