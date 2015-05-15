@@ -71,19 +71,39 @@ module.exports = {
 	
    // Custom attribute methods
 
-   reminderIsDue: function() {
-     if (this.forceReminder) {
-       return true;
-     }
-     var date = new Date();
-     var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
-     console.log(timeSinceLastUpdateSec);
-     if (timeSinceLastUpdateSec > this.frequency) {
-       return true;
-     } else {
-       return false;
-     }
-   },
+    taskPriority: function () {
+      var date = new Date();
+      var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
+      if (timeSinceLastUpdateSec < this.frequency) {
+        return 0;
+      }
+      var delayTimeInSec = timeSinceLastUpdateSec - this.frequency;
+      var maxDelay = 3 * 24 * 3600 ; // 3 days
+      if (delayTimeInSec >  maxDelay) {
+        return 100;
+      }
+      return Math.floor(delayTimeInSec/maxDelay * 100);
+    },
+
+    toJSON: function () {
+      var obj = this.toObject();
+      obj.priority = this.taskPriority();
+      return obj;
+    },
+
+    reminderIsDue: function() {
+      if (this.forceReminder) {
+        return true;
+      }
+      var date = new Date();
+      var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
+      console.log(timeSinceLastUpdateSec);
+      if (timeSinceLastUpdateSec > this.frequency) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 
    beforeCreate: function(task, cb) {
