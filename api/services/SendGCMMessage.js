@@ -16,6 +16,8 @@ module.exports = {
     var sender = new gcm.Sender('AIzaSyBSBLLF9lHR9CbilhrMeWjhli8nd6cX45c');
     var registrationIds = [token.regID];
  
+   
+    StatsService.sendStats('sms.send_sms_cnt', messages.length);
     sender.send(message, registrationIds, function (err, result) {
       if (err) {
         cb(err);
