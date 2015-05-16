@@ -35,7 +35,7 @@ module.exports = {
               cb(err);
               return;
             }
-            console.log(userStatusUpdate);
+            cb(null, message);
           });
         });
       });
