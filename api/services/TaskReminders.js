@@ -31,6 +31,7 @@ module.exports = {
                   var statusUpdateObj = {}; 
                   statusUpdateObj.timeReminderSent = new Date();
                   statusUpdateObj.timeMessageSent = new Date();
+                  statusUpdateObj.reminderCount = userStatus.reminderCount + 1;
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
                   Task.update({id:userStatus.taskSent.id}, {forceReminder: false}, function (err, newTask) {});
                   for(var i = 0; i < notifications.length; i++) {
@@ -83,6 +84,7 @@ module.exports = {
                     statusUpdateObj.timeFirstReminderSent = new Date();
                     statusUpdateObj.replyPending = true;
                     statusUpdateObj.taskSent = task.id;
+                    statusUpdateObj.reminderCount = 0;
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function(err, userStatusUpdate) {
                     });
                     for(var j = 0; j < notifications.length; j++) {

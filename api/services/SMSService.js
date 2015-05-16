@@ -30,6 +30,7 @@ module.exports = {
           var userStatusObj = {};
           userStatusObj.replyPending = false;
           userStatusObj.timeMessageSent = new Date();
+          userStatusObj.reminderCount = 0;
           UserStatus.update({user: user.id}, userStatusObj).exec(function (err, userStatusUpdate) {
             if (err) {
               cb(err);

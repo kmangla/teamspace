@@ -34,15 +34,26 @@ module.exports = {
     timeFirstReminderSent: {
       type: 'datetime',
     },
+
+    reminderCount: {
+      type: 'integer',
+      defaultsTo: 0
+    },
+
     repeatReminderIsDue: function() {
       var date = new Date();
       var timeSinceLastReminderSec = Math.round((date-this.timeReminderSent)/1000);
-      if (timeSinceLastReminderSec > 3 * 3600) {
+      var hoursTillNewReminder = 3;
+      if (reminderCount > 3) {
+        hoursTillNewReminder = 24;
+      }
+      if (timeSinceLastReminderSec > hoursTillNewReminder * 3600) {
         return true;
       } else {
         return false;
       }
     },
+
     canStartNewTaskThread: function() {
       var date = new Date();
       if (!this.timeMessageSent) {
