@@ -125,7 +125,7 @@ module.exports = {
          cb();
          return;
        }
-       if ((originalTask.status == 'open') && (task.status == 'close')) {
+       if ((originalTask.status == 'open') && (task.status == 'closed')) {
          User.updateTaskCount(originalTask.assignedTo, -1, function (err) {
            if (err) {
              console.log(err); 
