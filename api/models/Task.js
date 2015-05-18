@@ -34,10 +34,10 @@ module.exports = {
     	//enum: ['daily', 'alterateday', 'weekly', 'biweekly', 'monthly']
   	},
   	
-        updateCount: {
-          type: 'integer',
-          defaultsTo: 0
-        },
+    updateCount: {
+      type: 'integer',
+      defaultsTo: 0
+    },
 
   	lastUpdate: {
     	type: 'datetime'
@@ -53,22 +53,20 @@ module.exports = {
   		required: true
   	},
 
-        lastMessage: {
-          model: 'message',
-        },
+    lastMessage: {
+      model: 'message',
+    },
 
-        messages: {
-          collection: 'message',
-          via: 'forTask'
-        },
+    messages: {
+      collection: 'message',
+      via: 'forTask'
+    },
 
-        forceReminder: {
-          type: 'boolean',
-          defaultsTo: false
-        },
+    forceReminder: {
+      type: 'boolean',
+      defaultsTo: false
+    },
 
-   
-	
    // Custom attribute methods
 
     taskPriority: function () {
@@ -139,6 +137,27 @@ module.exports = {
        }
      });
    },
+
+   beforeDestroy: function(task, cb) {
+     Task.findOne({id: task.id}, function (err, originalTask) {
+       if (err) {
+         console.log(err);
+         cb();
+         return;
+       }
+       if (!originalTask) {
+         console.log('No task exists');
+         cb();
+         return;
+       }
+      User.updateTaskCount(originalTask.assignedTo, -1, function (err) {
+        if (err) {
+          console.log(err); 
+        }
+        cb();
+      });
+    });
+  },
    
    reminderMessageAndNotifications: function (task, cb) {
      Notification.destroy({task: task.id}).exec(function (err, notifications) {

@@ -91,8 +91,11 @@ module.exports = {
   },
 
   deleteEmployee: function (req, res) {
-    User.update({id: req.params.id}, {accountStatus: 'deleted'}).exec(function(err, employee) {
+    User.update({id: req.params.id}, {accountStatus: 'deleted', phone: Date.now()}).exec(function(err, employee) {
       if (err) return res.send(err);
+      Task.update({assignedTo: req.params.id}, {assignedTo: req.session.User.id}).exec(function(err) {
+        if (err) return res.send(err);
+      });
       res.json(employee);
     });
   },
