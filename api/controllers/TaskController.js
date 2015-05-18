@@ -30,7 +30,7 @@ module.exports = {
         }
       	task.employeeName = task.assignedTo.name;
         StatsService.sendStats("task.create_count", 1);
-      	return res.json(task); 
+      	return res.json(task.id); 
       });
     });
   },
