@@ -84,7 +84,7 @@ module.exports = {
                     statusUpdateObj.timeFirstReminderSent = new Date();
                     statusUpdateObj.replyPending = true;
                     statusUpdateObj.taskSent = task.id;
-                    statusUpdateObj.reminderCount = 0;
+                    statusUpdateObj.reminderCount = 1;
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function(err, userStatusUpdate) {
                     });
                     for(var j = 0; j < notifications.length; j++) {
