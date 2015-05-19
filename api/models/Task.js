@@ -95,7 +95,6 @@ module.exports = {
       }
       var date = new Date();
       var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
-      console.log(timeSinceLastUpdateSec);
       if (timeSinceLastUpdateSec > this.frequency) {
         return true;
       } else {

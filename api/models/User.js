@@ -170,6 +170,10 @@ module.exports = {
 
   isContactable: function(user, cb) {
     var moment = require('moment-timezone');
+    if (user.accountType == 'accountOwner') {
+      cb(false);
+      return;
+    }
     var date = moment(new Date()).tz(user.getTZ());
     cb((date.hour() >= 9) && (date.hour() <= 19) && (date.day() != 0) && !(user.phone.indexOf('Dummy') == 0));
   },

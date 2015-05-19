@@ -12,6 +12,7 @@
 module.exports.bootstrap = function(cb) {
   var reminder = require('../crontab/reminders.js');
   var sender = require('../crontab/sendReminders.js');
+  //var reports = require('../crontab/userRecords.js');
 
   OTP.native(function(err, collection) {
     collection.ensureIndex('phoneNumber', {
@@ -45,6 +46,7 @@ module.exports.bootstrap = function(cb) {
 
   setInterval(reminder.run, 1000 * 60 * 5);
   setInterval(sender.run, 1000 * 60 * 1);
+  //reports.run();
  
   var http = require("http");
   http.get("http://teamspace.herokuapp.com");
