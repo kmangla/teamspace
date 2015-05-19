@@ -39,7 +39,7 @@ module.exports = {
                     });
                   }
                 });
-                } else {
+                } else if (notifications.length > 0) {
                   var statusUpdateObj = {}; 
                   statusUpdateObj.timeMessageSent = new Date();
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
