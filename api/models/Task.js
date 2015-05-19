@@ -174,7 +174,7 @@ module.exports = {
          cb(err);
          return;
        }
-       var message = user.name + ':\n' + task.title;
+       var message = user.name + ':\n' + task.title + '\n' + task.description;
        cb(null, message);
      });
    },
