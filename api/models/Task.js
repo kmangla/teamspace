@@ -124,6 +124,14 @@ module.exports = {
          cb();
          return;
        }
+       if(originalTask.assignedTo != task.assignedTo) {
+         User.updateTaskCount(originalTask.assignedTo, -1, function (err) {
+           if (err) { console.log(err);}
+         });
+         User.updateTaskCount(task.assignedTo, 1, function (err) {
+           if (err) { console.log(err);}
+         });
+       }
        if ((originalTask.status == 'open') && (task.status == 'closed')) {
          User.updateTaskCount(originalTask.assignedTo, -1, function (err) {
            if (err) {
