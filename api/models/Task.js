@@ -70,8 +70,12 @@ module.exports = {
    // Custom attribute methods
 
     taskPriority: function () {
+      var dateNew = new Date(1);
       var date = new Date();
       var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
+      if (this.lastUpdate < dateNew) {
+        timeSinceLastUpdateSec = Math.round((date-this.createdAt)/1000);
+      }
       if (timeSinceLastUpdateSec < this.frequency) {
         return 0;
       }
