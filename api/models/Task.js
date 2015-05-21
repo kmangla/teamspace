@@ -186,7 +186,11 @@ module.exports = {
          cb(err);
          return;
        }
-       var message = user.name + ':\n' + task.title + '\n' + task.description + '\nReply with update on job';
+       var message = user.name + ':\n' + task.title;
+       if (task.description) {
+         message = message + '\n' + task.description;
+       }
+       message = message + '\nReply with update on job';
        cb(null, message);
      });
    },
