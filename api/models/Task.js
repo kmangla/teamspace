@@ -186,7 +186,7 @@ module.exports = {
          cb(err);
          return;
        }
-       var message = user.name + ':\n' + task.title + '\n' + task.description;
+       var message = user.name + ':\n' + task.title + '\n' + task.description + '\nReply with update on job';
        cb(null, message);
      });
    },
