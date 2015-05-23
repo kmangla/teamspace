@@ -93,13 +93,15 @@ module.exports = {
       return obj;
     },
 
-    reminderIsDue: function() {
+    reminderIsDue: function(user) {
       if (this.forceReminder) {
         return true;
       }
       var date = new Date();
-      var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
-      if (timeSinceLastUpdateSec > this.frequency) {
+      //var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
+      var days = Util.daysSince(date, this.lastUpdate, user);
+      console.log(days);
+      if (days >= (this.frequency / 86400)) {
         return true;
       } else {
         return false;

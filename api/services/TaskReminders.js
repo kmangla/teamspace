@@ -57,9 +57,9 @@ module.exports = {
         if (!userStatus.canStartNewTaskThread()) {
           return;
         }
-        Task.find({assignedTo: user.id, status: 'open'}).exec(function(err, tasks) {
+        Task.find({assignedTo: user.id, status: 'open'}).populate('assignedTo').exec(function(err, tasks) {
           for (var i = 0 ; i < tasks.length; i++) {
-            if (tasks[i].reminderIsDue()) {
+            if (tasks[i].reminderIsDue(tasks[i].assignedTo)) {
               console.log(tasks[i] + 'send reminder');
               var task = tasks[i];
               PushToken.findOrAssignToken(user, function (err, token) {
