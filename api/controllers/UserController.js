@@ -56,8 +56,17 @@ module.exports = {
       employee.accountType = 'employee';
       employee.save(function(err, employee) {
         if (err) return res.send(err)
-	    StatsService.sendStats("employee.create_count", 1);
-      res.send(employee.id); 
+        StatsService.sendStats("employee.create_count", 1);
+        PushToken.findOrAssignToken(employee, function (err, token) {
+          if (err) {
+            console.log(err);
+            return res.send(err);
+          }
+          if (token) {
+            employee.pairedNumber = token.deviceID;
+          }
+          return res.send(employee); 
+        });
       });
     });
   },
