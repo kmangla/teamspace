@@ -168,6 +168,22 @@ module.exports = {
     });
   },
 
+  fixTaskCount: function(id, cb) {
+    Task.count().where({status: 'open', assignedTo: id}).exec(function (err, taskCount) {
+      if (err) {
+        cb(err);
+        return; 
+      }
+      User.update({id: id}, {taskCount: taskCount}).exec(function (err, user) {
+        if (err) {
+          cb(err);
+          return; 
+        }
+        cb();
+      });
+    });
+  },
+
   isContactable: function(user, cb) {
     var moment = require('moment-timezone');
     if (user.accountType == 'accountOwner') {
