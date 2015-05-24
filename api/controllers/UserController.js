@@ -49,18 +49,18 @@ module.exports = {
 
       if (err) {
         console.log(err);
-        return res.send(err);
+        return res.serverError(err);
       }
       employee.manager = req.session.User.id;
       employee.online = true;
       employee.accountType = 'employee';
       employee.save(function(err, employee) {
-        if (err) return res.send(err)
+        if (err) return res.serverError(err);
         StatsService.sendStats("employee.create_count", 1);
         PushToken.findOrAssignToken(employee, function (err, token) {
           if (err) {
             console.log(err);
-            return res.send(err);
+            return res.serverError(err);
           }
           if (token) {
             employee.pairedNumber = token.deviceID;
@@ -73,7 +73,7 @@ module.exports = {
 
   listEmployee: function (req, res) {
     User.find({manager: req.session.User.id, accountType: 'employee', accountStatus: 'active'}).exec(function(err, employees) {
-      if(err) return res.send(err);
+      if(err) return res.serverError(err);
       return res.json(employees);
     });
   },
@@ -94,16 +94,16 @@ module.exports = {
       employeeUpdateObj.designation = req.param('designation');
     } 
     User.update({id: req.params.id}, employeeUpdateObj).exec(function(err, employee) {
-      if (err) return res.send(err);
+      if (err) return res.serverError(err);
       res.json(employee);
     });
   },
 
   deleteEmployee: function (req, res) {
     User.update({id: req.params.id}, {accountStatus: 'deleted', phone: Date.now()}).exec(function(err, employee) {
-      if (err) return res.send(err);
+      if (err) return res.serverError(err);
       Task.update({assignedTo: req.params.id}, {assignedTo: req.session.User.id}).exec(function(err) {
-        if (err) return res.send(err);
+        if (err) return res.serverError(err);
       });
       res.json(employee);
     });
