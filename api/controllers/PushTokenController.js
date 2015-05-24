@@ -24,8 +24,6 @@ module.exports = {
         if (err) {
           res.send(err);
         }
-        //console.log('here');
-        //SendNotification.sendNotification(req.session.User.id, req.session.User.id, 'test' , '', 'newMessage', function(err) {console.log(err)});
         res.send(200);
       });
     });
