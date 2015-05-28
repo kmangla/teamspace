@@ -29,5 +29,9 @@ module.exports = {
       model: 'PushToken',
       required: true,
     },
+
+    forMessage: {
+      model: 'Message'
+    },
   },
 }

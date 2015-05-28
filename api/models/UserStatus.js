@@ -45,7 +45,7 @@ module.exports = {
       var timeSinceLastReminderSec = Math.round((date-this.timeReminderSent)/1000);
       var hoursTillNewReminder = 3;
       if (this.reminderCount > 3) {
-        hoursTillNewReminder = 24;
+        hoursTillNewReminder = 6;
       }
       if (timeSinceLastReminderSec > hoursTillNewReminder * 3600) {
         return true;

@@ -24,5 +24,9 @@ module.exports = {
       type: 'string',
       size: 1000
     },
+
+    forMessage: {
+      model: 'Message'
+    },
   },
 }

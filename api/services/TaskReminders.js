@@ -35,7 +35,7 @@ module.exports = {
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
                   Task.update({id:userStatus.taskSent.id}, {forceReminder: false}, function (err, newTask) {});
                   for(var i = 0; i < notifications.length; i++) {
-                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
+                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, forMessage: notifications[i].forMessage, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
                     });
                   }
                 });
@@ -44,7 +44,7 @@ module.exports = {
                   statusUpdateObj.timeMessageSent = new Date();
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
                   for(var i = 0; i < notifications.length; i++) {
-                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
+                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), forMessage: notifications[i].forMessage, tokenID: token, message: notifications[i].message}, function (err, reminder) {
                     });
                   }
                 }
@@ -88,7 +88,7 @@ module.exports = {
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function(err, userStatusUpdate) {
                     });
                     for(var j = 0; j < notifications.length; j++) {
-                      SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: notifications[j].message}, function (err, reminder) {
+                      SMS.create({phone: user.phone, task: userStatus.taskSent.id, forMessage: notifications[i].forMessage, timeQueued: new Date(), tokenID: token, message: notifications[j].message}, function (err, reminder) {
                     });
                   }
                   });

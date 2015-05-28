@@ -23,6 +23,11 @@ module.exports = {
   		model: 'user',
   		required: true
   	},
+     
+        notifSent: {
+          type: 'boolean',
+          defaultsTo: false
+        },
   },
 
   
@@ -66,11 +71,11 @@ module.exports = {
          PushToken.findOrAssignToken(task.assignedTo, function (err, token) {
            var user = task.assignedTo;
            UserStatus.update({id: status.id}, {timeMessageSent: new Date()}).exec(function (err, userStatusUpdate) {});
-           SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: notifMessage}, function (err, reminder) {});
+           SMS.create({phone: user.phone, task: task.id, forMessage: message.id, timeQueued: new Date(), tokenID: token, message: notifMessage}, function (err, reminder) {});
            cb(false);
        });
       } else {
-        Notification.create({user: task.assignedBy.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {
+        Notification.create({user: task.assignedBy.id, forMessage: message.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {
           cb(true);
         });
       }

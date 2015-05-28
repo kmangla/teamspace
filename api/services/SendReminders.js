@@ -24,6 +24,8 @@ module.exports = {
             };
             SMS.destroy({id: reminder.id}, function (err) {
             });
+            Message.update({id: reminder.forMessage}, {notifSent: true}, function (err, message) {
+            });
           }
           if (messages.length) {
             SendGCMMessage.sendGCMMessage(reminders[0].tokenID, messages, function (err) {
