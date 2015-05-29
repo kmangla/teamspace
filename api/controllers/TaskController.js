@@ -62,6 +62,14 @@ module.exports = {
 
   updateTask: function (req, res) {
     var taskUpdateObj = {}; 
+    taskUpdateObj.id = req.params.id;
+    if (req.param('markUpdated')) {
+      var id = req.params.id;
+      taskUpdateObj.lastUpdated = new Date();
+      UserStatus.changeStatusIfRequired(req.params.id, function (err) {
+        if (err) console.log(err);
+      });
+    }
     if (req.param('title')) {
       taskUpdateObj.title = req.param('title');
     }
@@ -84,7 +92,6 @@ module.exports = {
     if (req.param('forceReminder')) {
       taskUpdateObj.forceReminder = true;
     }
-    taskUpdateObj.id = req.params.id;
     Task.update({id: req.params.id}, taskUpdateObj).exec(function(err, task) {
       if (err) return res.send(err);
       res.json(task);

@@ -67,4 +67,33 @@ module.exports = {
       }
     },
   },
+
+  changeStatusIfRequired: function (taskID, cb) {
+    Task.findOne({id: taskID}).exec(function (err, task) {
+      if (err) {
+        cb(err);
+        return;
+      }
+      console.log(task);
+      UserStatus.findOne({user: task.assignedTo}).exec(function (err, status) {
+        if (err) {
+          cb(err);
+          return;
+        }
+        if ((status.taskSent == taskID) && status.replyPending) {
+          var userStatusObj = {};
+          userStatusObj.replyPending = false;
+          userStatusObj.timeMessageSent = new Date();
+          userStatusObj.reminderCount = 0;
+          UserStatus.update({user: task.assignedTo}, userStatusObj).exec(function (err, userStatusUpdate) {
+            if (err) {
+              cb(err);
+              return;
+            }
+            cb();
+          });
+        }       
+      });
+    });
+  }
 }
