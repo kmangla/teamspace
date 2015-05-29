@@ -44,14 +44,18 @@ module.exports = {
       var date = new Date();
       var timeSinceLastReminderSec = Math.round((date-this.timeReminderSent)/1000);
       var hoursTillNewReminder = 3;
-      if (this.reminderCount > 3) {
-        hoursTillNewReminder = 6;
-      }
       if (timeSinceLastReminderSec > hoursTillNewReminder * 3600) {
         return true;
       } else {
         return false;
       }
+    },
+
+    shouldMoveToNextTask: function() {
+      if (this.reminderCount > 12) {
+        return true;
+      }
+      return false;
     },
 
     canStartNewTaskThread: function() {
@@ -60,7 +64,11 @@ module.exports = {
         return true;
       }
       var timeSinceLastMessageSec = Math.round((date-this.timeMessageSent)/1000);
-      if (timeSinceLastMessageSec > 60 * 30) {
+      var minWaitAfterLastMessage = 30;
+      if (this.shouldMoveToNextTask()) {
+        minWaitAfterLastMessage = 60 * 12;
+      }
+      if (timeSinceLastMessageSec > 60 * minWaitAfterLastMessage) {
         return true;
       } else {
         return false;

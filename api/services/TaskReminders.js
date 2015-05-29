@@ -13,7 +13,7 @@ module.exports = {
           console.log('No userStatus object for user ' + user.id);
           return;
         }
-        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id) {
+        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !userStatus.shouldMoveToNextTask()) {
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
                 console.log(err);
@@ -51,8 +51,6 @@ module.exports = {
               });
             });
           return;
-        } else {
-          console.log('reminder already sent');
         }
         if (!userStatus.canStartNewTaskThread()) {
           return;
