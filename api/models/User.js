@@ -133,15 +133,18 @@ module.exports = {
     UserStatus.create(userStatusObj, function (err, userStatus) {
       if (err) {
         console.log(err);
-        // Handle this error
       }
       cb();
     });
-    // StartUpTasks.makeTasksAndEmployees(user, function (err) {
-    //   if (err) {
-    //     console.log(err);
-    //   }
-    // });
+  },
+
+  afterDestroy: function (user, cb) {
+    UserStatus.destroy({user: user.id}, function (err, status) {
+      if (err) {
+        console.log(err);
+      }
+      cb();
+    });
   },
 
   updateTaskCount: function(id, inc, cb) {
@@ -190,7 +193,7 @@ module.exports = {
       cb(false);
       return;
     }
-    var date = moment(new Date()).tz(user.getTZ());
+    var date = moment(Util.getDateObject()).tz(user.getTZ());
     cb((date.hour() >= 9) && (date.hour() <= 19) && (date.day() != 0) && !(user.phone.indexOf('Dummy') == 0));
   },
 };

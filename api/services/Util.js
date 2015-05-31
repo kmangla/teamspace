@@ -16,5 +16,9 @@ module.exports = {
     var m_date1 = moment(date1).startOf('day').tz(user.getTZ());
     var m_date2 = moment(date2).startOf('day').tz(user.getTZ());
     return Math.floor((m_date1 - m_date2) / 86400000);
+  },
+
+  getDateObject: function (date) {
+    return new Date(date);
   }
 }

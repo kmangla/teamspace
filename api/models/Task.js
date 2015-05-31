@@ -152,24 +152,12 @@ module.exports = {
      });
    },
 
-   beforeDestroy: function(task, cb) {
-     Task.findOne({id: task.id}, function (err, originalTask) {
-       if (err) {
-         console.log(err);
-         cb();
-         return;
-       }
-       if (!originalTask) {
-         console.log('No task exists');
-         cb();
-         return;
-       }
-      User.updateTaskCount(originalTask.assignedTo, -1, function (err) {
-        if (err) {
-          console.log(err); 
-        }
-        cb();
-      });
+   afterDestroy: function(task, cb) {
+    User.updateTaskCount(task.assignedTo, -1, function (err) {
+      if (err) {
+        console.log(err); 
+      }
+      cb();
     });
   },
    
