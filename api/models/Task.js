@@ -153,12 +153,16 @@ module.exports = {
    },
 
    afterDestroy: function(task, cb) {
-    User.updateTaskCount(task.assignedTo, -1, function (err) {
-      if (err) {
-        console.log(err); 
-      }
+    if (task[0]) {
+      User.updateTaskCount(task[0].assignedTo, -1, function (err) {
+        if (err) {
+          console.log(err); 
+        }
+        cb();
+      });
+    } else {
       cb();
-    });
+    }
   },
    
    reminderMessageAndNotifications: function (task, cb) {
