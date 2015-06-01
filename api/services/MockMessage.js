@@ -3,9 +3,9 @@ module.exports = {
     Task.findOne({id: taskID}).populate('assignedBy').exec(function (err, task) {
       UserStatus.findOne({user: task.assignedTo}).exec(function (err, status) {
         if (status.replyPending && (status.taskSent == taskID)) {
-          cb(null, createReminderSentMessage(task));
+          cb(null, MockMessage.createReminderSentMessage(task));
         } else if (task.reminderIsDue(task.assignedTo)) {
-          cb(null, createReplyPendingMessage(task));
+          cb(null, MockMessage.createReplyPendingMessage(task));
         }
         cb();
       });
