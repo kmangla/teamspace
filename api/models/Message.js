@@ -28,6 +28,13 @@ module.exports = {
           type: 'boolean',
           defaultsTo: false
         },
+    
+    toJSON: function() {
+      var obj = this.toObject();
+      obj.systemGenerated = false;
+      return obj;
+    },
+
   },
 
   

@@ -7,8 +7,7 @@
 
 module.exports = {
 
-	create: function(req, res, next) {
-    
+  create: function(req, res, next) {
     if (!req.param('taskID')) {
       SMSService.receiveSMS(req.param('sentBy'), req.param('description'), function (err, message) {
         if (err) {
@@ -43,12 +42,15 @@ module.exports = {
     var query = Message.find({forTask: req.param('taskID')});
     PrivacyService.message(query, ['sentBy'], function(err, messages) {
       if(err) return res.send(err);
-      	//TODO: Will become 0 for both user and employee
-      	//TODO: need to maintain counter for both user and employee
-				Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
-          if (err) return res.send(err);
-        });
-      return res.json(messages);
+      Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
+        if (err) return res.send(err);
+      });
+      MockMessage.createMockMessage(req.param('taskID'), function (err, message) {
+        if (err) return res.send(err);
+        if (!message) return res.json(messages);
+        messages.push(message);
+        return res.json(messages);
+      });
     });
   },
 
@@ -61,6 +63,5 @@ module.exports = {
       })
     });
   },
-
 };
 
