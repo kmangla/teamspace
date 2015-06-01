@@ -1,6 +1,6 @@
 module.exports = {
   createMockMessage: function(taskID, cb) {
-    Task.findOne({id: taskID}).populate('assignedBy').exec(function (err, task) {
+    Task.findOne({id: taskID}).populate('assignedBy').populate('assignedTo').exec(function (err, task) {
       UserStatus.findOne({user: task.assignedTo}).exec(function (err, status) {
         if (status.replyPending && (status.taskSent == taskID)) {
           cb(null, MockMessage.createReminderSentMessage(task));
