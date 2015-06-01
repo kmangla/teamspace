@@ -98,7 +98,6 @@ module.exports = {
         return true;
       }
       var date = new Date();
-      //var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
       var days = Util.daysSince(date, this.lastUpdate, user);
       console.log(days);
       if (days >= (this.frequency / 86400)) {
