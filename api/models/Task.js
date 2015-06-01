@@ -189,5 +189,34 @@ module.exports = {
      });
    },
 
+   calculateLastUpdate: function(taskID, cb) {
+     Task.findOne({id: taskID}).exec(function (err, task) {
+       Message.find({forTask: taskID}).sort({createdAt: 'desc'}).exec(function (err, messages) {
+         if (err) {
+           cb(err);
+         }
+         var lastUpdate = new Date(0);
+         var lastMessage = null;
+         if (messages) {
+           var lastMessage = messages[0].id;
+           for (var i = 0; i < messages.length; i++) {
+             if (messages[i].sentBy == task.assignedTo) {
+               lastUpdate = messages[i].createdAt;
+               break;
+             }
+           }
+           var messageObj = {
+             lastUpdate: lastUpdate,
+             lastMessage: lastMessage
+           };
+           Task.update({id: taskID}, messageObj, function (err, task) {
+            cb();
+           }); 
+         } else {
+           cb();
+         }
+       });
+     });
+   },
 };
 

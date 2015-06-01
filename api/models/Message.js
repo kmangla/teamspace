@@ -37,6 +37,10 @@ module.exports = {
          console.log(err);
          return;
        }
+       if (!task || !task.assignedTo || !task.assignedBy) {
+         console.log(err);
+         return;
+       }
        if (message.sentBy == task.assignedBy.id) {
          Message.enqueueNotification(message, task, function (shouldForceReminder) {
            var forceReminder = task.forceReminder || shouldForceReminder;
@@ -84,6 +88,9 @@ module.exports = {
  
    sendCreateNotification: function(message) {
      Message.findOne({id: message.id}).populate('forTask').exec(function (err, message) {
+       if (!message.forTask) {
+         return;
+       }
        if (message.sentBy == message.forTask.assignedBy) {
          return;
        }

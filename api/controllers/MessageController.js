@@ -52,5 +52,15 @@ module.exports = {
     });
   },
 
+  update: function (req, res) {
+    var newTask = req.param('forTask');
+    Message.update({id: req.params.id}, {forTask: newTask}, function (err, message) {
+      if (err) return res.send(err);
+      Task.calculateLastUpdate(newTask, function (err) {
+        return res.json(message.id);
+      })
+    });
+  },
+
 };
 
