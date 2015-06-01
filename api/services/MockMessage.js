@@ -5,14 +5,15 @@ module.exports = {
         if (status.replyPending && (status.taskSent == taskID)) {
           cb(null, MockMessage.createReminderSentMessage(task, status.timeFirstReminderSent));
         } else if (task.reminderIsDue(task.assignedTo)) {
-          var time = new Date(task.lastUpdate.getTime() + task.frequency * 1000);
+          var time = new Date(task.getLastUpdateTime().getTime() + task.frequency * 1000);
           var currentTime = new Date();
           if (currentTime < time) {
             time = currentTime;
           }
           cb(null, MockMessage.createReplyPendingMessage(task, time));
+        } else {
+          cb();
         }
-        cb();
       });
     });
   },

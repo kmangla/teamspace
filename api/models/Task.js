@@ -67,6 +67,14 @@ module.exports = {
       defaultsTo: false
     },
 
+    getLastUpdateTime: function () {
+      var dateNew = new Date(1);
+      if (this.lastUpdate < dateNew) {
+        return this.createdAt;
+      }
+      return this.lastUpdate;
+    },
+
    // Custom attribute methods
 
     taskPriority: function () {
