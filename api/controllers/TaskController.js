@@ -65,7 +65,7 @@ module.exports = {
     taskUpdateObj.id = req.params.id;
     if (req.param('markUpdated')) {
       var id = req.params.id;
-      taskUpdateObj.lastUpdated = new Date();
+      taskUpdateObj.lastUpdate = new Date();
       UserStatus.changeStatusIfRequired(req.params.id, function (err) {
         if (err) console.log(err);
       });
