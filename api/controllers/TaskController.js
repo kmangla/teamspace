@@ -66,6 +66,7 @@ module.exports = {
     if (req.param('markUpdated')) {
       var id = req.params.id;
       taskUpdateObj.lastUpdate = new Date();
+      taskUpdateObj.forceReminder = false;
       UserStatus.changeStatusIfRequired(req.params.id, function (err) {
         if (err) console.log(err);
       });

@@ -33,7 +33,6 @@ module.exports = {
                   statusUpdateObj.timeMessageSent = new Date();
                   statusUpdateObj.reminderCount = userStatus.reminderCount + 1;
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
-                  Task.update({id:userStatus.taskSent.id}, {forceReminder: false}, function (err, newTask) {});
                   for(var i = 0; i < notifications.length; i++) {
                     SMS.create({phone: user.phone, task: userStatus.taskSent.id, forMessage: notifications[i].forMessage, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
                     });
@@ -66,10 +65,6 @@ module.exports = {
                   return;
                 }
                 Task.reminderMessageAndNotifications(task, function (err, message, notifications) {
-                  task.forceReminder = false;
-                  task.save(function (err, taskSaved) {
-                    console.log(err);
-                  });
                   SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
       	            if (err) {
                       console.log(err);
