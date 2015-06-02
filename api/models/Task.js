@@ -78,7 +78,7 @@ module.exports = {
         timeUpdated = this.createdAt;
       }
       var dueSince = timeUpdated +  this.frequency * 1000;
-      if (this.forceReminder) {
+      if (this.forceReminder && this.forceReminderTime) {
         var forceTime = this.forceReminderTime.getTime();
         if (forceTime < dueSince) {
           dueSince = forceTime;
