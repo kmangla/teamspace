@@ -19,6 +19,9 @@ module.exports = {
   },
 
   getDateObject: function (date) {
+    if (!date) {
+      return new Date();
+    }
     return new Date(date);
   }
 }
