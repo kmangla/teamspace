@@ -92,6 +92,7 @@ module.exports = {
 
     if (req.param('forceReminder')) {
       taskUpdateObj.forceReminder = true;
+      taskUpdateObj.forceReminderTime = new Date();
     }
     Task.update({id: req.params.id}, taskUpdateObj).exec(function(err, task) {
       if (err) return res.send(err);

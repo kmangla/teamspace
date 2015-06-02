@@ -66,28 +66,36 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     },
+  
+    forceReminderTime: {
+      type: 'datetime'
+    },
 
-    getLastUpdateTime: function () {
+    getUpdateDueSince: function () {
       var dateNew = new Date(1);
+      var timeUpdated = this.lastUpdate;
       if (this.lastUpdate < dateNew) {
-        return this.createdAt;
+        timeUpdated = this.createdAt;
       }
-      return this.lastUpdate;
+      var dueSince = timeUpdated +  this.frequency * 1000;
+      if (this.forceReminder) {
+        var forceTime = this.forceReminderTime.getTime();
+        if (forceTime < dueSince) {
+          dueSince = forceTime;
+        }
+      }
+      return dueSince;
     },
 
    // Custom attribute methods
 
     taskPriority: function () {
-      var dateNew = new Date(1);
       var date = new Date();
-      var timeSinceLastUpdateSec = Math.round((date-this.lastUpdate)/1000);
-      if (this.lastUpdate < dateNew) {
-        timeSinceLastUpdateSec = Math.round((date-this.createdAt)/1000);
-      }
-      if (timeSinceLastUpdateSec < this.frequency) {
+      var dueSince = this.getUpdateDueSince();
+      var delayTimeInSec = Math.round((date.getTime() - dueSince)/1000);
+      if (delayTimeInSec < 0) {
         return 0;
       }
-      var delayTimeInSec = timeSinceLastUpdateSec - this.frequency;
       var maxDelay = 3 * 24 * 3600 ; // 3 days
       if (delayTimeInSec >  maxDelay) {
         return 100;

@@ -51,7 +51,11 @@ module.exports = {
        if (message.sentBy == task.assignedBy.id) {
          Message.enqueueNotification(message, task, function (shouldForceReminder) {
            var forceReminder = task.forceReminder || shouldForceReminder;
-           Task.update({id: message.forTask}, {forceReminder: forceReminder, lastMessage: message.id}).exec(function(err, updatedTask) {});
+           var forceReminderTime = task.forceReminderTime;
+           if (shouldForceReminder) {
+             forceReminderTime = new Date();
+           }
+           Task.update({id: message.forTask}, {forceReminder: forceReminder, forceReminderTime: forceReminderTime, lastMessage: message.id}).exec(function(err, updatedTask) {});
          });
        } else {
          var updateCount = task.updateCount;
