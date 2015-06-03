@@ -8,8 +8,7 @@
  *
  */
 module.exports = function(req, res, next) {
-   //var key = HeaderParser.parse(req.headers.teamspaceheader);
-   var key = '55101b0e3a700d2a7e372ce2';
+   var key = HeaderParser.parse(req.headers.teamspaceheader);
    User.findOne({id: key}).exec(function(err, user) {
      if(err) return res.send(err);
      if (user) {
