@@ -100,7 +100,7 @@ module.exports = {
       if (delayTimeInSec >  maxDelay) {
         return 100;
       }
-      return Math.floor(delayTimeInSec/maxDelay * 100);
+      return Math.ceil(delayTimeInSec/maxDelay * 100);
     },
 
     toJSON: function () {
