@@ -57,7 +57,9 @@ module.exports = {
          });
        } else {
          var updateCount = task.updateCount;
-         updateCount = updateCount+1;
+         if (!message.systemGenerated) {
+           updateCount = updateCount+1;
+         }
          Task.update({id: message.forTask}, {updateCount: updateCount, forceReminder: false, lastMessage: message.id, lastUpdate: new Date()}).exec(function(err, updatedTask) {});
        }
        User.findOne({id: message.sentBy}).exec(function(err, employee) {
