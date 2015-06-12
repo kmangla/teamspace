@@ -20,7 +20,7 @@ module.exports = {
       return;
     }
     var systemGenerated = false;
-    if (req.param('systemGenerated')) {
+    if (Number(req.param('systemGenerated'))) {
       systemGenerated = true;
     }
     var messageObj = {
