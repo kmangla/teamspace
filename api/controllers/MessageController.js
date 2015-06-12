@@ -19,15 +19,15 @@ module.exports = {
       });
       return;
     }
-    var systemsGenerated = false;
-    if (req.param('systemsGenerated')) {
-      systemsGenerated = true;
+    var systemGenerated = false;
+    if (req.param('systemGenerated')) {
+      systemGenerated = true;
     }
     var messageObj = {
       description: req.param('description'),
       forTask: req.param('taskID'),
       sentBy: req.param('sentBy'),
-      systemsGenerated: systemsGenerated
+      systemGenerated: systemGenerated
     }
 
     Message.create(messageObj, function (err, message) {

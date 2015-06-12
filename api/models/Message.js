@@ -29,7 +29,7 @@ module.exports = {
           defaultsTo: false
         },
 
-        systemsGenerated: {
+        systemGenerated: {
           type: 'boolean',
           defaultsTo: false
         },
@@ -46,7 +46,7 @@ module.exports = {
          console.log(err);
          return;
        }
-       if ((message.sentBy == task.assignedBy.id) && !message.systemsGenerated) {
+       if ((message.sentBy == task.assignedBy.id) && !message.systemGenerated) {
          Message.enqueueNotification(message, task, function (shouldForceReminder) {
            var forceReminder = task.forceReminder || shouldForceReminder;
            var forceReminderTime = task.forceReminderTime;
@@ -66,7 +66,7 @@ module.exports = {
            return;
          }
          var employeeUpdateCount = employee.updateCount;
-         if (!message.systemsGenerated && (message.sentBy != task.assignedBy.id)) {
+         if (!message.systemGenerated && (message.sentBy != task.assignedBy.id)) {
            employeeUpdateCount = employeeUpdateCount+1;
          }
          User.update({id: message.sentBy}, {updateCount: employee.updateCount}).exec(function(err, updatedEmployee) {
@@ -103,7 +103,7 @@ module.exports = {
        if (message.sentBy == message.forTask.assignedBy) {
          return;
        }
-       if (message.systemsGenerated) {
+       if (message.systemGenerated) {
          return;
        }
        if (err) {
