@@ -13,7 +13,12 @@ module.exports = {
           console.log('No userStatus object for user ' + user.id);
           return;
         }
-        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !userStatus.shouldMoveToNextTask()) {
+        UserStatus.shouldMoveToNextTask(userStatus.id, function (err, shouldMoveToNextTask) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !shouldMoveToNextTask) {
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
                 console.log(err);
@@ -92,6 +97,7 @@ module.exports = {
               console.log(tasks[i] + 'reminder not due');
             }
           } 
+        });
         });
       });
     });

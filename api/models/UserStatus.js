@@ -51,29 +51,43 @@ module.exports = {
       }
     },
 
-    shouldMoveToNextTask: function() {
-      if (this.reminderCount > 12) {
-        return true;
-      }
-      return false;
-    },
-
     canStartNewTaskThread: function() {
       var date = new Date();
       if (!this.timeMessageSent) {
         return true;
       }
       var timeSinceLastMessageSec = Math.round((date-this.timeMessageSent)/1000);
-      var minWaitAfterLastMessage = 30;
-      if (this.shouldMoveToNextTask()) {
-        minWaitAfterLastMessage = 60 * 12;
-      }
-      if (timeSinceLastMessageSec > 60 * minWaitAfterLastMessage) {
+      if (timeSinceLastMessageSec > 60 * 30) {
         return true;
       } else {
         return false;
       }
     },
+  },
+
+  shouldMoveToNextTask: function(userStatusID, cb) {
+    UserStatus.findOne({id: userStatusID}).populate('taskSent').exec(function (err, status) {
+      if (err) {
+        cb(err);
+        return;
+      }
+      User.findOne({id: status.taskSent.assignedTo}, function (err, user) {
+        if (status.taskSent.frequency == 86400) {
+          var days = Util.daysSince(new Date(), status.timeFirstReminderSent, user);
+          if (days > 0) {
+            cb(null, true);
+            return; 
+          }
+        } else if (status.taskSent.frequency == 604800) {
+          var days = Util.daysSince(new Date(), status.timeFirstReminderSent, user);
+          if (days > 3) {
+            cb(null, true);
+            return;
+          }
+        }
+        cb(null, false);
+      });
+    });
   },
 
   changeStatusIfRequired: function (taskID, cb) {
