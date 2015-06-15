@@ -12,6 +12,7 @@
 module.exports.bootstrap = function(cb) {
   var reminder = require('../crontab/reminders.js');
   var sender = require('../crontab/sendReminders.js');
+  var digest = require('../crontab/digest.js');
   //var reports = require('../crontab/userRecords.js');
 
   OTP.native(function(err, collection) {
@@ -44,8 +45,19 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
+  Digest.native(function(err, collection) {
+    collection.ensureIndex('user', {
+      unique: true
+    }, function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
   setInterval(reminder.run, 1000 * 60 * 5);
   setInterval(sender.run, 1000 * 60 * 1);
+  setInterval(digest.run, 1000 * 60 * 60);
   //reports.run();
  
   var http = require("http");

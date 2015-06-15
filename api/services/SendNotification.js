@@ -30,7 +30,7 @@ module.exports = {
         for (var i = 0; i < tokens.length; i++) {
           registrationIds[i] = tokens[i].regID;
         }
- 
+        
         sender.send(message, registrationIds, function (err, result) {
           if (err) {
             console.log(err);

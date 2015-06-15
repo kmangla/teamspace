@@ -71,6 +71,10 @@ module.exports = {
         cb(err);
         return;
       }
+      if (!status || !status.taskSent) {
+        cb('Status object does not exist');
+        return;
+      }
       User.findOne({id: status.taskSent.assignedTo}, function (err, user) {
         if (status.taskSent.frequency == 86400) {
           var days = Util.daysSince(new Date(), status.timeFirstReminderSent, user);
