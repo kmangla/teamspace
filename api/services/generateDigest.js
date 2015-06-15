@@ -6,7 +6,7 @@ module.exports = {
       }
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
-      if ((date.hour() >= 9) && (date.hour() < 11)) {
+      if ((date.hour() < 9) || (date.hour() >= 11)) {
         return;
       }
       if (digest) {
