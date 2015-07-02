@@ -71,8 +71,12 @@ module.exports = {
         cb(err);
         return;
       }
-      if (!status || !status.taskSent) {
+      if (!status) {
         cb('Status object does not exist');
+        return;
+      }
+      if (!status.taskSent) {
+        cb(null, false);
         return;
       }
       User.findOne({id: status.taskSent.assignedTo}, function (err, user) {
