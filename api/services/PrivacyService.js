@@ -67,7 +67,7 @@ module.exports = {
               message.forTask = taskMap[messages[i].forTask];
             }
             if (toPopulate.indexOf('sentBy') != -1) {
-              message.sentBy = userMap[tasks[i].sentBy];
+              message.sentBy = userMap[messages[i].sentBy];
             }
             workingMessages.push(message);
           }
