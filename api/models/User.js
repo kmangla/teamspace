@@ -165,7 +165,7 @@ module.exports = {
         user.taskCount = 0;
       }
       user.taskCount = user.taskCount + inc;
-      user.save(function(err, user) {
+      User.update({id: id}, {taskCount: user.taskCount}, function(err, userUpdated) {
         if (err) {
           cb(err);
           return; 
