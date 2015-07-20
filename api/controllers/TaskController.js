@@ -15,6 +15,8 @@ module.exports = {
       frequency: req.param('frequency'),
       assignedTo: req.param('employeeID'),
       assignedBy: req.session.User.id,
+      lastUpdate: new Date(0),
+      updateCount: 0,
     }
 
     Task.create(taskObj, function (err, task) {
@@ -22,16 +24,9 @@ module.exports = {
         console.log(err);
         return res.send(err);
       }
-      task.lastUpdate = new Date(0);
-      task.updateCount = 0;
-      task.save(function(err, task) {
-        if (err) {
-        	return res.send(err);
-        }
-      	task.employeeName = task.assignedTo.name;
-        StatsService.sendStats("task.create_count", 1);
-      	return res.json(task); 
-      });
+      task.employeeName = task.assignedTo.name;
+      StatsService.sendStats("task.create_count", 1);
+      return res.json(task); 
     });
   },
 
