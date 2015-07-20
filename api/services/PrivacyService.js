@@ -70,7 +70,7 @@ module.exports = {
               message.sentBy = userMap[tasks[i].sentBy];
             }
             workingMessages.push(message);
-          });
+          }
           cb(null, workingMessages);
         });
       });
