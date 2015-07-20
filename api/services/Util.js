@@ -23,5 +23,13 @@ module.exports = {
       return new Date();
     }
     return new Date(date);
+  },
+
+  extractMap: function (objects, key) {
+    var map = {};
+    for (var i = 0; i < objects.length; i++) {
+      map[objects[i][key]] = objects[i];
+    }
+    return map;
   }
 }
