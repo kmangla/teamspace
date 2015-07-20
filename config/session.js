@@ -51,6 +51,7 @@ module.exports.session = {
   *                                                                          *
   *                                                                          *
   ***************************************************************************/
+  url: process.env.REDISTOGO_URL,
 
   // host: 'localhost',
   // port: 6379,
