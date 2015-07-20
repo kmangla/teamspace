@@ -21,6 +21,9 @@ module.exports = {
           var workingTasks = [];
           for (var i = 0; i < tasks.length; i++) {
             var task = tasks[i];
+            if (!tasks[i].assignedBy || !tasks[i].assignedTo || !userMap[tasks[i].assignedBy] || !userMap[tasks[i].assignedTo]) {
+              continue;
+            }
             if (toPopulate.indexOf('assignedBy') != -1) {
               task.assignedBy = userMap[tasks[i].assignedBy];
             }
