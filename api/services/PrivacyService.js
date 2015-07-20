@@ -42,34 +42,38 @@ module.exports = {
   },
 
   message: function (query, toPopulate, cb) {
-    var origToPopulate = toPopulate.slice(0);
-    if (toPopulate.indexOf('forTask') == -1) {
-      toPopulate.push('forTask');
-    }
-    if (toPopulate.indexOf('sentBy') == -1) {
-      toPopulate.push('sentBy');
-    }
-    Util.populateInQuery(query, toPopulate);
     query.exec(function (err, messages) {
       if (err) {
         cb(err, []);
         return;
       }
-      var workingMessages = [];
+      var usersToFetch = {};
+      var tasksToFetch = {};
       for (var i = 0; i < messages.length; i++) {
-        if (!messages[i].sentBy || !messages[i].forTask) {
-          continue;
-        }
-        var message = messages[i];
-        if (origToPopulate.indexOf('forTask') == -1) {
-          message.forTask = message.forTask.id;
-        }
-        if (origToPopulate.indexOf('sentBy') == -1) {
-          message.sentBy = message.sentBy.id;
-        }
-        workingMessages.push(message);
+        usersToFetch[messages[i].sentBy] = 1;
+        tasksToFetch[messages[i].forTask] = 1;
       }
-      cb(null, workingMessages);
+      User.find().where({id: Object.keys(usersToFetch)}).exec(function (err, users) {
+        Task.find().where({id: Object.keys(tasksToFetch)}).exec(function (err, tasks) {
+          var workingMessages = [];
+          var userMap = Util.extractMap(users, "id");
+          var taskMap = Util.extractMap(tasks, "id");
+          for (var i = 0; i < messages.length; i++) {
+            if (!messages[i].sentBy || !messages[i].forTask || !userMap[messages[i].sentBy] || !taskMap[messages[i].forTask]) {
+              continue;
+            }
+            var message = messages[i];
+            if (toPopulate.indexOf('forTask') != -1) {
+              message.forTask = taskMap[messages[i].forTask];
+            }
+            if (toPopulate.indexOf('sentBy') != -1) {
+              message.sentBy = userMap[tasks[i].sentBy];
+            }
+            workingMessages.push(message);
+          });
+          cb(null, workingMessages);
+        });
+      });
     });
   },
 };
