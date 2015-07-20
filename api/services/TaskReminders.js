@@ -18,7 +18,7 @@ module.exports = {
           console.log(err);
           return;
         }
-        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !shouldMoveToNextTask) {
+        if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !shouldMoveToNextTask && !user.priorityTask) {
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
                 console.log(err);
@@ -27,22 +27,22 @@ module.exports = {
               Task.reminderMessageAndNotifications(userStatus.taskSent, function (err, message, notifications) {
                 if (userStatus.repeatReminderIsDue()) {
                   console.log('send repeat reminder');
-                SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
-         	  if (err) {
-                    console.log(err);
-                    return;
-                  } 
-                  console.log(reminder);
-                  var statusUpdateObj = {}; 
-                  statusUpdateObj.timeReminderSent = new Date();
-                  statusUpdateObj.timeMessageSent = new Date();
-                  statusUpdateObj.reminderCount = userStatus.reminderCount + 1;
-                  UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
-                  for(var i = 0; i < notifications.length; i++) {
-                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, forMessage: notifications[i].forMessage, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
-                    });
-                  }
-                });
+                  SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
+         	    if (err) {
+                      console.log(err);
+                      return;
+                    } 
+                    console.log(reminder);
+                    var statusUpdateObj = {}; 
+                    statusUpdateObj.timeReminderSent = new Date();
+                    statusUpdateObj.timeMessageSent = new Date();
+                    statusUpdateObj.reminderCount = userStatus.reminderCount + 1;
+                    UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
+                    for(var i = 0; i < notifications.length; i++) {
+                      SMS.create({phone: user.phone, task: userStatus.taskSent.id, forMessage: notifications[i].forMessage, timeQueued: new Date(), tokenID: token, message: notifications[i].message}, function (err, reminder) {
+                      });
+                    }
+                  });
                 } else if (notifications.length > 0) {
                   var statusUpdateObj = {}; 
                   statusUpdateObj.timeMessageSent = new Date();
@@ -56,10 +56,21 @@ module.exports = {
             });
           return;
         }
-        if (!userStatus.canStartNewTaskThread()) {
+        if (!user.priorityTask && !userStatus.canStartNewTaskThread()) {
           return;
         }
-        Task.find({assignedTo: user.id, status: 'open'}).populate('assignedTo').exec(function(err, tasks) {
+        var tasksFind = {
+          assignedTo: user.id,
+          status: 'open'
+        }
+        if (user.priorityTask) {
+          tasksFind['id'] = user.priorityTask;
+        }
+        Task.find(tasksFind).populate('assignedTo').exec(function(err, tasks) {
+          if (!tasks) {
+            User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {
+            });
+          }
           for (var i = 0 ; i < tasks.length; i++) {
             if (tasks[i].reminderIsDue(tasks[i].assignedTo)) {
               console.log(tasks[i] + 'send reminder');
@@ -84,6 +95,8 @@ module.exports = {
                     statusUpdateObj.taskSent = task.id;
                     statusUpdateObj.reminderCount = 1;
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function(err, userStatusUpdate) {
+                    });
+                    User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {
                     });
                     for(var j = 0; j < notifications.length; j++) {
                       SMS.create({phone: user.phone, task: userStatus.taskSent.id, forMessage: notifications[i].forMessage, timeQueued: new Date(), tokenID: token, message: notifications[j].message}, function (err, reminder) {

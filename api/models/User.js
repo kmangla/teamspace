@@ -56,6 +56,10 @@ module.exports = {
     	model: 'user'
     },
 
+    priorityTask: {
+        model: 'task'
+    },
+
     password: {
       type: 'string'
     },
