@@ -11,6 +11,7 @@ module.exports = {
     }
     var message = new gcm.Message({
       data: {'push' : dataObj},
+      time_to_live: 3 * 3600
     });
    
     var sender = new gcm.Sender('AIzaSyBSBLLF9lHR9CbilhrMeWjhli8nd6cX45c');
