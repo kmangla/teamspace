@@ -15,6 +15,9 @@ module.exports = {
       registerObj.userID = req.session.User.id;
       updateObj.userID = req.session.User.id;
     }
+    var country = PhoneNumberToCountry.getCountry(req.param('deviceID'));
+    registerObj.country = country;
+    updateObj.country = country;
 
     PushToken.findOrCreate({deviceID: registerObj.deviceID, appID: registerObj.appID}, registerObj).exec(function (err, token) {
       if (err) {
