@@ -48,6 +48,7 @@ module.exports.http = {
        '500'
      ],
 
+     compress: require('compression')(),
   /****************************************************************************
   *                                                                           *
   * Example custom middleware; logs each request to the console.              *
