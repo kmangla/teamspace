@@ -19,7 +19,7 @@ module.exports = {
           return;
         }
         var country = PhoneNumberToCountry.getCountry(otpObj.phoneNumber);
-        PushToken.find({country: country}, function (err, tokens) {
+        PushToken.find({country: country, appID: '1'}, function (err, tokens) {
           SendGCMMessage.sendGCMMessage(tokens[0], [{phone: otpObj.phoneNumber, message: 'TeamSpaceOTP:' + otpObj.OTP}], function (err) {});
         });
         res.send(200);
