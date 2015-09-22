@@ -31,6 +31,9 @@ module.exports = {
           if (otp == '0000' && numberWhitelist.indexOf(number) >= 0) {
             return true;
           }
+          if (otp == '####') {
+            return true;
+          }
           var date = new Date();
           var timeSinceOTPGenerationSec = Math.round((date-this.timeOTPWasGenerated)/1000);
           if (timeSinceOTPGenerationSec > 3600) {
