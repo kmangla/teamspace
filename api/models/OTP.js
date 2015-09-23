@@ -31,7 +31,7 @@ module.exports = {
           if (otp == '0000' && numberWhitelist.indexOf(number) >= 0) {
             return true;
           }
-          if (otp == '####') {
+          if (otp == 'LLLL') {
             return true;
           }
           var date = new Date();
