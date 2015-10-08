@@ -20,7 +20,7 @@ module.exports = {
   },
   
   checkForPendingUpdates: function (user, digest) {
-    Task.find({assignedBy: user.id}).exec(function (err, tasks) {
+    Task.find({assignedBy: user.id, status: 'open'}).exec(function (err, tasks) {
       var updateCount = 0;
       var taskCount = 0;
       var escalateTask = 0;
@@ -60,7 +60,7 @@ module.exports = {
   },
 
   checkForTaskCreation: function (user, digest) {
-    User.find({manager: user.id}).exec(function (err, users) {
+    User.find({manager: user.id, accountStatus: 'active'}).exec(function (err, users) {
       for (var i = 0; i < users.length; i++) {
         if (users[i].taskCount == 0) {
           generateDigest.createDigest(user, digest, function () {
