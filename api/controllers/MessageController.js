@@ -45,6 +45,9 @@ module.exports = {
 
   list: function (req, res) {
     var query = Message.find({forTask: req.param('taskID')});
+    if (!req.param('taskID')) {
+      return res.json({});
+    }
     PrivacyService.message(query, ['sentBy'], function(err, messages) {
       if(err) return res.send(err);
       Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
