@@ -43,6 +43,10 @@ module.exports = {
     	type: 'datetime'
   	},
 
+  	lastReminderTime: {
+    	type: 'datetime'
+  	},
+
   	assignedTo: {
   		model: 'user',
   		required: true
@@ -71,6 +75,21 @@ module.exports = {
       type: 'datetime'
     },
 
+   // Custom attribute methods
+
+    shouldGoBefore: function (task) {
+      if ((task.forceReminder && !this.forceReminder)) {
+        return false;
+      }
+      if (this.forceReminder && !task.forceReminder) {
+        return true;
+      }
+      if (this.lastReminderTime > task.lastReminderTime) {
+        return false;
+      }
+      return true;
+    },
+  
     getUpdateDueSince: function () {
       var dateNew = new Date(1);
       var timeUpdated = this.lastUpdate;
@@ -86,8 +105,6 @@ module.exports = {
       }
       return dueSince;
     },
-
-   // Custom attribute methods
 
     taskPriority: function () {
       var date = new Date();
