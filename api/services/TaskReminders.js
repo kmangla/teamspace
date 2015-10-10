@@ -79,10 +79,9 @@ module.exports = {
               dueTasks.push(tasks[i]);
             }
           }
-          if (!dueTasks) {
+          if (dueTasks.length == 0) {
             return;
           }
-          console.log(dueTasks);
           TaskReminders.findMax(dueTasks, function (err, task) {
             console.log(task + 'send reminder');
             PushToken.findOrAssignToken(user, function (err, token) {
