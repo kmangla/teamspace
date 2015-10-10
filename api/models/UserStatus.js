@@ -80,18 +80,10 @@ module.exports = {
         return;
       }
       User.findOne({id: status.taskSent.assignedTo}, function (err, user) {
-        if (status.taskSent.frequency == 86400) {
-          var days = Util.daysSince(new Date(), status.timeFirstReminderSent, user);
-          if (days > 0) {
-            cb(null, true);
-            return; 
-          }
-        } else if (status.taskSent.frequency == 604800) {
-          var days = Util.daysSince(new Date(), status.timeFirstReminderSent, user);
-          if (days > 3) {
-            cb(null, true);
-            return;
-          }
+        var days = Util.daysSince(new Date(), status.timeFirstReminderSent, user);
+        if (days > 0) {
+          cb(null, true);
+          return; 
         }
         cb(null, false);
       });
