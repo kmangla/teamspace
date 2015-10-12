@@ -6,7 +6,7 @@ module.exports = {
       console.log(tasks);
       var userStatusesToFetch = {};
       for (var i = 0; i < tasks.length; i++) {
-        userStatusesToFetch[tasks[i].assignedTo] = 1;
+        userStatusesToFetch[tasks[i].assignedTo.id] = 1;
       }
       console.log(Object.keys(userStatusesToFetch));
       console.log(userStatusesToFetch);
