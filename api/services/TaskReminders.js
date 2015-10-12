@@ -13,7 +13,6 @@ module.exports = {
           console.log('No userStatus object for user ' + user.id);
           return;
         }
-        TaskStatus.findOne({id: userStatus.taskSent.currentStatus}, function (err, taskStatus) {
         UserStatus.shouldMoveToNextTask(userStatus.id, function (err, shouldMoveToNextTask) {
           if (err) {
             console.log(err);
@@ -25,6 +24,7 @@ module.exports = {
                 console.log(err);
                 return;
               }
+              TaskStatus.findOne({id: userStatus.taskSent.currentStatus}, function (err, taskStatus) {
               Task.reminderMessageAndNotifications(userStatus.taskSent, function (err, message, notifications) {
                 if (userStatus.repeatReminderIsDue()) {
                   SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
@@ -40,7 +40,7 @@ module.exports = {
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
                     var taskStatusUpdateObj = {}; 
                     taskStatusUpdateObj.timeReminderSent = new Date();
-                    taskStatusUpdateObj.reminderCount = userStatus.reminderCount + 1;
+                    taskStatusUpdateObj.reminderCount = taskStatus.reminderCount + 1;
                     TaskStatus.update({id: taskStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
                     createSMSForNotifications(user, userStatus, notifications, token);
                   });
@@ -50,6 +50,7 @@ module.exports = {
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
                   createSMSForNotifications(user, userStatus, notifications, token);
                 }
+              });
               });
             });
           return;
@@ -115,7 +116,6 @@ module.exports = {
               });
             }); 
           });
-        });
         });
         });
       });
