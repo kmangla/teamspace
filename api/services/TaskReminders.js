@@ -42,13 +42,13 @@ module.exports = {
                     taskStatusUpdateObj.timeReminderSent = new Date();
                     taskStatusUpdateObj.reminderCount = taskStatus.reminderCount + 1;
                     TaskStatus.update({id: taskStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
-                    createSMSForNotifications(user, userStatus, notifications, token);
+                    TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
                   });
                 } else if (notifications.length > 0) {
                   var statusUpdateObj = {}; 
                   statusUpdateObj.timeMessageSent = new Date();
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
-                  createSMSForNotifications(user, userStatus, notifications, token);
+                  TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
                 }
               });
               });
@@ -111,7 +111,7 @@ module.exports = {
 
                   User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {});
 
-                  createSMSForNotifications(user, userStatus, notifications, token);
+                  TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
                 });
               });
             }); 
