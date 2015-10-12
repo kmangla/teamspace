@@ -55,11 +55,11 @@ module.exports = {
       });
       MockMessage.createMockMessage([req.param('taskID')], function (err, mockMessages) {
         console.log(mockMessages);
-        /*var message = Util.extractKey(messages, req.param('taskID'));
+        var message = Util.extractKey(messages, req.param('taskID'));
         console.log(messages);
         if (err) return res.send(err);
         if (!message) return res.json(messages);
-        messages.push(message);*/
+        messages.push(message);
         return res.json(messages);
       });
     });

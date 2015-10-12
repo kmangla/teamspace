@@ -7,11 +7,6 @@ module.exports = {
         userStatusesToFetch[tasks[i].assignedTo.id] = 1;
       }
       UserStatus.find().where({user: Object.keys(userStatusesToFetch)}).exec(function (err, statuses) {
-        if (err) {
-          console.log(err);
-          cb(err, {});
-          return;
-        }
         var statusMap = Util.extractMap(statuses, "user");
         for (var i = 0; i < tasks.length; i++) {
           var task = tasks[i];
