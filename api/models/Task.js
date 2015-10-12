@@ -43,10 +43,6 @@ module.exports = {
     	type: 'datetime'
   	},
 
-  	lastReminderTime: {
-    	type: 'datetime'
-  	},
-
   	assignedTo: {
   		model: 'user',
   		required: true
@@ -75,7 +71,12 @@ module.exports = {
       type: 'datetime'
     },
 
-   // Custom attribute methods
+  	currentStatus: {
+  		model: 'taskstatus',
+  		required: true
+  	},
+
+    // Custom attribute methods
 
     shouldGoBefore: function (task) {
       if ((task.forceReminder && !this.forceReminder)) {
@@ -84,7 +85,7 @@ module.exports = {
       if (this.forceReminder && !task.forceReminder) {
         return true;
       }
-      if (this.lastReminderTime > task.lastReminderTime) {
+      if (this.currentStatus.lastReminderTime > task.currentStatus.lastReminderTime) {
         return false;
       }
       return true;
@@ -141,11 +142,18 @@ module.exports = {
   },
 
    beforeCreate: function(task, cb) {
-     User.updateTaskCount(task.assignedTo, 1, function (err) {
-       if (err) {
-         console.log(err);
-       }
-       cb();
+     var taskStatus = {
+       replyPending: false,
+       reminderCount: 0
+     };
+     TaskStatus.create(taskStatus, function (err, taskStatusCreated) {
+       task.currentStatus = taskStatusCreated.id;
+       User.updateTaskCount(task.assignedTo, 1, function (err) {
+         if (err) {
+           console.log(err);
+         }
+         cb();
+       });
      });
    },
 
@@ -157,7 +165,6 @@ module.exports = {
          return;
        }
        if (!originalTask) {
-         console.log('No task exists');
          cb();
          return;
        }

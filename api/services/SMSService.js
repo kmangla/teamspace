@@ -36,7 +36,12 @@ module.exports = {
               cb(err);
               return;
             }
-            cb(null, message);
+            var taskStatus = {}
+            taskStatus.replyPending = false;
+            taskStatus.reminderCount = 0;
+            TaskStatus.update({id:userStatus.taskSent.currentStatus}, taskStatus, function (err, taskStatusUpdate) {
+              cb(null, message);
+            });
           });
         });
       });
