@@ -8,7 +8,9 @@ module.exports = {
       for (var i = 0; i < tasks.length; i++) {
         userStatusesToFetch[tasks[i].assignedTo.id] = 1;
       }
-      cb(null, {taskIDs[0]: 'test'});
+      var data = {};
+      data[taskIDs[0]] = 'test';
+      cb(null, data);
       return;
       console.log(Object.keys(userStatusesToFetch));
       console.log(userStatusesToFetch);
