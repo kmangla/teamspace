@@ -1,6 +1,6 @@
 module.exports = {
   createMockMessage: function(taskIDs, cb) {
-    var taskIDstoMessage = {}
+    var taskIDstoMessage = {};
     Task.find().where({id: taskIDs}).populate('assignedBy').populate('assignedTo').populate('currentStatus').exec(function (err, tasks) {
       var userStatusesToFetch = {};
       for (var i = 0; i < tasks.length; i++) {
