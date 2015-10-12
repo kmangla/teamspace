@@ -34,7 +34,7 @@ module.exports = {
   },
 
   extractKey: function(map, key) {
-    if (map.hasKey(key)) {
+    if (key in map)) {
       return map[key];
     }
     return null;
