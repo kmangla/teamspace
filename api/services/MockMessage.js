@@ -1,17 +1,12 @@
 module.exports = {
   createMockMessage: function(taskIDs, cb) {
     var taskIDstoMessage = {};
-    console.log(taskIDs);
     Task.find().where({id: taskIDs}).populate('assignedBy').populate('assignedTo').populate('currentStatus').exec(function (err, tasks) {
-      console.log(tasks);
       var userStatusesToFetch = {};
       for (var i = 0; i < tasks.length; i++) {
         userStatusesToFetch[tasks[i].assignedTo.id] = 1;
       }
-      console.log(Object.keys(userStatusesToFetch));
-      console.log(userStatusesToFetch);
       UserStatus.find().where({user: Object.keys(userStatusesToFetch)}).exec(function (err, statuses) {
-        console.log(statuses);
         if (err) {
           console.log(err);
           cb(err, {});
@@ -23,12 +18,12 @@ module.exports = {
           if (task.reminderIsDue(task.assignedTo)) {
             if (task.currentStatus.replyPending) {
               if ((statusMap[task.assignedTo].taskSent == task.id) && (task.taskPriority == 100)) {
-                taskIDstoMessage[task.id] =  createUrgentReminderSentMessage(task);
+                taskIDstoMessage[task.id] =  MockMessage.createUrgentReminderSentMessage(task);
               } else {
-                taskIDstoMessage[task.id] =  createReminderSentMessage(task);
+                taskIDstoMessage[task.id] =  MockMessage.createReminderSentMessage(task);
               }
             } else {
-              taskIDstoMessage[task.id] = createReplyPendingMessage(task, task.getUpdateDueSince());
+              taskIDstoMessage[task.id] = MockMessage.createReplyPendingMessage(task, task.getUpdateDueSince());
             }
           }
         }
