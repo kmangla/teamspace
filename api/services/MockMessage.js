@@ -1,51 +1,67 @@
 module.exports = {
-  createMockMessage: function(taskID, cb) {
-    Task.findOne({id: taskID}).populate('assignedBy').populate('assignedTo').exec(function (err, task) {
-      UserStatus.findOne({user: task.assignedTo.id}).exec(function (err, status) {
-        if (status.replyPending && (status.taskSent == taskID)) {
-          cb(null, MockMessage.createReminderSentMessage(task, status.timeReminderSent));
-        } else if (task.reminderIsDue(task.assignedTo)) {
-          var time = new Date(task.getUpdateDueSince());
-          if (time < task.lastReminderTime) {
-            // Reply is pending and a reminder has been sent
-            cb(null, MockMessage.createReminderSentMessage(task, task.lastReminderTime));
-          } else {
-            // Reply is pending and no reminders have been sent
-            var currentTime = new Date();
-            if (currentTime < time) {
-              time = currentTime;
+  createMockMessage: function(taskIDs, cb) {
+    var taskIDstoMessage = {}
+    Task.find().where({id: taskIDs}).populate('assignedBy').populate('assignedTo').populate('currentStatus').exec(function (err, tasks) {
+      var userStatusesToFetch = {};
+      for (var i = 0; i < tasks.length; i++) {
+        userStatusesToFetch[tasks[i].assignedTo] = 1;
+      }
+      UserStatus.find().where({id: Object.keys(userStatusesToFetch)}, function (err, statuses) {
+        var statusMap = Util.extractMap(statuses, "user");
+        for (var i = 0; i < tasks.length; i++) {
+          var task = tasks[i];
+          if (task.reminderIsDue(task.assignedTo)) {
+            if (task.currentStatus.replyPending) {
+              if ((statusMap[task.assignedTo].taskSent == task.id) && (task.taskPriority == 100)) {
+                taskIDstoMessage[task.id] =  createUrgentReminderSentMessage(task);
+              } else {
+                taskIDstoMessage[task.id] =  createReminderSentMessage(task);
+              }
+            } else {
+              taskIDstoMessage[task.id] = createReplyPendingMessage(task, task.getUpdateDueSince());
             }
-            cb(null, MockMessage.createReplyPendingMessage(task, time));
           }
-        } else {
-          cb();
         }
+        cb(null, taskIDstoMessage);
       });
     });
   },
 
-  createReplyPendingMessage: function (task, time) {
+  createReplyPendingMessage: function (task) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reply Pending',
+      description: 'Reminder Scheduled To Be Sent',
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
-      createdAt: time,
-      updatedAt: time
+      createdAt: task.getUpdateDueSince(),
+      updatedAt: task.getUpdateDueSince()
     }; 
     return message;
   },
 
-  createReminderSentMessage: function (task, time) {
+  createReminderSentMessage: function (task) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reminder Sent',
+      description: task.currentStatus.reminderCount + ' Reminders Sent',
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
-      createdAt: time,
-      updatedAt: time
+      createdAt: task.currentStatus.timeReminderSent,
+      updatedAt: task.currentStatus.timeReminderSent
+    }; 
+    return message;
+  },
+
+  createUrgentReminderSentMessage: function (task) {
+    var message = {
+      id: 'm_' + task.id,
+      description: 'No Replies Received. Contact Employee for Update',
+      forTask: task.id,
+      sentBy: task.assignedBy,
+      systemGenerated: true,
+      createdAt: task.currentStatus.timeReminderSent,
+      updatedAt: task.currentStatus.timeReminderSent
     }; 
     return message;
   },

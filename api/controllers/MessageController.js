@@ -53,7 +53,8 @@ module.exports = {
       Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
         if (err) return res.send(err);
       });
-      MockMessage.createMockMessage(req.param('taskID'), function (err, message) {
+      MockMessage.createMockMessage(req.param('taskID'), function (err, messages) {
+        var message = util.extractKey(messages, req.param('taskID'));
         if (err) return res.send(err);
         if (!message) return res.json(messages);
         messages.push(message);

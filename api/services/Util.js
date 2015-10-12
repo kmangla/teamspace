@@ -31,5 +31,12 @@ module.exports = {
       map[objects[i][key]] = objects[i];
     }
     return map;
+  },
+
+  extractKey: function(map, key) {
+    if (map.hasKey(key)) {
+      return map[key];
+    }
+    return null;
   }
 }
