@@ -53,13 +53,13 @@ module.exports = {
       Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
         if (err) return res.send(err);
       });
-      MockMessage.createMockMessage([req.param('taskID')], function (err, messages) {
-        console.log(messages);
-        var message = Util.extractKey(messages, req.param('taskID'));
+      MockMessage.createMockMessage([req.param('taskID')], function (err, mockMessages) {
+        console.log(mockMessages);
+        /*var message = Util.extractKey(messages, req.param('taskID'));
         console.log(messages);
         if (err) return res.send(err);
         if (!message) return res.json(messages);
-        messages.push(message);
+        messages.push(message);*/
         return res.json(messages);
       });
     });
