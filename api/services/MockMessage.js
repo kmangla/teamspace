@@ -10,7 +10,7 @@ module.exports = {
       }
       console.log(Object.keys(userStatusesToFetch));
       console.log(userStatusesToFetch);
-      UserStatus.find().where({user: Object.keys(userStatusesToFetch)}, function (err, statuses) {
+      UserStatus.find().where({user: Object.keys(userStatusesToFetch)}).exec(function (err, statuses) {
         console.log(statuses);
         if (err) {
           console.log(err);
