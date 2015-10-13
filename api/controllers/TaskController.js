@@ -24,6 +24,7 @@ module.exports = {
         console.log(err);
         return res.send(err);
       }
+      console.log(task);
       task.employeeName = task.assignedTo.name;
       StatsService.sendStats("task.create_count", 1);
       return res.json(task); 
