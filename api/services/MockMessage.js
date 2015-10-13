@@ -13,7 +13,7 @@ module.exports = {
           if (task.reminderIsDue(task.assignedTo)) {
             if (task.currentStatus.replyPending) {
               console.log(statusMap);
-              if (istatusMap[task.assignedTo] && (statusMap[task.assignedTo].taskSent == task.id) && (task.taskPriority == 100)) {
+              if (statusMap[task.assignedTo] && (statusMap[task.assignedTo].taskSent == task.id) && (task.taskPriority == 100)) {
                 taskIDstoMessage[task.id] =  MockMessage.createUrgentReminderSentMessage(task);
               } else {
                 taskIDstoMessage[task.id] =  MockMessage.createReminderSentMessage(task);
