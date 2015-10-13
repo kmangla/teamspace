@@ -18,7 +18,8 @@ module.exports = {
       lastUpdate: new Date(0),
       updateCount: 0,
     }
-
+   
+    console.log(taskObj);
     Task.create(taskObj, function (err, task) {
       if (err) {
         console.log(err);
