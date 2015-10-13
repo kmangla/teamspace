@@ -35,7 +35,19 @@ module.exports = {
     var query = Task.find({assignedBy: req.session.User.id, status: req.param('status')});
     PrivacyService.task(query, Util.populateParamToExpand(req), function(err, tasks) {
       if(err) return res.send(err);
-      return res.json(tasks);
+      var taskIDs = Object.keys(Util.extractMap(tasks, "id"));
+      MockMessage.createMockMessage(taskIDs, function (err, taskMap) {
+        var tasksWithMessages = [];
+        for (var i = 0; i < tasks.length; i++) {
+          var task = tasks[i];
+          var message = Util.extractKey(taskMap, task.id);
+          if (message) {
+            task.lastMessage = message;
+          }
+          tasksWithMessages.push(message);
+        }
+        return res.json(tasksWithMessages);
+      });
     });
   },
 
