@@ -72,8 +72,7 @@ module.exports = {
     },
 
   	currentStatus: {
-  		model: 'taskstatus',
-  		required: true
+  		model: 'taskstatus'
   	},
 
     // Custom attribute methods
