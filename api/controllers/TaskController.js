@@ -46,7 +46,6 @@ module.exports = {
           }
           tasksWithMessages.push(task);
         }
-        console.log(tasksWithMessages);
         return res.json(tasksWithMessages);
       });
     });
