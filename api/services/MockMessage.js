@@ -34,8 +34,8 @@ module.exports = {
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
-      createdAt: task.getUpdateDueSince(),
-      updatedAt: task.getUpdateDueSince()
+      createdAt: new Date(task.getUpdateDueSince()),
+      updatedAt: new Date(task.getUpdateDueSince())
     }; 
     return message;
   },

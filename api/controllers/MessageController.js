@@ -54,8 +54,8 @@ module.exports = {
         if (err) return res.send(err);
       });
       MockMessage.createMockMessage([req.param('taskID')], function (err, mockMessages) {
-        var message = Util.extractKey(mockMessages, req.param('taskID'));
         if (err) return res.send(err);
+        var message = Util.extractKey(mockMessages, req.param('taskID'));
         if (!message) return res.json(messages);
         messages.push(message);
         return res.json(messages);

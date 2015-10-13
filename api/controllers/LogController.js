@@ -13,12 +13,8 @@ module.exports = {
       userID: req.session.User.id,
       logData: req.param('log'), 
     };
-    Log.create(logObj, function (err, log) {
-      if (err) {
-        return res.send(400);
-      }
-      return res.send('Ok');
-    });
+    console.log(logData);
+    return res.send('Ok');
   },
 };
 
