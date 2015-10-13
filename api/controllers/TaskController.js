@@ -44,8 +44,9 @@ module.exports = {
           if (message) {
             task.lastMessage = message;
           }
-          tasksWithMessages.push(message);
+          tasksWithMessages.push(task);
         }
+        console.log(tasksWithMessages);
         return res.json(tasksWithMessages);
       });
     });
