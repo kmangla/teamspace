@@ -16,5 +16,11 @@ module.exports = {
     console.log(logData);
     return res.send('Ok');
   },
+  logClientData: function(req, res) {
+    console.log("Client Log: %s %s %s %s %s ", req.param('userID'),
+      req.param('serverCode'), req.param('phone'),req.param('desc'),
+     req.param('serverResponse'),req.param('url'));
+    return res.send('Ok');
+  },
 };
 
