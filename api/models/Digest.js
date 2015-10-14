@@ -18,5 +18,10 @@ module.exports = {
       type: 'datetime',
       required: true
     },
+
+    type: {
+  		type: 'string',
+  		enum: ['new_employee', 'new_task', 'task_update']
+    }
   },
 }
