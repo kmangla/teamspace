@@ -84,7 +84,7 @@ module.exports = {
       if (this.forceReminder && !task.forceReminder) {
         return true;
       }
-      if (this.currentStatus.lastReminderTime > task.currentStatus.lastReminderTime) {
+      if (this.currentStatus.timeReminderSent > task.currentStatus.timeReminderSent) {
         return false;
       }
       return true;

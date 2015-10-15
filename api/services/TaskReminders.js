@@ -81,7 +81,6 @@ module.exports = {
             return;
           }
           TaskReminders.findMax(dueTasks, function (err, task) {
-            console.log(task + 'send reminder');
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
                 console.log(err);
@@ -103,10 +102,15 @@ module.exports = {
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function(err, userStatusUpdate) {});
 
                   var taskStatusUpdateObj = {}; 
-                  taskStatusUpdateObj.timeReminderSent = new Date();
-                  taskStatusUpdateObj.timeFirstReminderSent = new Date();
-                  taskStatusUpdateObj.replyPending = true;
-                  taskStatusUpdateObj.reminderCount = 1;
+                  if (!task.currentStatus.replyPending) {
+                    taskStatusUpdateObj.timeReminderSent = new Date();
+                    taskStatusUpdateObj.timeFirstReminderSent = new Date();
+                    taskStatusUpdateObj.replyPending = true;
+                    taskStatusUpdateObj.reminderCount = 1;
+                  } else {
+                    taskStatusUpdateObj.timeReminderSent = new Date();
+                    taskStatusUpdateObj.reminderCount = task.currentStatus.reminderCount + 1;
+                  }
                   TaskStatus.update({id: task.currentStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
 
                   User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {});
