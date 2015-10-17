@@ -101,7 +101,7 @@ module.exports = {
                   statusUpdateObj.reminderCount = 1;
                   UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function(err, userStatusUpdate) {});
 
-                  var taskStatusUpdateObj = {}; 
+                  var taskStatusUpdateObj = {};
                   if (!task.currentStatus.replyPending) {
                     taskStatusUpdateObj.timeReminderSent = new Date();
                     taskStatusUpdateObj.timeFirstReminderSent = new Date();

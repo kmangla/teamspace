@@ -13,8 +13,8 @@ module.exports = {
 
   daysSince: function (date1, date2, user) {
     var moment = require('moment-timezone');
-    var m_date1 = moment(date1).startOf('day').tz(user.getTZ());
-    var m_date2 = moment(date2).startOf('day').tz(user.getTZ());
+    var m_date1 = moment(date1).tz(user.getTZ()).startOf('day');
+    var m_date2 = moment(date2).tz(user.getTZ()).startOf('day');
     return Math.floor((m_date1 - m_date2) / 86400000);
   },
 
