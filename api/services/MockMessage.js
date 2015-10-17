@@ -8,6 +8,11 @@ module.exports = {
       }
       UserStatus.find().where({user: Object.keys(userStatusesToFetch)}).exec(function (err, statuses) {
         var statusMap = Util.extractMap(statuses, "user");
+        var userMapList = Util.extractMapList(tasks, "assignedTo", "id");
+        var userMaxTaskMap = {};
+        for (var userID  in userMapList) {
+          userMaxTaskMap[userID] = TaskReminders.findMax(userMapList[userID]);
+        }
         for (var i = 0; i < tasks.length; i++) {
           var task = tasks[i];
           if (task.reminderIsDue(task.assignedTo)) {
@@ -22,13 +27,30 @@ module.exports = {
                 }
               }
             } else {
-              taskIDstoMessage[task.id] = MockMessage.createReplyPendingMessage(task, task.getUpdateDueSince());
+              if (userMaxTaskMap[task.assignedTo.id].id == task.id) {
+                taskIDstoMessage[task.id] = MockMessage.createReplyPendingNextMessage(task, task.getUpdateDueSince());
+              } else {
+                taskIDstoMessage[task.id] = MockMessage.createReplyPendingMessage(task, task.getUpdateDueSince());
+              }
             }
           }
         }
         cb(null, taskIDstoMessage);
       });
     });
+  },
+
+  createReplyPendingNextMessage: function (task) {
+    var message = {
+      id: 'm_' + task.id,
+      description: 'Reminders scheduled to be sent next',
+      forTask: task.id,
+      sentBy: task.assignedBy,
+      systemGenerated: true,
+      createdAt: new Date(task.getUpdateDueSince()),
+      updatedAt: new Date(task.getUpdateDueSince())
+    }; 
+    return message;
   },
 
   createReplyPendingMessage: function (task) {

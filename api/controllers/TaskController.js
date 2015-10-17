@@ -58,14 +58,19 @@ module.exports = {
     var query = Task.find({assignedTo: req.param('employeeID'), assignedBy: req.session.User.id, status: req.param('status')});
     PrivacyService.task(query, Util.populateParamToExpand(req), function(err, tasks) {
       if(err) return res.send(err);
-      //If user requested employee details reset update count
-      //TODO: need to maintain counter for both user and employee
-      /*if (task[0].assignedBy === req.session.User.id) {
-        User.update({id: task[0].assignedTo.id}, {updateCount: 0}).exec(function(err, employee) {
-          if (err) return res.send(err);
-        });
-      }*/
-      return res.json(tasks);
+      var taskIDs = Object.keys(Util.extractMap(tasks, "id"));
+      MockMessage.createMockMessage(taskIDs, function (err, taskMap) {
+        var tasksWithMessages = [];
+        for (var i = 0; i < tasks.length; i++) {
+          var task = tasks[i];
+          var message = Util.extractKey(taskMap, task.id);
+          if (message) {
+            task.lastMessage = message;
+          }
+          tasksWithMessages.push(task);
+        }
+        return res.json(tasksWithMessages);
+      });
     });
   },
 

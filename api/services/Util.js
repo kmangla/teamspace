@@ -25,6 +25,23 @@ module.exports = {
     return new Date(date);
   },
 
+  extractMapList: function (objects, key, subkey) {
+    var mapList = {};
+    for (var i = 0; i < objects.length; i++) {
+      if (!objects[i][key]) {
+        continue;
+      }
+      mapList[objects[i][key][subkey]] = [];
+    }
+    for (var i = 0; i < objects.length; i++) {
+      if (!objects[i][key]) {
+        continue;
+      }
+      mapList[objects[i][key][subkey]].push(objects[i]);
+    }
+    return mapList;
+  },
+
   extractMap: function (objects, key) {
     var map = {};
     for (var i = 0; i < objects.length; i++) {
