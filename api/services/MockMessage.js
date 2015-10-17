@@ -15,7 +15,11 @@ module.exports = {
               if (statusMap[task.assignedTo.id] && (statusMap[task.assignedTo.id].taskSent == task.id) && (task.taskPriority == 100)) {
                 taskIDstoMessage[task.id] =  MockMessage.createUrgentReminderSentMessage(task);
               } else {
-                taskIDstoMessage[task.id] =  MockMessage.createReminderSentMessage(task);
+                if (statusMap[task.assignedTo.id] && (statusMap[task.assignedTo.id].taskSent == task.id)) {
+                  taskIDstoMessage[task.id] =  MockMessage.createCurrentReminderSentMessage(task);
+                } else {
+                  taskIDstoMessage[task.id] =  MockMessage.createPreviousReminderSentMessage(task);
+                }
               }
             } else {
               taskIDstoMessage[task.id] = MockMessage.createReplyPendingMessage(task, task.getUpdateDueSince());
@@ -30,7 +34,7 @@ module.exports = {
   createReplyPendingMessage: function (task) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reminder scheduled to be sent',
+      description: 'Reminders scheduled to be sent',
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
@@ -40,10 +44,23 @@ module.exports = {
     return message;
   },
 
-  createReminderSentMessage: function (task) {
+  createCurrentReminderSentMessage: function (task) {
     var message = {
       id: 'm_' + task.id,
-      description: task.currentStatus.reminderCount + ' Reminders sent',
+      description: 'Reminders being sent currently',
+      forTask: task.id,
+      sentBy: task.assignedBy,
+      systemGenerated: true,
+      createdAt: task.currentStatus.timeReminderSent,
+      updatedAt: task.currentStatus.timeReminderSent
+    }; 
+    return message;
+  },
+
+  createPreviousReminderSentMessage: function (task) {
+    var message = {
+      id: 'm_' + task.id,
+      description: 'Reminders already sent',
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
@@ -56,7 +73,7 @@ module.exports = {
   createUrgentReminderSentMessage: function (task) {
     var message = {
       id: 'm_' + task.id,
-      description: 'No replies received. Contact employee for update',
+      description: 'No updates received. Contact employee',
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,

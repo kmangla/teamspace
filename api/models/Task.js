@@ -78,7 +78,13 @@ module.exports = {
     // Custom attribute methods
 
     shouldGoBefore: function (task) {
-      if ((task.forceReminder && !this.forceReminder)) {
+      if (task.forceReminder && this.forceReminder) {
+        if (this.forceReminderTime > task.forceReminderTime) {
+          return true;
+        }
+        return false;
+      }
+      if (task.forceReminder && !this.forceReminder) {
         return false;
       }
       if (this.forceReminder && !task.forceReminder) {
