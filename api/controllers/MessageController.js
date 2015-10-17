@@ -53,11 +53,11 @@ module.exports = {
       Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
         if (err) return res.send(err);
       });
-      MockMessage.createMockMessage([req.param('taskID')], function (err, mockMessages) {
-        if (err) return res.send(err);
-        var message = Util.extractKey(mockMessages, req.param('taskID'));
-        if (!message) return res.json(messages);
-        messages.push(message);
+      Task.findOne({id: req.param('taskID')}).populate('assignedTo').populate('currentStatus').exec(function (err, task) {
+        if (task.currentStatus.replyPending) {
+          var message = MockMessage.createReminderSentMessage(task);
+          messages.push(message);
+        }
         return res.json(messages);
       });
     });

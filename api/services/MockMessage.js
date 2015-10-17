@@ -104,4 +104,17 @@ module.exports = {
     }; 
     return message;
   },
+
+  createReminderSentMessage: function (task) {
+    var message = {
+      id: 'm_' + task.id,
+      description: 'Reminder sent',
+      forTask: task.id,
+      sentBy: task.assignedBy,
+      systemGenerated: true,
+      createdAt: task.currentStatus.timeReminderSent,
+      updatedAt: task.currentStatus.timeReminderSent
+    };
+    return message;
+  },
 }
