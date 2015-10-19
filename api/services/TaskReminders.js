@@ -2,59 +2,59 @@ module.exports = {
   run : function(user) {
     User.isContactable(user, function (isContactable) {
       if (!isContactable) {
+        Logging.logInfo('schedule_reminders', null, user.id, null, 'User is not contactable');
         return;
       }
       UserStatus.findOne({user: user.id}).populate('taskSent').exec(function (err, userStatus) {
         if (err) {
-          console.log(err);
           return;
         }
         if (!userStatus) {
-          console.log('No userStatus object for user ' + user.id);
+          Logging.logError('schedule_reminders', null, user.id, null, 'No userStatus object');
           return;
         }
         UserStatus.shouldMoveToNextTask(userStatus.id, function (err, shouldMoveToNextTask) {
           if (err) {
-            console.log(err);
             return;
           }
           if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !shouldMoveToNextTask && !user.priorityTask) {
+            Logging.logInfo('schedule_reminders', null, user.id, userStatus.taskSent.id, 'Keep current task for reminders');
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
-                console.log(err);
                 return;
               }
               TaskStatus.findOne({id: userStatus.taskSent.currentStatus}, function (err, taskStatus) {
-              Task.reminderMessageAndNotifications(userStatus.taskSent, function (err, message, notifications) {
-                if (userStatus.repeatReminderIsDue()) {
-                  SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
-         	    if (err) {
-                      console.log(err);
-                      return;
-                    } 
-                    console.log(reminder);
+                Task.reminderMessageAndNotifications(userStatus.taskSent, function (err, message, notifications) {
+                  if (userStatus.repeatReminderIsDue()) {
+                    SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
+                 	    if (err) {
+                        return;
+                      }
+                      Logging.logInfo('schedule_reminders', null, user.id, userStatus.taskSent.id, 'Reminder sent for task');
+                      var statusUpdateObj = {}; 
+                      statusUpdateObj.timeReminderSent = new Date();
+                      statusUpdateObj.timeMessageSent = new Date();
+                      statusUpdateObj.reminderCount = userStatus.reminderCount + 1;
+                      UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
+
+                      var taskStatusUpdateObj = {}; 
+                      taskStatusUpdateObj.timeReminderSent = new Date();
+                      taskStatusUpdateObj.reminderCount = taskStatus.reminderCount + 1;
+                      TaskStatus.update({id: taskStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
+                      TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
+                    });
+                  } else if (notifications.length > 0) {
                     var statusUpdateObj = {}; 
-                    statusUpdateObj.timeReminderSent = new Date();
                     statusUpdateObj.timeMessageSent = new Date();
-                    statusUpdateObj.reminderCount = userStatus.reminderCount + 1;
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
-                    var taskStatusUpdateObj = {}; 
-                    taskStatusUpdateObj.timeReminderSent = new Date();
-                    taskStatusUpdateObj.reminderCount = taskStatus.reminderCount + 1;
-                    TaskStatus.update({id: taskStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
                     TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
-                  });
-                } else if (notifications.length > 0) {
-                  var statusUpdateObj = {}; 
-                  statusUpdateObj.timeMessageSent = new Date();
-                  UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
-                  TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
-                }
-              });
+                  }
+                });
               });
             });
           return;
         }
+        Logging.logInfo('schedule_reminders', null, user.id, userStatus.taskSent.id, 'Change current task for reminders');
         if (!user.priorityTask && !userStatus.canStartNewTaskThread()) {
           return;
         }
@@ -81,15 +81,15 @@ module.exports = {
             return;
           }
           var task = TaskReminders.findMax(dueTasks);
+          Logging.logInfo('schedule_reminders', null, user.id, task.id, 'New task selected for sending reminders');
           PushToken.findOrAssignToken(user, function (err, token) {
             if (err) {
-              console.log(err);
               return;
             }
             Task.reminderMessageAndNotifications(task, function (err, message, notifications) {
               SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
+                Logging.logInfo('schedule_reminders', null, user.id, task.id, 'Reminder sent for task');
    	            if (err) {
-                  console.log(err);
                   return;
                 } 
                 var statusUpdateObj = {}; 
