@@ -19,13 +19,10 @@ module.exports = {
       updateCount: 0,
     }
    
-    console.log(taskObj);
     Task.create(taskObj, function (err, task) {
       if (err) {
-        console.log(err);
         return res.send(err);
       }
-      console.log(task);
       task.employeeName = task.assignedTo.name;
       StatsService.sendStats("task.create_count", 1);
       return res.json(task); 
@@ -82,7 +79,7 @@ module.exports = {
       taskUpdateObj.lastUpdate = new Date();
       taskUpdateObj.forceReminder = false;
       UserStatus.changeStatusIfRequired(req.params.id, function (err) {
-        if (err) console.log(err);
+        if (err) {}
       });
     }
     if (req.param('sendReminderNow')) {

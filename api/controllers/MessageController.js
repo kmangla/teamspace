@@ -11,7 +11,6 @@ module.exports = {
     if (!req.param('taskID')) {
       SMSService.receiveSMS(req.param('sentBy'), req.param('description'), function (err, message) {
         if (err) {
-          console.log(err);
           return res.send(err);
         }
         StatsService.sendStats("message.receive_count.type_sms", 1);
@@ -33,7 +32,6 @@ module.exports = {
     Message.create(messageObj, function (err, message) {
       StatsService.sendStats("message.receive_count.type_app", 1);
       if (err) {
-        console.log(err);
         return res.send(err);
       }
       message.save(function(err, message) {

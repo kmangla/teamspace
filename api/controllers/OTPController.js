@@ -28,26 +28,24 @@ module.exports = {
   },
 
   verify: function(req, res) {
-    console.log('verify called');
     var phoneNumber = req.param('phoneNumber').trim();
     if (!(phoneNumber.substring(0,1) == '+')) {
       phoneNumber = '+' + phoneNumber;
     }
     OTP.findOne({phoneNumber: phoneNumber}, function (err, otp){
       if (err) {
-        console.log(err);
         res.send(err);
         return;
       } 
       if (req.param('otp') != 'LLLL') {
         if (!otp) {
-          console.log('No OTP generated');
+          Logging.logInfo('otp', null, null, null, 'No OTP generated');
           res.send('No OTP generated');
           return;
         }
         var otpCheck = otp.passOTPVerification(req.param('otp'), phoneNumber);
         if (!otpCheck) {
-          console.log('OTP Verification Failed');
+          Logging.logInfo('otp', null, null, null, 'OTP Verification failed');
           res.send('OTP Verification Failed');
           return;
         }
@@ -60,17 +58,14 @@ module.exports = {
       };
       User.findOrCreate({phone: phoneNumber}, userObj, function (err, user) {
         if (err) {
-          console.log(err);
           res.send(err);
           return;
         }
-        console.log(user);
         var reply = [];
         reply[0] = {
           userID: user.id,
           key: user.id,
         };
-        console.log(reply);
         res.send(reply);
       });
     });

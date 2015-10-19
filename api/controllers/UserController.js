@@ -20,7 +20,6 @@ module.exports = {
     User.create(userObj, function (err, user) {
 
       if (err) {
-        console.log(err);
         return res.send(err);
       }
 
@@ -48,7 +47,6 @@ module.exports = {
     User.create(employeeObj, function (err, employee) {
 
       if (err) {
-        console.log(err);
         return res.serverError(err);
       }
       employee.manager = req.session.User.id;
@@ -59,7 +57,6 @@ module.exports = {
         StatsService.sendStats("employee.create_count", 1);
         PushToken.findOrAssignToken(employee, function (err, token) {
           if (err) {
-            console.log(err);
             return res.serverError(err);
           }
           if (token) {
