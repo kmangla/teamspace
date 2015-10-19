@@ -136,7 +136,6 @@ module.exports = {
     userStatusObj.user = user.id;
     UserStatus.create(userStatusObj, function (err, userStatus) {
       if (err) {
-        console.log(err);
       }
       cb();
     });
@@ -145,7 +144,6 @@ module.exports = {
   afterDestroy: function (user, cb) {
     UserStatus.destroy({user: user.id}, function (err, status) {
       if (err) {
-        console.log(err);
       }
       cb();
     });
@@ -158,7 +156,6 @@ module.exports = {
         return;
       }
       if (!user) {
-        cb('No user found');
         return;
       }
       if (!user.taskCount) {

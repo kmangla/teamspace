@@ -155,7 +155,6 @@ module.exports = {
        task.currentStatus = taskStatusCreated.id;
        User.updateTaskCount(task.assignedTo, 1, function (err) {
          if (err) {
-           console.log(err);
          }
          cb();
        });
@@ -165,7 +164,6 @@ module.exports = {
    beforeUpdate: function(task, cb) {
      Task.findOne({id: task.id}, function (err, originalTask) {
        if (err) {
-         console.log(err);
          cb();
          return;
        }
@@ -185,7 +183,6 @@ module.exports = {
        if ((originalTask.status == 'open') && (task.status == 'closed')) {
          User.updateTaskCount(originalTask.assignedTo, -1, function (err) {
            if (err) {
-             console.log(err); 
            }
            cb();
          });
@@ -199,7 +196,6 @@ module.exports = {
     if (task[0]) {
       User.updateTaskCount(task[0].assignedTo, -1, function (err) {
         if (err) {
-          console.log(err); 
         }
         cb();
       });
@@ -210,7 +206,6 @@ module.exports = {
    
    reminderMessageAndNotifications: function (task, cb) {
      Notification.destroy({task: task.id}).exec(function (err, notifications) {
-       console.log(notifications);
        Task.reminderMessage(task, function (err, message) {
          cb(err, message, notifications);
        });

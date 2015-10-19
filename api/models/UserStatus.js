@@ -96,7 +96,6 @@ module.exports = {
         cb(err);
         return;
       }
-      console.log(task);
       UserStatus.findOne({user: task.assignedTo}).exec(function (err, status) {
         if (err) {
           cb(err);

@@ -37,12 +37,12 @@ module.exports = {
           var date = new Date();
           var timeSinceOTPGenerationSec = Math.round((date-this.timeOTPWasGenerated)/1000);
           if (timeSinceOTPGenerationSec > 3600) {
-            console.log('OTP has expired');
+            Logging.logInfo('OTP', null, null, null, 'OTP ' + otp + ' has expired for ' + number);
             return false;
           }
 
           if (this.OTP != otp) {
-            console.log('Incorrect OTP');
+            Logging.logInfo('OTP', null, null, null, 'OTP ' + otp + ' is incorrect for ' + number);
             return false;
           }
           return true;

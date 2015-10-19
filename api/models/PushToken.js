@@ -43,10 +43,10 @@ module.exports = {
           return;
         }
         if (!token) {
+          Logging.logInfo('push_token', user.id, null, null, 'Push token not assigned');
           PushToken.assignToken(user, cb);
           return;
         }
-        console.log('using ' + token);
         cb(null, token);
       });
     }
@@ -60,17 +60,17 @@ module.exports = {
         return;
       }
       if (!tokens.length) {
+        Logging.logInfo('push_token', user.id, null, null, 'No tokens available for country :' + country);
         cb('No tokens available');
         return;
       }
       var randToken = tokens[Math.floor(Math.random() * tokens.length)];
-      console.log(randToken);
       User.update({id: user.id}, {token: randToken.id}).exec(function (err, updateUser) {
         if (err) {
           cb(err);
           return; 
         }
-        console.log('assigning ' + randToken);
+        Logging.logInfo('push_token', user.id, null, null, 'Token ' + randToken.id + ' assigned for user');
         cb(null, randToken); 
       });
     });
