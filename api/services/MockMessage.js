@@ -23,7 +23,11 @@ module.exports = {
                 if (statusMap[task.assignedTo.id] && (statusMap[task.assignedTo.id].taskSent == task.id)) {
                   taskIDstoMessage[task.id] =  MockMessage.createCurrentReminderSentMessage(task);
                 } else {
-                  taskIDstoMessage[task.id] =  MockMessage.createPreviousReminderSentMessage(task);
+                  if (userMaxTaskMap[task.assignedTo.id].id == task.id) {
+                    taskIDstoMessage[task.id] = MockMessage.createReplyPendingNextMessage(task, task.getUpdateDueSince());
+                  } else {
+                    taskIDstoMessage[task.id] = MockMessage.createPreviousReminderSentMessage(task);
+                  }
                 }
               }
             } else {
