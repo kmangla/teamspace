@@ -56,6 +56,7 @@ module.exports = {
         }
         Logging.logInfo('schedule_reminders', null, user.id, null, 'Change current task for reminders');
         if (!user.priorityTask && !userStatus.canStartNewTaskThread()) {
+          Logging.logInfo('schedule_reminders', null, user.id, null, 'New thread cannot be started for now');
           return;
         }
         var tasksFind = {
@@ -67,8 +68,7 @@ module.exports = {
         }
         Task.find(tasksFind).populate('assignedTo').populate('currentStatus').exec(function(err, tasks) {
           if (!tasks) {
-            User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {
-            });
+            User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {});
             return;
           }
           var dueTasks = [];
