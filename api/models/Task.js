@@ -90,6 +90,12 @@ module.exports = {
       if (this.forceReminder && !task.forceReminder) {
         return true;
       }
+      if (!this.currentStatus.timeReminderSent) {
+        return true;
+      }
+      if (!task.currentStatus.timeReminderSent) {
+        return false;
+      }
       if (this.currentStatus.timeReminderSent > task.currentStatus.timeReminderSent) {
         return false;
       }
