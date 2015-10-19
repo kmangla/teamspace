@@ -36,9 +36,11 @@ module.exports = {
       if (updatedTask.length) {
         var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
         var randomTask = updatedTask[randomNumber];
-        generateDigest.createDigest(user, digest, 'task_update', function () {
+        var message =
+          'Update received from ' + randomTask.assignedTo.name;
+        generateDigest.createDigest(user, digest, 'task_update', message, function () {
           SendNotification.sendNotification(user.id, user.id, 
-            'Update received from ' + randomTask.assignedTo.name,
+            message,
             null,
            'digest',
             function (err) {}
@@ -49,9 +51,11 @@ module.exports = {
       if (escalateTask.length) {
         var randomNumber = RandomNumber.randomInt(0, escalateTask.length);
         var randomTask = escalateTask[randomNumber];
-        generateDigest.createDigest(user, digest, 'task_update', function () {
+        var message =
+          'No replies received from ' + randomTask.assignedTo.name + '. Contact for update';
+        generateDigest.createDigest(user, digest, 'task_update', message, function () {
           SendNotification.sendNotification(user.id, user.id, 
-            'No replies received from ' + randomTask.assignedTo.name + '. Contact for update', 
+            message, 
             null,
             'digest',
             function (err) {}
@@ -86,9 +90,11 @@ module.exports = {
       }
       var randomNumber = RandomNumber.randomInt(0, usersWithNoTask.length);
       var randomUser = usersWithNoTask[randomNumber];
-      generateDigest.createDigest(user, digest, 'new_task', function () {
+      var message = 
+        'No tasks assigned to ' + randomUser.name + '. Assign tasks to start automatically monitoring progress.';
+      generateDigest.createDigest(user, digest, 'new_task', message, function () {
         SendNotification.sendNotification(user.id, user.id,
-          'No tasks assigned to ' + randomUser.name + '. Assign tasks to start automatically monitoring progress.',
+          message,
           null,
           'digest',
           function (err) {}
@@ -98,7 +104,8 @@ module.exports = {
     });
   },
 
-  createDigest: function (user, digest, type, cb) {
+  createDigest: function (user, digest, type, message, cb) {
+    Logging.logInfo('digest', user.id, null, null, 'Digest sent: ' + type + ':' + message);
     if (digest) {
       Digest.update({id: digest.id}, {timeSent: Util.getDateObject(), type: type}).exec(function (err, updateDigest) {
         cb();

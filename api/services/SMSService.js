@@ -6,27 +6,36 @@ module.exports = {
         return;
       }
       if (!user) {
+        Logging.logError('sms_receive', null, null, null, 'User does not exist for phone:' + phone);
         cb('User does not exist for phone ' + phone);
         return;
       }
       UserStatus.findOne({user: user.id}).populate('taskSent').exec(function (err, userStatus) {
         if (err) {
-	  cb(err);
+      	  cb(err);
           return;
         }
         if (!userStatus.taskSent) {
+          Logging.logError('sms_receive', null, user.id, null, 'No task reminder sent');
           cb('No task reminder sent');
           return;
         }
         var messageObj = {};
-	messageObj.forTask = userStatus.taskSent;
+      	messageObj.forTask = userStatus.taskSent;
         messageObj.sentBy = user;
         messageObj.description = message;
-        Message.create(messageObj).exec(function (err, message) {
+        Message.create(messageObj).exec(function (err, messageCreated) {
           if (err) {
             cb(err);
             return;
           }
+          Logging.logInfo(
+            'sms_receive',
+            userStatus.taskSent.assignedBy,
+            userStatus.taskSent.assignedTo,
+            userStatus.taskSent.id,
+            message
+          );
           var userStatusObj = {};
           userStatusObj.replyPending = false;
           userStatusObj.timeMessageSent = new Date();
@@ -40,7 +49,7 @@ module.exports = {
             taskStatus.replyPending = false;
             taskStatus.reminderCount = 0;
             TaskStatus.update({id:userStatus.taskSent.currentStatus}, taskStatus, function (err, taskStatusUpdate) {
-              cb(null, message);
+              cb(null, messageCreated);
             });
           });
         });

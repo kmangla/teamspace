@@ -11,6 +11,7 @@ module.exports = {
           return;
         }
         if (!tokens.length) {
+          Logging.logError('notification', receiverID, senderID, taskID, 'Token does not exist for user');
           cb('Token does not exist for user');
           return;
         }
@@ -31,6 +32,7 @@ module.exports = {
           registrationIds[i] = tokens[i].regID;
         }
         
+        Logging.logInfo('notification', receiverID, senderID, taskID, 'Notification sent for: ' + text);
         sender.send(message, registrationIds, function (err, result) {
           if (err) {
             console.log(err);
