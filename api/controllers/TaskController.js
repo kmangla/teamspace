@@ -21,12 +21,12 @@ module.exports = {
    
     Task.create(taskObj, function (err, task) {
       if (err) {
-        Logging.LogError('task_controller', taskObj.assignedBy, taskObj.assignedTo, null, 'Task creation failed ' +  err);
+        Logging.logError('task_controller', taskObj.assignedBy, taskObj.assignedTo, null, 'Task creation failed ' +  err);
         return res.send(err);
       }
       task.employeeName = task.assignedTo.name;
       StatsService.sendStats("task.create_count", 1);
-      Logging.LogInfo('task_controller', task.assignedBy, task.assignedTo, task.id, 'Task creation succeeded');
+      Logging.logInfo('task_controller', task.assignedBy, task.assignedTo, task.id, 'Task creation succeeded');
       return res.json(task); 
     });
   },

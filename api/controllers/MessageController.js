@@ -11,11 +11,11 @@ module.exports = {
     if (!req.param('taskID')) {
       SMSService.receiveSMS(req.param('sentBy'), req.param('description'), function (err, message) {
         if (err) {
-          Logging.LogError('message_controller', null, req.param('sentBy'), null, 'Message creation failed ' + err);
+          Logging.logError('message_controller', null, req.param('sentBy'), null, 'Message creation failed ' + err);
           return res.send(err);
         }
         StatsService.sendStats("message.receive_count.type_sms", 1);
-        Logging.LogInfo('message_controller', null, message.sentBy, message.forTask, 'Message creation was successful');
+        Logging.logInfo('message_controller', null, message.sentBy, message.forTask, 'Message creation was successful');
         return res.json(message);
       });
       return;
@@ -34,13 +34,13 @@ module.exports = {
     Message.create(messageObj, function (err, message) {
       StatsService.sendStats("message.receive_count.type_app", 1);
       if (err) {
-        Logging.LogError('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation failed ' + err);
+        Logging.logError('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation failed ' + err);
         return res.send(err);
       }
-      Logging.LogInfo('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation was successful');
+      Logging.logInfo('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation was successful');
       message.save(function(err, message) {
         if (err) {
-          Logging.LogError('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation failed ' + err);
+          Logging.logError('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation failed ' + err);
           return res.send(err);
         }
       	return res.json(message); 

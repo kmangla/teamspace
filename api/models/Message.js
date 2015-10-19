@@ -83,12 +83,12 @@ module.exports = {
          PushToken.findOrAssignToken(task.assignedTo, function (err, token) {
            var user = task.assignedTo;
            UserStatus.update({id: status.id}, {timeMessageSent: new Date()}).exec(function (err, userStatusUpdate) {});
-           Logging.LogInfo('notification', task.assignedBy.id, task.assignedTo.id, task.id, 'Notification sent for : ' + notifMessage); 
+           Logging.logInfo('notification', task.assignedBy.id, task.assignedTo.id, task.id, 'Notification sent for : ' + notifMessage); 
            SMS.create({phone: user.phone, task: task.id, forMessage: message.id, timeQueued: new Date(), tokenID: token, message: notifMessage}, function (err, reminder) {});
            cb(false);
        });
       } else {
-        Logging.LogInfo('notification', task.assignedBy.id, task.assignedTo.id, task.id, 'Notification queued for : ' + notifMessage); 
+        Logging.logInfo('notification', task.assignedBy.id, task.assignedTo.id, task.id, 'Notification queued for : ' + notifMessage); 
         Notification.create({user: task.assignedBy.id, forMessage: message.id, task: task.id, timeQueued: new Date(), message: notifMessage}, function (err, notification) {
           cb(true);
         });
@@ -110,7 +110,7 @@ module.exports = {
        if (err) {
          return;
        }
-       Logging.LogInfo('notification', message.forTask.assignedBy, message.sentBy, message.forTask.id, 'Notification sent for : ' + message.description); 
+       Logging.logInfo('notification', message.forTask.assignedBy, message.sentBy, message.forTask.id, 'Notification sent for : ' + message.description); 
        SendNotification.sendNotification(message.forTask.assignedBy, message.sentBy, message.description, message.forTask.id, 'newMessage',
          function (err) {if (err) {console.log(err);}}
        );

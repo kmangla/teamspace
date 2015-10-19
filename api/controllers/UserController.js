@@ -20,7 +20,7 @@ module.exports = {
     User.create(userObj, function (err, user) {
 
       if (err) {
-        Logging.LogError('user_controller', null, null, null, 'User creation failed ' +  err);
+        Logging.logError('user_controller', null, null, null, 'User creation failed ' +  err);
         return res.send(err);
       }
 
@@ -29,11 +29,11 @@ module.exports = {
       user.designation = 'Saheb'
       user.save(function(err, user) {
         if (err) {
-          Logging.LogError('user_controller', user.id, null, null, 'User creation failed ' +  err);
+          Logging.logError('user_controller', user.id, null, null, 'User creation failed ' +  err);
           return next(err);
         }
         StatsService.sendStats("user.create_count", 1);
-        Logging.LogInfo('user_controller', user.id, null, null, 'User creation succeeded');
+        Logging.logInfo('user_controller', user.id, null, null, 'User creation succeeded');
   			res.json(user);
       });
     });
@@ -51,7 +51,7 @@ module.exports = {
     // Create a Employee with the params sent from  
     User.create(employeeObj, function (err, employee) {
       if (err) {
-        Logging.LogError('user_controller', null, null, null, 'Employee creation failed ' +  err);
+        Logging.logError('user_controller', null, null, null, 'Employee creation failed ' +  err);
         return res.serverError(err);
       }
       employee.manager = req.session.User.id;
@@ -59,19 +59,19 @@ module.exports = {
       employee.accountType = 'employee';
       employee.save(function(err, employee) {
         if (err) {
-          Logging.LogError('user_controller', null, employee.id, null, 'Employee creation failed ' +  err);
+          Logging.logError('user_controller', null, employee.id, null, 'Employee creation failed ' +  err);
           return res.serverError(err);
         }
         StatsService.sendStats("employee.create_count", 1);
         PushToken.findOrAssignToken(employee, function (err, token) {
           if (err) {
-            Logging.LogError('user_controller', null, employee.id, null, 'Employee creation failed ' +  err);
+            Logging.logError('user_controller', null, employee.id, null, 'Employee creation failed ' +  err);
             return res.serverError(err);
           }
           if (token) {
             employee.pairedNumber = token.deviceID;
           }
-          Logging.LogInfo('user_controller', null, employee.id, null, 'Employee creation succeeded');
+          Logging.logInfo('user_controller', null, employee.id, null, 'Employee creation succeeded');
           return res.send(employee); 
         });
       });
