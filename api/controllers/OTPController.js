@@ -10,15 +10,18 @@ module.exports = {
     };
     OTP.findOrCreate({phoneNumber: otpObj.phoneNumber}, otpObj, function (err, otp) {
       if (err) {
+        Logging.LogError('otp_controller', null, null, null, 'OTP creation failed :' + err);
         res.send(err);
         return;
       }
       OTP.update({phoneNumber: otpObj.phoneNumber}, otpObj, function (err, otpUpdated) {
         if (err) {
+          Logging.LogError('otp_controller', null, null, null, 'OTP creation failed :' + err);
           res.send(err);
           return;
         }
         var country = PhoneNumberToCountry.getCountry(otpObj.phoneNumber);
+        Logging.LogInfo('otp_controller', null, null, null, 'OTP created for number :' + otpObj.phoneNumber);
         PushToken.find({country: country, appID: '1'}, function (err, tokens) {
           SendGCMMessage.sendGCMMessage(tokens[0], [{phone: otpObj.phoneNumber, message: 'TeamSpaceOTP:' + otpObj.OTP}], function (err) {});
         });
@@ -34,18 +37,19 @@ module.exports = {
     }
     OTP.findOne({phoneNumber: phoneNumber}, function (err, otp){
       if (err) {
+        Logging.LogError('otp_controller', null, null, null, 'OTP verification failed :' + err);
         res.send(err);
         return;
       } 
       if (req.param('otp') != 'LLLL') {
         if (!otp) {
-          Logging.logInfo('otp', null, null, null, 'No OTP generated');
+          Logging.logInfo('otp_controller', null, null, null, 'No OTP generated for number :' + phoneNumber);
           res.send('No OTP generated');
           return;
         }
         var otpCheck = otp.passOTPVerification(req.param('otp'), phoneNumber);
         if (!otpCheck) {
-          Logging.logInfo('otp', null, null, null, 'OTP Verification failed');
+          Logging.logInfo('otp_controller', null, null, null, 'OTP Verification failed for number:' + phonerNumber);
           res.send('OTP Verification Failed');
           return;
         }
@@ -58,6 +62,7 @@ module.exports = {
       };
       User.findOrCreate({phone: phoneNumber}, userObj, function (err, user) {
         if (err) {
+          Logging.LogError('otp_controller', null, null, null, 'OTP verification user creation failed for number :' + phoneNumber);
           res.send(err);
           return;
         }
@@ -66,6 +71,7 @@ module.exports = {
           userID: user.id,
           key: user.id,
         };
+        Logging.LogInfo('otp_controller', null, null, null, 'OTP verification user created :' + user.id);
         res.send(reply);
       });
     });
