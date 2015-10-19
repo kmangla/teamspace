@@ -35,7 +35,6 @@ module.exports = {
         Logging.logInfo('notification', receiverID, senderID, taskID, 'Notification sent for: ' + text);
         sender.send(message, registrationIds, function (err, result) {
           if (err) {
-            console.log(err);
             cb(err);
           } else {
             cb();
