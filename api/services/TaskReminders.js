@@ -54,7 +54,7 @@ module.exports = {
             });
           return;
         }
-        Logging.logInfo('schedule_reminders', null, user.id, userStatus.taskSent.id, 'Change current task for reminders');
+        Logging.logInfo('schedule_reminders', null, user.id, null, 'Change current task for reminders');
         if (!user.priorityTask && !userStatus.canStartNewTaskThread()) {
           return;
         }
