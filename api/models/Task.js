@@ -228,7 +228,7 @@ module.exports = {
        if (task.description) {
          message = message + '\n' + task.description;
        }
-       message = message + '\nReply with update on job';
+       message = message + '\nReply with update to stop reminders';
        cb(null, message);
      });
    },
