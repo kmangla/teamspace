@@ -85,7 +85,7 @@ module.exports = {
           usersWithNoTask.push(users[i]);
         }
       }
-      if (usersWithNoTask.length) {
+      if (!usersWithNoTask.length) {
        return;
       }
       var randomNumber = RandomNumber.randomInt(0, usersWithNoTask.length);
