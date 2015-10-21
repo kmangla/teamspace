@@ -26,10 +26,10 @@ module.exports = {
       var updatedTask = [];
       var escalateTask = [];
       for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].updateCount) {
+        if (tasks[i].updateCount && tasks[i].assignedTo) {
           updatedTask.push(tasks[i]);
         }
-        if (tasks[i].taskPriority() >= 100 && tasks[i].currentStatus.replyPending) {
+        if (tasks[i].taskPriority() >= 100 && tasks[i].currentStatus.replyPending && tasks[i].assignedTo) {
           escalateTask.push(tasks[i]);
         }
       }
