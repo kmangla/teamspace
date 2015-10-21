@@ -199,7 +199,7 @@ module.exports = {
       return;
     }
     var date = moment(Util.getDateObject()).tz(user.getTZ());
-    cb((date.hour() >= 9) && (date.hour() <= 19) && (date.day() != 0) && !(user.phone.indexOf('Dummy') == 0));
+    cb((date.hour() >= 9) && (date.hour() <= 19) && (date.day() != 0) && (date.day() != 4) && !(user.phone.indexOf('Dummy') == 0));
   },
 };
 
