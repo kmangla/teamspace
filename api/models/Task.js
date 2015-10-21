@@ -224,11 +224,11 @@ module.exports = {
          cb(err);
          return;
        }
-       var message = user.name + ':\n' + task.title;
+       var message = user.name + ': Reply needed\n' + task.title;
        if (task.description) {
          message = message + '\n' + task.description;
        }
-       message = message + '\nReply with update to stop reminders';
+       message = message + '\nReply with update on job';
        cb(null, message);
      });
    },
