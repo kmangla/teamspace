@@ -76,4 +76,32 @@ module.exports = {
       });
     });
   },
+
+  user: function (query, toPopulate, cb) {
+    query.exec(function (err, users) {
+      if (err) {
+        cb(err, []);
+        return;
+      }
+      var usersToFetch = {};
+      for (var i = 0; i < users.length; i++) {
+        usersToFetch[users[i].manager] = 1;
+      }
+      User.find().where({id: Object.keys(usersToFetch)}).exec(function (err, managers) {
+        var managerMap = Util.extractMap(managers, "id");
+        var workingUsers = [];
+        for (var i = 0; i < users.length; i++) {
+          var user = users[i];
+          if (!users[i].manager || !managerMap[users[i].manager] || (users[i].accountStatus != 'active')) {
+            continue;
+          }
+          if (toPopulate.indexOf('manager') != -1) {
+            user.manager = managerMap[users[i].manager];
+          }
+          workingUsers.push(user);
+        }
+        cb(null, workingUsers);
+      });
+    });
+  },
 };
