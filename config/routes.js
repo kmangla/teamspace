@@ -78,5 +78,7 @@ module.exports.routes = {
   // Logging
   'post /log': 'LogController.logData',
   // Error Logging
-  'post /error': 'LogController.logClientData'
+  'post /error': 'LogController.logClientData',
+  // Notification
+  'post /notification': 'NotificationController.sendNotification'
 };

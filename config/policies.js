@@ -53,6 +53,10 @@ module.exports.policies = {
     logData: ["keyBasedAuth"],
   },
 
+  notification: {
+    sendNotification: ["keyBasedAuth"],
+  },
+
   message: {
     create: ["keyOrSMSBasedAuth"],
     list: ["keyBasedAuth"],
