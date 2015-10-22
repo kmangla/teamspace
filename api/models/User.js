@@ -135,9 +135,9 @@ module.exports = {
     var userStatusObj = {};
     userStatusObj.user = user.id;
     UserStatus.create(userStatusObj, function (err, userStatus) {
-      if (err) {
-      }
-      cb();
+      UserGlobalStatus.create({user: user.id, replyPending: false}, function (err, userGlobalStatus) {
+        cb();
+      });
     });
   },
 

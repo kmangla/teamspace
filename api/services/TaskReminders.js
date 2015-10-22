@@ -112,9 +112,8 @@ module.exports = {
                   taskStatusUpdateObj.reminderCount = task.currentStatus.reminderCount + 1;
                 }
                 TaskStatus.update({id: task.currentStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
-
                 User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {});
-
+                TaskReminders.updateUserGlobalStatus(user);
                 TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
               });
             });
@@ -122,6 +121,18 @@ module.exports = {
         });
         });
       });
+    });
+  },
+
+  updateUserGlobalStatus: function (user) {
+    UserGlobalStatus.findOne({user: user.id}).exec(function (err, userGlobalStatus) {
+      if (!userGlobalStatus.replyPending) {
+        var updateObj = {
+          replyPending: true,
+          timeFirstReminderSent: new Date()
+        };
+        UserGlobalStatus.update({id:userGlobalStatus.id}, updateObj, function (err, userStatusUpdated) {});
+      }
     });
   },
 

@@ -48,6 +48,7 @@ module.exports = {
             var taskStatus = {}
             taskStatus.replyPending = false;
             taskStatus.reminderCount = 0;
+            UserGlobalStatus.update({user: user.id}, {replyPending: false, timeLastReplyReceived: new Date()}, function (err, update) {});
             TaskStatus.update({id:userStatus.taskSent.currentStatus}, taskStatus, function (err, taskStatusUpdate) {
               cb(null, messageCreated);
             });
