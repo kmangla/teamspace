@@ -7,7 +7,7 @@ module.exports = {
             return;
           }
           var messages = [];
-          var limit = 10;
+          var limit = 2;
           if (reminders.length < limit) {
             limit = reminders.length;
           }
