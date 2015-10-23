@@ -9,6 +9,7 @@ module.exports = {
             'message': messages[i].message,
       };
     }
+    console.log(dataObj);
     var message = new gcm.Message({
       data: {'push' : dataObj},
       time_to_live: 3 * 3600,
