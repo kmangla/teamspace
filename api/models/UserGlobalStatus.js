@@ -36,6 +36,11 @@ module.exports = {
       if (!this.replyPending) {
         return false;
       }
+      var moment = require('moment-timezone');
+      var date = moment(Util.getDateObject()).tz(user.getTZ());
+      if (!((date.hour() >= 11) && (date.hour() <= 17) && (date.day() != 0) && (date.date() != 6))) {
+        return false;
+      }
       if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 7) {
         if (Util.daysSince(new Date(), this.timeEmployeeSMSSent, user) > 7) {
           return true;
@@ -43,5 +48,15 @@ module.exports = {
       }
       return false;
     }
+  },
+
+  sendReminderFromEmployer: function (employer, employee, taskID, cb) {
+    PushToken.findOrAssignToken(employee, function (err, token) {
+      var message = 'Please reply to reminder messages from ' + token.deviceID + ' with updates on tasks.';
+      Logging.logInfo('employee_sms', employer.id, employee.id, taskID, message);
+      /*SendNotification.sendNotification(employer.id, employee.id, message, taskID, 'silentMessage', function () {
+        UserGlobalStatus.update({user: employee.id}, {timeEmployeeSMSSent: new Date()}, function (err, updatedStatus) {cb();});
+      });*/
+    });
   }
 }

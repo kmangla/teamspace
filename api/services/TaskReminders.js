@@ -30,6 +30,7 @@ module.exports = {
                  	    if (err) {
                         return;
                       }
+                      TaskReminders.checkShouldSendEmployerReminder(user, userStatus.taskSent.id, function () {});
                       Logging.logInfo('schedule_reminders', null, user.id, userStatus.taskSent.id, 'Reminder sent for task');
                       var statusUpdateObj = {}; 
                       statusUpdateObj.timeReminderSent = new Date();
@@ -88,6 +89,7 @@ module.exports = {
             }
             Task.reminderMessageAndNotifications(task, function (err, message, notifications) {
               SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
+                TaskReminders.checkShouldSendEmployerReminder(user, task.id, function () {});
                 Logging.logInfo('schedule_reminders', null, user.id, task.id, 'Reminder sent for task');
    	            if (err) {
                   return;
@@ -132,6 +134,14 @@ module.exports = {
           timeFirstReminderSent: new Date()
         };
         UserGlobalStatus.update({id:userGlobalStatus.id}, updateObj, function (err, userStatusUpdated) {});
+      }
+    });
+  },
+
+  checkShouldSendEmployerReminder: function(user, taskID, cb) {
+    UserGlobalStatus.findOne({user: user.id}).exec(function (err, status) {
+      if (status.shouldSendReminderFromEmployer(user)) {
+        UserGlobalStatus.sendReminderFromEmployer(user.manager, user, taskID, cb);
       }
     });
   },
