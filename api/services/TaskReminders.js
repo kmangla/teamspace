@@ -19,6 +19,7 @@ module.exports = {
           }
           if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !shouldMoveToNextTask && !user.priorityTask) {
             Logging.logInfo('schedule_reminders', null, user.id, userStatus.taskSent.id, 'Keep current task for reminders');
+            TaskReminders.checkShouldSendEmployerReminder(user, userStatus.taskSent.id, function () {});
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
                 return;
@@ -30,7 +31,6 @@ module.exports = {
                  	    if (err) {
                         return;
                       }
-                      TaskReminders.checkShouldSendEmployerReminder(user, userStatus.taskSent.id, function () {});
                       Logging.logInfo('schedule_reminders', null, user.id, userStatus.taskSent.id, 'Reminder sent for task');
                       var statusUpdateObj = {}; 
                       statusUpdateObj.timeReminderSent = new Date();
