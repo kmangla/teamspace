@@ -38,7 +38,7 @@ module.exports = {
       }
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
-      if (!((date.hour() >= 11) && (date.hour() <= 17) && (date.day() != 0) && (date.date() != 6))) {
+      if (!((date.hour() >= 9) && (date.hour() <= 17) && (date.day() != 0) && (date.date() != 6))) {
         return false;
       }
       if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 3) {
