@@ -41,8 +41,8 @@ module.exports = {
       if (!((date.hour() >= 11) && (date.hour() <= 17) && (date.day() != 0) && (date.date() != 6))) {
         return false;
       }
-      if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 3) {
-        if ((this.timeEmployeeSMSSent == null) || (Util.daysSince(new Date(), this.timeEmployeeSMSSent, user) > 3)) {
+      if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 6) {
+        if ((this.timeEmployeeSMSSent == null) || (Util.daysSince(new Date(), this.timeEmployeeSMSSent, user) > 6)) {
           return true;
         }
       }
