@@ -83,7 +83,7 @@ module.exports = {
          PushToken.findOrAssignToken(task.assignedTo, function (err, token) {
            var user = task.assignedTo;
            UserStatus.update({id: status.id}, {timeMessageSent: new Date()}).exec(function (err, userStatusUpdate) {});
-           Logging.logInfo('notification', task.assignedBy.id, task.assignedTo.id, task.id, 'Notification sent for : ' + notifMessage); 
+           Logging.logInfo('notification', task.assignedBy.id, task.assignedTo.id, task.id, 'Notification created for : ' + notifMessage); 
            SMS.create({phone: user.phone, task: task.id, forMessage: message.id, timeQueued: new Date(), tokenID: token, message: notifMessage}, function (err, reminder) {});
            cb(false);
        });
@@ -110,7 +110,7 @@ module.exports = {
        if (err) {
          return;
        }
-       Logging.logInfo('notification', message.forTask.assignedBy, message.sentBy, message.forTask.id, 'Notification sent for : ' + message.description); 
+       Logging.logInfo('notification', message.forTask.assignedBy, message.sentBy, message.forTask.id, 'Notification created for : ' + message.description); 
        SendNotification.sendNotification(message.forTask.assignedBy, message.sentBy, message.description, message.forTask.id, 'newMessage',
          function (err) {if (err) {console.log(err);}}
        );
