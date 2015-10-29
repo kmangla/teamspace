@@ -66,13 +66,15 @@ module.exports = {
           res.send(err);
           return;
         }
-        var reply = [];
-        reply[0] = {
-          userID: user.id,
-          key: user.id,
-        };
-        Logging.logInfo('otp_controller', null, null, null, 'OTP verification user created :' + user.id);
-        res.send(reply);
+        User.update({phone: phoneNUmber}, {name: name}, function (err, userUpdated) {
+          var reply = [];
+          reply[0] = {
+            userID: userUpdated.id,
+            key: userUpdated.id,
+          };
+          Logging.logInfo('otp_controller', null, null, null, 'OTP verification user created :' + userUpdated.id);
+          res.send(reply);
+        });
       });
     });
   },
