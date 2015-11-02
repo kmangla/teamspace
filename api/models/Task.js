@@ -226,7 +226,7 @@ module.exports = {
        }
        var message = user.name + ': Reply with update on job\n' + task.title;
        if (task.description) {
-         message = message + '\n' + description;
+         message = message + '\n' + task.description;
        }
        cb(null, message);
      });
