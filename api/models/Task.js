@@ -78,16 +78,16 @@ module.exports = {
     // Custom attribute methods
 
     shouldGoBefore: function (task) {
-      if (task.forceReminder && this.forceReminder) {
+      if (task.forceReminderStillMustBeSent() && this.forceReminderStillMustBeSent()) {
         if (this.forceReminderTime > task.forceReminderTime) {
           return true;
         }
         return false;
       }
-      if (task.forceReminder && !this.forceReminder) {
+      if (task.forceReminderStillMustBeSent() && !this.forceReminderStillMustBeSent()) {
         return false;
       }
-      if (this.forceReminder && !task.forceReminder) {
+      if (this.forceReminderStillMustBeSent() && !task.forceReminderStillMustBeSent()) {
         return true;
       }
       if (!this.currentStatus.timeReminderSent) {
@@ -100,6 +100,13 @@ module.exports = {
         return false;
       }
       return true;
+    },
+
+    forceReminderStillMustBeSent: function () {
+      if (this.forceReminder && (this.forceReminderTime > this.currentStatus.timeReminderSent)) {
+        return true;
+      }
+      return false;
     },
   
     getUpdateDueSince: function () {
