@@ -54,11 +54,9 @@ module.exports = {
     PushToken.findOrAssignToken(employee, function (err, token) {
       var message = 'You will have received SMS\'s from ' + token.deviceID + '. Please reply to that number with updates on tasks.';
       Logging.logInfo('employee_sms', employer.id, employee.id, taskID, message);
-      if ((employer.id == '5548fbd7cd008003003f04ab') || employer.id == '5623a51e28c11d030061177e' || employer.id == '56174808f83347030087b707') {
-        SendNotification.sendNotification(employer.id, employee.id, message, taskID, 'silentMessage', function () {
-          UserGlobalStatus.update({user: employee.id}, {timeEmployeeSMSSent: new Date()}, function (err, updatedStatus) {cb();});
-        });
-      }
+      SendNotification.sendNotification(employer.id, employee.id, message, taskID, 'silentMessage', function () {
+        UserGlobalStatus.update({user: employee.id}, {timeEmployeeSMSSent: new Date()}, function (err, updatedStatus) {cb();});
+      });
     });
   }
 }
