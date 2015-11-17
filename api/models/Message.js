@@ -35,7 +35,25 @@ module.exports = {
         },
   },
 
-  
+   beforeCreate: function (message, cb) {
+     Message.find({sentBy: message.sentBy, forTask: message.forTask}).sort('createdAt DESC').limit(1).exec(function (err, messages) {
+       if (messages.length == 0) {
+         cb();
+         return;
+       }
+       var oldMessage = messages[0];
+       if (oldMessage.description != message.description) {
+         cb();
+         return;
+       }
+       if (((new Date()).getTime() - oldMessage.createdAt.getTime()) > 1000 * 60 * 3) {
+         cb();
+         return;
+       }
+       cb('Recent similar message');
+     });
+   },
+
    afterCreate: function(message, cb) {
      Task.findOne({id: message.forTask}).populate('assignedTo').populate('assignedBy').exec(function(err, task) {
        if(err) {
