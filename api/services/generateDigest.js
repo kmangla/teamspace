@@ -36,21 +36,6 @@ module.exports = {
           escalateTask.push(tasks[i]);
         }
       }
-      if (updatedTask.length) {
-        var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
-        var randomTask = updatedTask[randomNumber];
-        var message =
-          'Update received from ' + randomTask.assignedTo.name;
-        generateDigest.createDigest(user, digest, 'task_update', message, function () {
-          SendNotification.sendNotification(user.id, user.id, 
-            message,
-            null,
-           'digest',
-            function (err) {}
-          );
-        });
-        return;
-      }
       if (escalateTask.length) {
         var randomNumber = RandomNumber.randomInt(0, escalateTask.length);
         var randomTask = escalateTask[randomNumber];
@@ -61,6 +46,21 @@ module.exports = {
             message, 
             null,
             'digest',
+            function (err) {}
+          );
+        });
+        return;
+      }
+      if (updatedTask.length) {
+        var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
+        var randomTask = updatedTask[randomNumber];
+        var message =
+          'Update received from ' + randomTask.assignedTo.name;
+        generateDigest.createDigest(user, digest, 'task_update', message, function () {
+          SendNotification.sendNotification(user.id, user.id, 
+            message,
+            null,
+           'digest',
             function (err) {}
           );
         });
