@@ -26,7 +26,7 @@ module.exports = {
       var updatedTask = [];
       var escalateTask = [];
       for (var i = 0; i < tasks.length; i++) {
-        if (task.assignedTo.id == task.assignedBy) {
+        if (tasks[i].assignedTo.id == tasks[i].assignedBy) {
           continue;
         }
         if (tasks[i].updateCount && tasks[i].assignedTo) {
