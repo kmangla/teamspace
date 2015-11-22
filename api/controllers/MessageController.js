@@ -12,7 +12,7 @@ module.exports = {
       SMSService.receiveSMS(req.param('sentBy'), req.param('description'), function (err, message) {
         if (err) {
           Logging.logError('message_controller', null, req.param('sentBy'), null, 'Message creation failed ' + err);
-          return res.send(err);
+          return res.serverError(err);
         }
         StatsService.sendStats("message.receive_count.type_sms", 1);
         Logging.logInfo('message_controller', null, message.sentBy, message.forTask, 'Message creation was successful');
@@ -35,13 +35,13 @@ module.exports = {
       StatsService.sendStats("message.receive_count.type_app", 1);
       if (err) {
         Logging.logError('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation failed ' + err);
-        return res.send(err);
+        return res.serverError(err);
       }
       Logging.logInfo('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation was successful');
       message.save(function(err, message) {
         if (err) {
           Logging.logError('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation failed ' + err);
-          return res.send(err);
+          return res.serverError(err);
         }
       	return res.json(message); 
       });
