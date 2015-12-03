@@ -75,6 +75,7 @@ module.exports = {
       }
       UserGlobalStatus.find().where({user: Object.keys(employeeIDs)}).exec(function (err, statuses) {
         if(err) return res.send(err);
+        var statusMap = Util.extractMap(statuses, "user");
         var taskIDs = Object.keys(Util.extractMap(tasks, "id"));
         MockMessage.createMockMessage(taskIDs, function (err, taskMap) {
           var tasksWithMessages = [];
