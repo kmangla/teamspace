@@ -67,7 +67,7 @@ module.exports = {
   createRepeatReminderWillBeSent: function (task, offset) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reminder to be sent on ' +  Util.dateString(offset),
+      description: 'Next reminder to be sent on ' +  Util.dateString(offset),
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
