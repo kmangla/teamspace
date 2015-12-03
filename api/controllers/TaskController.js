@@ -34,7 +34,9 @@ module.exports = {
   listAll: function (req, res) {
     //TODO: req.param('status') is valid, ie its in [open, close]
     var query = Task.find({assignedBy: req.session.User.id, status: req.param('status')});
-    PrivacyService.task(query, Util.populateParamToExpand(req).push('currentStatus'), function(err, tasks) {
+    var params = Util.populateParamToExpand(req);
+    params.push('currentStatus');
+    PrivacyService.task(query, params, function(err, tasks) {
       var employeeIDs = {};
       for (var j = 0; j < tasks.length; j++) {
         employeeIDs[tasks[j].assignedTo.id] = 1;
@@ -64,22 +66,30 @@ module.exports = {
   list: function (req, res) {
     //TODO: req.param('status') is valid, ie its in [open, close]
     var query = Task.find({assignedTo: req.param('employeeID'), assignedBy: req.session.User.id, status: req.param('status')});
-    PrivacyService.task(query, Util.populateParamToExpand(req).push('currentStatus'), function(err, tasks) {
-      if(err) return res.send(err);
-      var taskIDs = Object.keys(Util.extractMap(tasks, "id"));
-      MockMessage.createMockMessage(taskIDs, function (err, taskMap) {
-        var tasksWithMessages = [];
-        for (var i = 0; i < tasks.length; i++) {
-          var task = tasks[i];
-          var message = Util.extractKey(taskMap, task.id);
-          if (message) {
-            task.lastMessage = message;
+    var params = Util.populateParamToExpand(req);
+    params.push('currentStatus');
+    PrivacyService.task(query, params, function(err, tasks) {
+      var employeeIDs = {};
+      for (var j = 0; j < tasks.length; j++) {
+        employeeIDs[tasks[j].assignedTo.id] = 1;
+      }
+      UserGlobalStatus.find().where({user: Object.keys(employeeIDs)}).exec(function (err, statuses) {
+        if(err) return res.send(err);
+        var taskIDs = Object.keys(Util.extractMap(tasks, "id"));
+        MockMessage.createMockMessage(taskIDs, function (err, taskMap) {
+          var tasksWithMessages = [];
+          for (var i = 0; i < tasks.length; i++) {
+            var task = tasks[i];
+            var message = Util.extractKey(taskMap, task.id);
+            if (message) {
+              task.lastMessage = message;
+            }
+            task.priority = task.taskPriority(task.assignedTo, task.currentStatus, statusMap[task.assignedTo.id]);
+            task.currentStatus = task.currentStatus.id;
+            tasksWithMessages.push(task);
           }
-          task.currentStatus = task.currentStatus.id;
-          task.priority = 0;
-          tasksWithMessages.push(task);
-        }
-        return res.json(tasksWithMessages);
+          return res.json(tasksWithMessages);
+        });
       });
     });
   },
