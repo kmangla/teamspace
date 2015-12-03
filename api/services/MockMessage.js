@@ -18,10 +18,10 @@ module.exports = {
         for (var userID  in userMapList) {
           userSortedTaskMap[userID] = MockMessage.sortOrder(userMapList[userID], statusMap[userID]);
         }
-        for (var i = 0; i < tasks.length; i++) {
-          var task = tasks[i];
+        for (var i = 0; i < dueTasks.length; i++) {
+          var task = dueTasks[i];
           var userID = task.assignedTo.id;
-          if (statusMap[userID].taskSent == tasks[i].id) {
+          if (statusMap[userID].taskSent == dueTasks[i].id) {
             taskIDstoMessage[task.id] = MockMessage.createReminderCurrentlySentMessage(task);
           } else {
             if (task.currentStatus.replyPending) {
