@@ -7,35 +7,45 @@ module.exports = {
       }
       var usersToFetch = {};
       var messagesToFetch = {};
+      var statusToFetch = {};
       for (var i = 0; i < tasks.length; i++) {
         usersToFetch[tasks[i].assignedTo] = 1;
         usersToFetch[tasks[i].assignedBy] = 1;
         if (toPopulate.indexOf('lastMessage') != -1) {
           messagesToFetch[tasks[i].lastMessage] = 1;
         }
+        if (toPopulate.indexOf('currentStatus') != -1) {
+          statusToFetch[tasks[i].currentStatus] = 1;
+        }
       }
       User.find().where({id: Object.keys(usersToFetch)}).exec(function (err, users) {
         Message.find().where({id: Object.keys(messagesToFetch)}).exec(function (err, messages) {
-          var userMap = Util.extractMap(users, "id");
-          var messageMap = Util.extractMap(messages, "id");
-          var workingTasks = [];
-          for (var i = 0; i < tasks.length; i++) {
-            var task = tasks[i];
-            if (!tasks[i].assignedBy || !tasks[i].assignedTo || !userMap[tasks[i].assignedBy] || !userMap[tasks[i].assignedTo]) {
-              continue;
+          TaskStatus.find().where({id: Object.keys(statusToFetch)}).exec(function (err, statuses) {
+            var userMap = Util.extractMap(users, "id");
+            var messageMap = Util.extractMap(messages, "id");
+            var taskStatusMap = Util.extractMap(statuses, "id");
+            var workingTasks = [];
+            for (var i = 0; i < tasks.length; i++) {
+              var task = tasks[i];
+              if (!tasks[i].assignedBy || !tasks[i].assignedTo || !userMap[tasks[i].assignedBy] || !userMap[tasks[i].assignedTo]) {
+                continue;
+              }
+              if (toPopulate.indexOf('assignedBy') != -1) {
+                task.assignedBy = userMap[tasks[i].assignedBy];
+              }
+              if (toPopulate.indexOf('assignedTo') != -1) {
+                task.assignedTo = userMap[tasks[i].assignedTo];
+              }
+              if (toPopulate.indexOf('lastMessage') != -1) {
+                task.lastMessage = messageMap[tasks[i].lastMessage];
+              }
+              if (toPopulate.indexOf('currentStatus') != -1) {
+                task.currentStatus = taskStatusMap[tasks[i].currentStatus];
+              }
+              workingTasks.push(task);
             }
-            if (toPopulate.indexOf('assignedBy') != -1) {
-              task.assignedBy = userMap[tasks[i].assignedBy];
-            }
-            if (toPopulate.indexOf('assignedTo') != -1) {
-              task.assignedTo = userMap[tasks[i].assignedTo];
-            }
-            if (toPopulate.indexOf('lastMessage') != -1) {
-              task.lastMessage = messageMap[tasks[i].lastMessage];
-            }
-            workingTasks.push(task);
-          }
-          cb(null, workingTasks);
+            cb(null, workingTasks);
+          });
         });
       });
     });
