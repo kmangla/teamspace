@@ -125,6 +125,7 @@ module.exports = {
       if (isDue) {
         return 50;
       }
+      return 0;
     },
 
     daysSinceDue: function (user) {
