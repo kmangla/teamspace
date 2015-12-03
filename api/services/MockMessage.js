@@ -22,7 +22,7 @@ module.exports = {
           var task = tasks[i];
           var userID = task.assignedTo.id;
           if (statusMap[userID].taskSent == tasks[i].id) {
-            taskIDstoMessage[task.id] = MockMessage.createReminderSentMessage(task);
+            taskIDstoMessage[task.id] = MockMessage.createReminderCurrentlySentMessage(task);
           } else {
             if (task.currentStatus.replyPending) {
               taskIDstoMessage[task.id] = MockMessage.createRepeatReminderWillBeSent(task, userSortedTaskMap[userID][task.id]);
@@ -67,7 +67,7 @@ module.exports = {
   createRepeatReminderWillBeSent: function (task, offset) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reminder sent. Next reminder will be sent on' +  Util.dateString(offset),
+      description: 'Reminder sent. Next reminder will be sent on ' +  Util.dateString(offset),
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
@@ -80,7 +80,7 @@ module.exports = {
   createReminderWillBeSent: function (task, offset) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reminder scheduled to be sent on' + Util.dateString(offset),
+      description: 'Reminder scheduled to be sent on ' + Util.dateString(offset),
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
