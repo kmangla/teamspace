@@ -60,6 +60,6 @@ module.exports = {
   dateString: function(offset) {
     var date = new Date();
     date.setDate(date.getDate() + offset);
-    return date.getDate() + '/' + date.getMonth();
+    return date.getDate() + '/' + (date.getMonth() +1);
   },
 }
