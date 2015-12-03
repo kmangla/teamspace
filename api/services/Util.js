@@ -55,5 +55,11 @@ module.exports = {
       return map[key];
     }
     return null;
-  }
+  },
+
+  dateString: function(offset) {
+    var date = new Date();
+    date.setDate(date.getDate() + offset);
+    return date.getDate() + '/' + date.getMonth();
+  },
 }

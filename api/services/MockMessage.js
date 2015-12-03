@@ -3,39 +3,31 @@ module.exports = {
     var taskIDstoMessage = {};
     Task.find().where({id: taskIDs}).populate('assignedBy').populate('assignedTo').populate('currentStatus').exec(function (err, tasks) {
       var userStatusesToFetch = {};
+      var dueTasks = [];
       for (var i = 0; i < tasks.length; i++) {
-        userStatusesToFetch[tasks[i].assignedTo.id] = 1;
+        var task = tasks[i];
+        userStatusesToFetch[task.assignedTo.id] = 1;
+        if (task.reminderIsDue(task.assignedTo)) {
+          dueTasks.push(task);
+        }
       }
       UserStatus.find().where({user: Object.keys(userStatusesToFetch)}).exec(function (err, statuses) {
         var statusMap = Util.extractMap(statuses, "user");
-        var userMapList = Util.extractMapList(tasks, "assignedTo", "id");
-        var userMaxTaskMap = {};
+        var userMapList = Util.extractMapList(dueTasks, "assignedTo", "id");
+        var userSortedTaskMap = {};
         for (var userID  in userMapList) {
-          userMaxTaskMap[userID] = TaskReminders.findMax(userMapList[userID]);
+          userSortedTaskMap[userID] = MockMessage.sortOrder(userMapList[userID], statusMap[userID]);
         }
         for (var i = 0; i < tasks.length; i++) {
           var task = tasks[i];
-          if (task.reminderIsDue(task.assignedTo)) {
+          var userID = task.assignedTo.id;
+          if (statusMap[userID].taskSent == tasks[i].id) {
+            taskIDstoMessage[task.id] = MockMessage.createReminderSentMessage(task);
+          } else {
             if (task.currentStatus.replyPending) {
-              if (statusMap[task.assignedTo.id] && (statusMap[task.assignedTo.id].taskSent == task.id) && (task.taskPriority == 100)) {
-                taskIDstoMessage[task.id] =  MockMessage.createUrgentReminderSentMessage(task);
-              } else {
-                if (statusMap[task.assignedTo.id] && (statusMap[task.assignedTo.id].taskSent == task.id)) {
-                  taskIDstoMessage[task.id] =  MockMessage.createCurrentReminderSentMessage(task);
-                } else {
-                  if (userMaxTaskMap[task.assignedTo.id].id == task.id) {
-                    taskIDstoMessage[task.id] = MockMessage.createReplyPendingNextMessage(task, task.getUpdateDueSince());
-                  } else {
-                    taskIDstoMessage[task.id] = MockMessage.createPreviousReminderSentMessage(task);
-                  }
-                }
-              }
+              taskIDstoMessage[task.id] = MockMessage.createRepeatReminderWillBeSent(task, userSortedTaskMap[userID][task.id]);
             } else {
-              if (userMaxTaskMap[task.assignedTo.id].id == task.id) {
-                taskIDstoMessage[task.id] = MockMessage.createReplyPendingNextMessage(task, task.getUpdateDueSince());
-              } else {
-                taskIDstoMessage[task.id] = MockMessage.createReplyPendingMessage(task, task.getUpdateDueSince());
-              }
+              taskIDstoMessage[task.id] = MockMessage.createReminderWillBeSent(task, userSortedTaskMap[userID][task.id]);
             }
           }
         }
@@ -44,36 +36,38 @@ module.exports = {
     });
   },
 
-  createReplyPendingNextMessage: function (task) {
-    var message = {
-      id: 'm_' + task.id,
-      description: 'Reminders scheduled to be sent next',
-      forTask: task.id,
-      sentBy: task.assignedBy,
-      systemGenerated: true,
-      createdAt: new Date(task.getUpdateDueSince()),
-      updatedAt: new Date(task.getUpdateDueSince())
-    }; 
-    return message;
+  sortOrder: function(tasks, status) {
+    var taskOrderList = {};
+    for (var i = 0; i < tasks.length; i++) {
+      var task = null;
+      for (var j = 0; j < tasks.length; j++) {
+        if (tasks[j].id in taskOrderList) {
+          continue;
+        }
+        if (task == null) {
+          task = tasks[j];
+          continue;
+        }
+        if (status.taskSent == tasks[j].id) {
+          task = tasks[j];
+          continue;
+        }
+        if (status.taskSent == task.id) {
+          continue;
+        }
+        if (tasks[j].shouldGoBefore(task)) {
+          task = tasks[j];
+        }
+      }
+      taskOrderList[task.id] = i;
+    }
+    return taskOrderList;
   },
 
-  createReplyPendingMessage: function (task) {
+  createRepeatReminderWillBeSent: function (task, offset) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reminders scheduled to be sent',
-      forTask: task.id,
-      sentBy: task.assignedBy,
-      systemGenerated: true,
-      createdAt: new Date(task.getUpdateDueSince()),
-      updatedAt: new Date(task.getUpdateDueSince())
-    }; 
-    return message;
-  },
-
-  createCurrentReminderSentMessage: function (task) {
-    var message = {
-      id: 'm_' + task.id,
-      description: 'Reminders being sent currently',
+      description: 'Reminder sent. Next reminder will be sent on' +  Util.dateString(offset),
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
@@ -83,29 +77,29 @@ module.exports = {
     return message;
   },
 
-  createPreviousReminderSentMessage: function (task) {
+  createReminderWillBeSent: function (task, offset) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Reminders already sent',
+      description: 'Reminder scheduled to be sent on' + Util.dateString(offset),
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
-      createdAt: task.currentStatus.timeReminderSent,
-      updatedAt: task.currentStatus.timeReminderSent
+      createdAt: new Date(),
+      updatedAt: new Date()
     }; 
     return message;
   },
 
-  createUrgentReminderSentMessage: function (task) {
+  createReminderCurrentlySentMessage: function (task) {
     var message = {
       id: 'm_' + task.id,
-      description: 'No updates received. Contact employee',
+      description: 'Reminder being sent today',
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
       createdAt: task.currentStatus.timeReminderSent,
       updatedAt: task.currentStatus.timeReminderSent
-    }; 
+    };
     return message;
   },
 

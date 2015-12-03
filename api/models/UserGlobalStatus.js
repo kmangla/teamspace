@@ -32,16 +32,23 @@ module.exports = {
 
     // Custom attributes
 
-    shouldSendReminderFromEmployer: function (user) {
+    employeeNotResponding: function (user) {
       if (!this.replyPending) {
         return false;
       }
+      if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 3) {
+        return true;
+      }
+      return false;
+    },
+
+    shouldSendReminderFromEmployer: function (user) {
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
       if (!((date.hour() >= 11) && (date.hour() <= 17) && (date.day() != 0) && (date.date() != 6))) {
         return false;
       }
-      if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 3) {
+      if (this.employeeNotResponding(user)) {
         if ((this.timeEmployeeSMSSent == null) || (Util.daysSince(new Date(), this.timeEmployeeSMSSent, user) > 3)) {
           return true;
         }

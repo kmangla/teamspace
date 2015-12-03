@@ -45,6 +45,7 @@ module.exports = {
           if (message) {
             task.lastMessage = message;
           }
+          task.priority = 0;
           tasksWithMessages.push(task);
         }
         return res.json(tasksWithMessages);
@@ -66,6 +67,7 @@ module.exports = {
           if (message) {
             task.lastMessage = message;
           }
+          task.priority = 0;
           tasksWithMessages.push(task);
         }
         return res.json(tasksWithMessages);

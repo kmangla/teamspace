@@ -109,53 +109,37 @@ module.exports = {
       return false;
     },
   
-    getUpdateDueSince: function () {
-      var dateNew = new Date(1);
-      var timeUpdated = this.lastUpdate;
-      if (this.lastUpdate < dateNew) {
-        timeUpdated = this.createdAt;
-      }
-      var dueSince = timeUpdated.getTime() +  this.frequency * 1000;
-      if (this.forceReminder && this.forceReminderTime) {
-        var forceTime = this.forceReminderTime.getTime();
-        if (forceTime < dueSince) {
-          dueSince = forceTime;
-        }
-      }
-      return dueSince;
-    },
-
-    taskPriority: function () {
-      var date = new Date();
-      var dueSince = this.getUpdateDueSince();
-      var delayTimeInSec = Math.round((date.getTime() - dueSince)/1000);
-      if (delayTimeInSec < 0) {
-        return 0;
-      }
-      var maxDelay = 3 * 24 * 3600 ; // 3 days
-      if (delayTimeInSec >  maxDelay) {
-        return 100;
-      }
-      return Math.ceil(delayTimeInSec/maxDelay * 100);
-    },
-
     toJSON: function () {
       var obj = this.toObject();
-      obj.priority = this.taskPriority();
       return obj;
     },
 
-    reminderIsDue: function(user) {
+    taskPriority: function(user, currentStatus, globalStatus) {
+      var days = this.daysSinceDue(user);
+      var isDue = this.reminderIsDue(user);
+      if (isDue && globalStatus.employeeNotResponding(user)) {
+        if (currentStatus.replyPending) {
+          return 100;
+        }
+      }
+      if (isDue) {
+        return 50;
+      }
+    },
+
+    daysSinceDue: function (user) {
+      var date = Util.getDateObject();
       if (this.forceReminder) {
-        return true;
+        var days = Util.daysSince(date, this.forceReminderTime, user);
+        return days;
       }
-      var date = new Date();
-      var days = Util.daysSince(date, this.lastUpdate, user);
-      if (days >= (this.frequency / 86400)) {
-        return true;
-      } else {
-        return false;
-      }
+      var days = Util.daysSince(date, this.lastUpdate, user) - Math.floor(this.frequency / 86400);
+      return days;
+    },
+
+    reminderIsDue: function(user) {
+      var days = this.daysSinceDue(user);
+      return (days >= 0);
     },
   },
 
