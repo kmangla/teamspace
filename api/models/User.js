@@ -64,6 +64,11 @@ module.exports = {
       type: 'string'
     },
 
+    repeatMessageDelay: {
+      type: 'integer',
+      defaultsTo: 3
+    }
+
     // updates since manager last viewed
     updateCount: {
     	type: 'integer',

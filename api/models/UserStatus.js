@@ -40,10 +40,10 @@ module.exports = {
       defaultsTo: 0
     },
 
-    repeatReminderIsDue: function() {
+    repeatReminderIsDue: function(user) {
       var date = new Date();
       var timeSinceLastReminderSec = Math.round((date-this.timeReminderSent)/1000);
-      var hoursTillNewReminder = 3;
+      var hoursTillNewReminder = user.repeatMessageDelay;
       if (timeSinceLastReminderSec > hoursTillNewReminder * 3600) {
         return true;
       } else {

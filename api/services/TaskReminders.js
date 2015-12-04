@@ -25,7 +25,7 @@ module.exports = {
               }
               TaskStatus.findOne({id: userStatus.taskSent.currentStatus}, function (err, taskStatus) {
                 Task.reminderMessageAndNotifications(userStatus.taskSent, function (err, message, notifications) {
-                  if (userStatus.repeatReminderIsDue()) {
+                  if (userStatus.repeatReminderIsDue(user)) {
                     SMS.create({phone: user.phone, task: userStatus.taskSent.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
                  	    if (err) {
                         return;
