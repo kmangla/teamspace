@@ -67,7 +67,7 @@ module.exports = {
     repeatMessageDelay: {
       type: 'integer',
       defaultsTo: 3
-    }
+    },
 
     // updates since manager last viewed
     updateCount: {
