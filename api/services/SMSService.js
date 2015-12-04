@@ -36,6 +36,7 @@ module.exports = {
             userStatus.taskSent.id,
             message
           );
+          cb(null, messageCreated);
           var userStatusObj = {};
           userStatusObj.replyPending = false;
           userStatusObj.timeMessageSent = new Date();
@@ -50,7 +51,6 @@ module.exports = {
             taskStatus.reminderCount = 0;
             UserGlobalStatus.update({user: user.id}, {replyPending: false, timeLastReplyReceived: new Date()}, function (err, update) {});
             TaskStatus.update({id:userStatus.taskSent.currentStatus}, taskStatus, function (err, taskStatusUpdate) {
-              cb(null, messageCreated);
             });
           });
         });
