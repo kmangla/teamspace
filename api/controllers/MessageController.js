@@ -38,13 +38,7 @@ module.exports = {
         return res.serverError(err);
       }
       Logging.logInfo('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation was successful');
-      message.save(function(err, message) {
-        if (err) {
-          Logging.logError('message_controller', null, req.param('sentBy'), req.param('taskID'), 'Message creation failed ' + err);
-          return res.serverError(err);
-        }
-      	return res.json(message); 
-      });
+    	return res.json(message); 
     });
   },
 
