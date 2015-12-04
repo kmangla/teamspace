@@ -49,14 +49,14 @@ module.exports = {
     }
     PrivacyService.message(query, ['sentBy'], function(err, messages) {
       if(err) return res.send(err);
-      Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
-        if (err) return res.send(err);
-      });
       Task.findOne({id: req.param('taskID')}).populate('assignedTo').populate('currentStatus').exec(function (err, task) {
         if (task.currentStatus.replyPending) {
           var message = MockMessage.createReminderSentMessage(task);
           messages.push(message);
         }
+        Task.update({id: req.param('taskID')}, {updateCount: 0}).exec(function(err, task) {
+          if (err) return res.send(err);
+        });
         return res.json(messages);
       });
     });
