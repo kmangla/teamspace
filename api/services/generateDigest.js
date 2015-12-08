@@ -25,7 +25,9 @@ module.exports = {
     Task.find({assignedBy: user.id, status: 'open'}).populate('currentStatus').populate('assignedTo').exec(function (err, tasks) {
       var statusesToFetch = {};
       for (var i = 0; i < tasks.length; i++) {
-        statusesToFetch[tasks[i].assignedTo.id] = 1;
+        if (tasks[i].assignedTo) {
+          statusesToFetch[tasks[i].assignedTo.id] = 1;
+        }
       }
       UserGlobalStatus.find().where({user: Object.keys(statusesToFetch)}).exec(function (err, statuses) {
       var statusMap = Util.extractMap(statuses, "user");
@@ -38,7 +40,7 @@ module.exports = {
         if (tasks[i].updateCount && tasks[i].assignedTo) {
           updatedTask.push(tasks[i]);
         }
-        if (tasks[i].taskPriority(task.assignedTo, task.currentStatus, statusMap[task.assignedTo.id]) >= 100 && tasks[i].currentStatus.replyPending && tasks[i].assignedTo) {
+        if (tasks[i].assignedTo && tasks[i].taskPriority(task.assignedTo, task.currentStatus, statusMap[task.assignedTo.id]) >= 100 && tasks[i].currentStatus.replyPending) {
           escalateTask.push(tasks[i]);
         }
       }
