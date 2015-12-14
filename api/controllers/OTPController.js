@@ -66,7 +66,8 @@ module.exports = {
           res.send(err);
           return;
         }
-        User.update({phone: phoneNumber}, {name: name}, function (err, userUpdated) {
+        User.update({phone: phoneNumber}, {name: name}, function (err, userUpdatedArr) {
+          var userUpdated = userUpdatedArr[0];
           var reply = [];
           reply[0] = {
             userID: userUpdated.id,
