@@ -7,7 +7,7 @@ module.exports = {
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
       // Only send digest between 9 and 11
-      if ((date.hour() < 9) || (date.hour() >= 11)) {
+      if ((date.hour() < 10) || (date.hour() >= 12)) {
         return;
       }
       // If a digest was sent, do not send in the same day.
@@ -34,6 +34,7 @@ module.exports = {
       var updatedTask = [];
       var escalateTask = [];
       for (var i = 0; i < tasks.length; i++) {
+        var task = tasks[i];
         if (tasks[i].assignedTo && (tasks[i].assignedTo.id == tasks[i].assignedBy)) {
           continue;
         }
