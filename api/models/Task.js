@@ -43,6 +43,11 @@ module.exports = {
     	type: 'datetime'
   	},
 
+    taskBlob: {
+      type: 'string',
+      size: 5000,
+    },
+
   	assignedTo: {
   		model: 'user',
   		required: true
