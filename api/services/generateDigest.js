@@ -44,7 +44,7 @@ module.exports = {
         if (tasks[i].assignedTo && tasks[i].taskPriority(task.assignedTo, task.currentStatus, statusMap[task.assignedTo.id]) >= 100 && tasks[i].currentStatus.replyPending) {
           escalateTask.push(tasks[i]);
         }
-      }
+      }/*
       if (escalateTask.length) {
         var randomNumber = RandomNumber.randomInt(0, escalateTask.length);
         var randomTask = escalateTask[randomNumber];
@@ -59,7 +59,7 @@ module.exports = {
           );
         });
         return;
-      }
+      }*/
       if (updatedTask.length) {
         var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
         var randomTask = updatedTask[randomNumber];
