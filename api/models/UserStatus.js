@@ -99,7 +99,6 @@ module.exports = {
       var taskStatus = {}
       taskStatus.replyPending = false;
       taskStatus.reminderCount = 0;
-      UserGlobalStatus.update({user: task.assignedTo}, {replyPending: false, timeLastReplyReceived: new Date()}, function (err, update) {});
       TaskStatus.update({id:task.currentStatus}, taskStatus, function (err, taskStatusUpdate) {
       });
       UserStatus.findOne({user: task.assignedTo}).exec(function (err, status) {
