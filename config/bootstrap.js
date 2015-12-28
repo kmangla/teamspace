@@ -55,6 +55,23 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
+  Task.native(function(err, collection) {
+    collection.ensureIndex('assignedTo', {}, function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  Task.native(function(err, collection) {
+    collection.ensureIndex('assignedBy', {}, function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  setInterval(reminder.run, 1000 * 60 * 5);
   setInterval(reminder.run, 1000 * 60 * 5);
   setInterval(sender.run, 1000 * 60 * 1);
   setInterval(digest.run, 1000 * 60 * 60);
