@@ -79,6 +79,14 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
+  Notification.native(function(err, collection) {
+    collection.ensureIndex('task', {}, function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
   setInterval(reminder.run, 1000 * 60 * 5);
   setInterval(sender.run, 1000 * 60 * 1);
   setInterval(digest.run, 1000 * 60 * 60);
