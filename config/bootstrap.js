@@ -71,7 +71,14 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
-  setInterval(reminder.run, 1000 * 60 * 5);
+  Message.native(function(err, collection) {
+    collection.ensureIndex('forTask', {}, function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
   setInterval(reminder.run, 1000 * 60 * 5);
   setInterval(sender.run, 1000 * 60 * 1);
   setInterval(digest.run, 1000 * 60 * 60);
