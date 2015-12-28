@@ -50,12 +50,14 @@ module.exports = {
 
   	assignedTo: {
   		model: 'user',
-  		required: true
+  		required: true,
+      index: true
   	},
 
   	assignedBy: {
   		model: 'user',
-  		required: true
+  		required: true,
+      index: true
   	},
 
     lastMessage: {
