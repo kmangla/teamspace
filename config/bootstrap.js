@@ -71,6 +71,14 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
+  Task.native(function(err, collection) {
+    collection.ensureIndex('status', {}, function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
   Message.native(function(err, collection) {
     collection.ensureIndex('forTask', {}, function(err, result) {
       if (err) {
