@@ -1,5 +1,6 @@
 module.exports = {
   run : function(user) {
+    console.log(user);
     Digest.findOne({user: user.id}).exec(function (err, digest) {
       if (err) {
         return;
@@ -91,29 +92,15 @@ module.exports = {
         return;
       }
     }
-    User.find({manager: user.id, accountStatus: 'active'}).exec(function (err, users) {
-      var usersWithNoTask = [];
-      for (var i = 0; i < users.length; i++) {
-        if (users[i].taskCount == 0) {
-          usersWithNoTask.push(users[i]);
-        }
-      }
-      if (!usersWithNoTask.length) {
-       return;
-      }
-      var randomNumber = RandomNumber.randomInt(0, usersWithNoTask.length);
-      var randomUser = usersWithNoTask[randomNumber];
-      var message = 
-        'No tasks assigned to ' + randomUser.name + '. Assign tasks to start automatically monitoring progress.';
-      generateDigest.createDigest(user, digest, 'new_task', message, function () {
-        SendNotification.sendNotification(user.id, user.id,
-          message,
-          null,
-          'digest',
-          function (err) {}
-        );
-      });
-      return;
+    var message = 
+      'Create tasks to monitor employees';
+    generateDigest.createDigest(user, digest, 'new_task', message, function () {
+      SendNotification.sendNotification(user.id, user.id,
+        message,
+        null,
+        'digest',
+        function (err) {}
+      );
     });
   },
 
