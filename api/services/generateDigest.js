@@ -1,6 +1,5 @@
 module.exports = {
   run : function(user) {
-    console.log(user);
     Digest.findOne({user: user.id}).exec(function (err, digest) {
       if (err) {
         return;
