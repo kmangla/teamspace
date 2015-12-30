@@ -36,6 +36,9 @@ module.exports = {
       if (!this.replyPending) {
         return false;
       }
+      if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 7) {
+        Logging.logInfo('employee_call', null, user.id, null, 'Critical delay from employee');
+      }
       if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 3) {
         return true;
       }
