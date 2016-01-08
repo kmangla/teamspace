@@ -78,6 +78,30 @@ module.exports = {
     });
   },
 
+  createEmployeeMulti: function(req, res) {
+    var employeeList = req.param('employees');
+    var data = {};
+    for (phone in employeeList) {
+      var name = employeeList[phone];
+      var employeeObj = {
+        name: name,
+        company: req.param('company'),
+        phone: phone,
+        manager: req.session.User.id,
+        online: true,
+        accountType: 'employee'
+      };
+      User.create(employeeObj, function (err, employee) {
+        if (err) {
+          Logging.logError('user_controller', null, null, null, 'Multi employee creation failed ' +  err);
+        }
+        Logging.logInfo('user_controller', null, employee.id, null, 'Employee creation succeeded');
+      });
+      data[phone] = true;
+    }
+    return res.send(data);
+  },
+
   listEmployee: function (req, res) {
     User.find({manager: req.session.User.id, accountType: 'employee', accountStatus: 'active'}).exec(function(err, employees) {
       if(err) return res.serverError(err);

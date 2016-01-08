@@ -49,6 +49,8 @@ module.exports.routes = {
   'post /user': 'UserController.create',
   // Create Employee
   'post /employee': 'UserController.createEmployee',
+  // Create Employees
+  'post /employeeMulti': 'UserController.createEmployeeMulti',
   // Get all Employees
   'get /employees': 'UserController.listEmployee',
   // Update Employee 

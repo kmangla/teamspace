@@ -27,6 +27,7 @@ module.exports.policies = {
   ***************************************************************************/
   user: {
     createEmployee: "keyBasedAuth",
+    createEmployeeMulti: "keyBasedAuth",
     listEmployee: ["keyBasedAuth"],
     deleteEmployee: ["keyBasedAuth", "employeeReportsToUser"],
     //TODO: check either employee himself or his manager can update
