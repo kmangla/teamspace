@@ -12,6 +12,7 @@ module.exports = {
       name: req.param('name'),
       company: req.param('company'),
       email: req.param('email'),
+      taskBlob: '',
       phone: req.param('phone'),
       password: req.param('password')
     }
@@ -45,6 +46,7 @@ module.exports = {
       name: req.param('name'),
       company: req.param('company'),
       phone: req.param('phone'),
+      taskBlob: '',
       designation: req.param('designation'),
     }
 
@@ -89,6 +91,7 @@ module.exports = {
         phone: phone,
         manager: req.session.User.id,
         online: true,
+        taskBlob: '',
         accountType: 'employee'
       };
       User.create(employeeObj, function (err, employee) {
@@ -123,7 +126,10 @@ module.exports = {
     }
     if (req.param('designation')) {
       employeeUpdateObj.designation = req.param('designation');
-    } 
+    }
+    if (req.param('taskBlob')) {
+      employeeUpdateObj.taskBlob = req.param('taskBlob');
+    }
     User.update({id: req.params.id}, employeeUpdateObj).exec(function(err, employee) {
       if (err) return res.serverError(err);
       res.json(employee);

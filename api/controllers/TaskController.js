@@ -13,7 +13,6 @@ module.exports = {
       description: req.param('description'),
       status: req.param('status') || 'open',
       frequency: req.param('frequency'),
-      taskBlob: req.param('taskBlob') || '',
       assignedTo: req.param('employeeID'),
       assignedBy: req.session.User.id,
       lastUpdate: new Date(0),
