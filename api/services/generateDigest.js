@@ -93,11 +93,11 @@ module.exports = {
     }
     var message = 
       'Create tasks to monitor employees';
-    generateDigest.createDigest(user, digest, 'new_task', message, function () {
+    generateDigest.createDigest(user, digest, 'taskCreation', message, function () {
       SendNotification.sendNotification(user.id, user.id,
         message,
         null,
-        'digest',
+        'taskCreation',
         function (err) {}
       );
     });
