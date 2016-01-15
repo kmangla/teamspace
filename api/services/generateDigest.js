@@ -63,7 +63,7 @@ module.exports = {
 
   checkForEmployeeCreation: function (user, digest) {
     User.count({manager: user.id}).exec(function (error, found) {
-      if (found <= 2) {
+      if (found <= 2 && (digest.type !== 'employeeCreation')) {
         var message = 
           'Add employees to monitor tasks';
         generateDigest.createDigest(user, digest, 'employeeCreation', message, function () {
