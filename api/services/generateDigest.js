@@ -30,76 +30,73 @@ module.exports = {
         }
       }
       UserGlobalStatus.find().where({user: Object.keys(statusesToFetch)}).exec(function (err, statuses) {
-      var statusMap = Util.extractMap(statuses, "user");
-      var updatedTask = [];
-      var escalateTask = [];
-      for (var i = 0; i < tasks.length; i++) {
-        var task = tasks[i];
-        if (tasks[i].assignedTo && (tasks[i].assignedTo.id == tasks[i].assignedBy)) {
-          continue;
+        var statusMap = Util.extractMap(statuses, "user");
+        var updatedTask = [];
+        for (var i = 0; i < tasks.length; i++) {
+          var task = tasks[i];
+          if (tasks[i].assignedTo && (tasks[i].assignedTo.id == tasks[i].assignedBy)) {
+            continue;
+          }
+          if (tasks[i].updateCount && tasks[i].assignedTo) {
+            updatedTask.push(tasks[i]);
+          }
         }
-        if (tasks[i].updateCount && tasks[i].assignedTo) {
-          updatedTask.push(tasks[i]);
+        if (updatedTask.length) {
+          var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
+          var randomTask = updatedTask[randomNumber];
+          var message =
+            'Update received from ' + randomTask.assignedTo.name;
+          generateDigest.createDigest(user, digest, 'task_update', message, function () {
+            SendNotification.sendNotification(user.id, user.id, 
+              message,
+              null,
+             'digest',
+              function (err) {}
+            );
+          });
+          return;
         }
-        if (tasks[i].assignedTo && tasks[i].taskPriority(task.assignedTo, task.currentStatus, statusMap[task.assignedTo.id]) >= 100 && tasks[i].currentStatus.replyPending) {
-          escalateTask.push(tasks[i]);
-        }
-      }/*
-      if (escalateTask.length) {
-        var randomNumber = RandomNumber.randomInt(0, escalateTask.length);
-        var randomTask = escalateTask[randomNumber];
-        var message =
-          'No replies received from ' + randomTask.assignedTo.name + '. Contact for update';
-        generateDigest.createDigest(user, digest, 'task_update', message, function () {
-          SendNotification.sendNotification(user.id, user.id, 
-            message, 
-            null,
-            'digest',
-            function (err) {}
-          );
-        });
-        return;
-      }*/
-      if (updatedTask.length) {
-        var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
-        var randomTask = updatedTask[randomNumber];
-        var message =
-          'Update received from ' + randomTask.assignedTo.name;
-        generateDigest.createDigest(user, digest, 'task_update', message, function () {
-          SendNotification.sendNotification(user.id, user.id, 
-            message,
-            null,
-           'digest',
-            function (err) {}
-          );
-        });
-        return;
-      }
-      // If tasks created less than 3
-      if (tasks.length < 3) {
-        generateDigest.checkForTaskCreation(user, digest);
-      }
+        generateDigest.checkForEmployeeCreation(user, digest);
       });
     });
   },
 
-  checkForTaskCreation: function (user, digest) {
-    // For Task creation reminders send only once every 3 days
-    if (digest) {
-      var daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
-      if (daysSince <= 3) {
+  checkForEmployeeCreation: function (user, digest) {
+    User.count({manager: user.id}).exec(function (error, found) {
+      if (found > 0) {
+        var message = 
+          'Add employees to monitor tasks';
+        generateDigest.createDigest(user, digest, 'employeeCreation', message, function () {
+          SendNotification.sendNotification(user.id, user.id,
+            message,
+            null,
+            'employeeCreation',
+            function (err) {}
+          );
+        });
         return;
       }
-    }
-    var message = 
-      'Create tasks to monitor employees';
-    generateDigest.createDigest(user, digest, 'taskCreation', message, function () {
-      SendNotification.sendNotification(user.id, user.id,
-        message,
-        null,
-        'taskCreation',
-        function (err) {}
-      );
+      generateDigest.checkForTaskCreation(user, digest);
+    });
+  },
+
+  checkForTaskCreation: function (user, digest) {
+    var secondDate = new Date();
+    secondDate.setDate(secondDate.getDate() - 14);
+    Task.find({assignedBy: user.id, createdAt: {'>': secondDate, '<': new Date()}}).exec(function (err, tasks) {
+      if (tasks.length == 0) {
+        var message = 
+          'Create tasks to monitor employees';
+        generateDigest.createDigest(user, digest, 'taskCreation', message, function () {
+          SendNotification.sendNotification(user.id, user.id,
+            message,
+            null,
+            'taskCreation',
+            function (err) {}
+          );
+        });
+        return;
+      }
     });
   },
 
