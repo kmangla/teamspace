@@ -78,7 +78,7 @@ module.exports.routes = {
   // OTP verify
   'get /verifyOTP': 'OTPController.verify',
   // Logging
-  'post /log': 'LogController.logData',
+  'post /metrics': 'LogController.logData',
   // Error Logging
   'post /error': 'LogController.logClientData',
   // Notification
