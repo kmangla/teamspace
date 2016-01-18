@@ -119,7 +119,7 @@ module.exports = {
     taskPriority: function(user, currentStatus, globalStatus) {
       var days = this.daysSinceDue(user);
       var isDue = this.reminderIsDue(user);
-      if (isDue && globalStatus.employeeNotResponding(user)) {
+      if (isDue && (days >= 7)) {
         if (currentStatus.replyPending) {
           return 100;
         }
