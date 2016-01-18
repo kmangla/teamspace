@@ -39,6 +39,9 @@ module.exports = {
       if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 7) {
         Logging.logInfo('employee_call', null, user.id, null, 'Critical delay from employee. Call ' + user.name + ' at ' + user.phone + '.');
       }
+      if (Util.daysSince(new Date(), user.createdAt) < 14) {
+        return true;
+      }
       if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 3) {
         return true;
       }
@@ -48,7 +51,7 @@ module.exports = {
     shouldSendReminderFromEmployer: function (user) {
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
-      if (!((date.hour() >= 11) && (date.hour() <= 17) && (date.day() != 0) && (date.date() != 6))) {
+      if (!((date.hour() >= 11) && (date.hour() <= 18) && (date.day() != 0) && (date.date() != 6))) {
         return false;
       }
       if (this.employeeNotResponding(user)) {
