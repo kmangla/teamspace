@@ -39,7 +39,7 @@ module.exports = {
       if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 7) {
         Logging.logInfo('employee_call', null, user.id, null, 'Critical delay from employee. Call ' + user.name + ' at ' + user.phone + '.');
       }
-      if (Util.daysSince(new Date(), user.createdAt) < 14) {
+      if (Util.daysSince(new Date(), user.createdAt, user) < 14) {
         return true;
       }
       if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 3) {
