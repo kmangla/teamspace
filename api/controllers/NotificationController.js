@@ -7,7 +7,7 @@
 
 module.exports = {
   sendNotification: function(req, res) {
-    SendNotification.sendNotification(req.session.User.id, req.param('senderID'), req.param('text'), req,param('ntype'), function () {});
+    SendNotification.sendNotification(req.session.User.id, req.param('senderID'), req.param('text'), req.param('taskID'), req.param('ntype'), function () {});
     return res.send('Ok');
   }
 };
