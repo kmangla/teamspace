@@ -74,7 +74,7 @@ module.exports = {
           }
           var dueTasks = [];
           for (var i = 0 ; i < tasks.length; i++) {
-            if (Util.daysSince(new Date(), tasks[i].currentStatus.timeReminderSent, tasks[i].assignedTo) <= 0) {
+            if (Util.daysSince(new Date(), tasks[i].currentStatus.timeReminderSent, tasks[i].assignedTo) <= 1) {
               continue;
             }
             if (tasks[i].reminderIsDue(tasks[i].assignedTo)) {
