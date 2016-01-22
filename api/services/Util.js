@@ -42,6 +42,23 @@ module.exports = {
     return mapList;
   },
 
+  extractMapListBasic: function (objects, key) {
+    var mapList = {};
+    for (var i = 0; i < objects.length; i++) {
+      if (!objects[i][key]) {
+        continue;
+      }
+      mapList[objects[i][key]] = [];
+    }
+    for (var i = 0; i < objects.length; i++) {
+      if (!objects[i][key]) {
+        continue;
+      }
+      mapList[objects[i][key]].push(objects[i]);
+    }
+    return mapList;
+  },
+
   extractMap: function (objects, key) {
     var map = {};
     for (var i = 0; i < objects.length; i++) {
