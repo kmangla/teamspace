@@ -25,17 +25,10 @@ module.exports = {
         if (messageToSend == null) {
           return;
         }
-        console.log(messageToSend);
-        var pushMessages = [];
-        pushMessages[0] = {
-          phone : user.phone,
-          message : messageToSend
-        };
-        SendGCMMessage.sendGCMMessage(token, pushMessages, function (err) {
-          if (err) {
-            return;
-          }
-        });
+        if (user.email == null) {
+          return;
+        }
+        EmailService.sendMail(user.email, messageToSend);
       });
       });
       });
