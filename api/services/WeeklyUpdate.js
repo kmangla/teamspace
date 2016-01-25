@@ -39,6 +39,14 @@ module.exports = {
   createMessage: function (employeeObjects, closedTasks, updatedTasks, pendingTasks) {
     var message = 'TeamSpace Weekly Report:';
     var employees = Object.keys(employeeObjects);
+    var htmlReport = '<table border=\"1\" style=\"width:100%\">';
+    htmlReport = htmlReport +
+        '<tr>' +
+            '<td>Name</td>' +
+            '<td>Total Tasks Assigned</td>' +
+            '<td>Completed Tasks</td>' +
+            '<td>Tasks Replied To</td>' +
+        '</tr>';
     for (var i = 0; i < employees.length; i++) {
       var employeeID = employees[i];
       var employee = employeeObjects[employeeID];
@@ -60,7 +68,20 @@ module.exports = {
       var totalCount = closedCount + updatedCount + pendingCount;
       message = message + '\n' + employee.name + ': ';
       message = message + closedCount + ' completed, ' + updatedCount + ' updated, ' + totalCount + ' tasks assigned';
+      var color = '#ACFA58';
+      if (pendingCount >= totalCount/2) {
+        color = '#FE642E';
+      }
+      htmlReport = htmlReport +
+        '<tr bgcolor=\"' + color + '\">' + 
+            '<td>' + employee.name + '</td>' +
+            '<td>' + totalCount + '</td>' +
+            '<td>' + closedCount + '</td>' +
+            '<td>' + updatedCount + '</td>' +
+        '</tr>';
     }
-    return message;
+    htmlReport = htmlReport +  '</table>';
+    htmlReport = htmlReport + '</br></br>';
+    return htmlReport;
   }
 }

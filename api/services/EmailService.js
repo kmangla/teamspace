@@ -15,7 +15,7 @@ module.exports = {
       from: "teamspaceapp@gmail.com",
       to: email,
       subject: "TeamSpace Weekly Report",
-      text: text,
+      html: text,
     }
 
     smtpTransport.sendMail(mail, function (error, response) {
