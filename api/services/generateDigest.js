@@ -6,18 +6,18 @@ module.exports = {
       }
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
-      // Only send digest between 9 and 11
+      // Only send digest between 6 and 8 pm
       if ((date.hour() < 18) || (date.hour() >= 20)) {
         return;
       }
       // If a digest was sent, do not send in the same day.
       if (digest) {
         var daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
-        if (daysSince <= 0) {
+        if (daysSince <= 2) {
           return;
         }
       }
-      generateDigest.checkForPendingUpdates(user, digest);
+      generateDigest.checkForTaskCreation(user, digest);
     });
   },
   
@@ -86,7 +86,7 @@ module.exports = {
     Task.find({assignedBy: user.id, createdAt: {'>': secondDate, '<': new Date()}}).exec(function (err, tasks) {
       if (tasks.length == 0) {
         var message = 
-          'Create tasks to monitor employees';
+          'No tasks created recently. Create new tasks to monitor';
         generateDigest.createDigest(user, digest, 'taskCreation', message, function () {
           SendNotification.sendNotification(user.id, user.id,
             message,
