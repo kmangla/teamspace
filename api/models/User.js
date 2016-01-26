@@ -209,7 +209,7 @@ module.exports = {
       return;
     }
     var date = moment(Util.getDateObject()).tz(user.getTZ());
-    cb((date.hour() >= 9) && (date.hour() <= 19) && (date.day() != 0) && !(user.phone.indexOf('Dummy') == 0) && (date.date() != 26));
+    cb((date.hour() >= 9) && (date.hour() <= 19) && (date.day() != 0) && !(user.phone.indexOf('Dummy') == 0));
   },
 };
 

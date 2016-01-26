@@ -41,7 +41,8 @@ module.exports = {
       if (!this.replyPending) {
         return false;
       }
-      if (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 7) {
+      if ((Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 7) || 
+          ((this.employeeSMSCount < 6) && (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 2))) {
         Logging.logInfo('employee_call', null, user.id, null, 'Critical delay from employee. Call ' + user.name + ' at ' + user.phone + '.');
       }
       if (((this.employeeSMSCount < 6) && (Util.daysSince(new Date(), this.timeFirstReminderSent, user) > 0))
