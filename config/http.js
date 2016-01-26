@@ -56,6 +56,9 @@ module.exports.http = {
   ****************************************************************************/
 
      myRequestLogger: function (req, res, next) {
+         if (req.method == "HEAD") {
+           return next();
+         }
          console.log("Requested :: ", req.method, req.url);
          return next();
      },

@@ -86,7 +86,7 @@ module.exports = {
     Task.find({assignedBy: user.id, createdAt: {'>': secondDate, '<': new Date()}}).exec(function (err, tasks) {
       if (tasks.length == 0) {
         var message = 
-          'No tasks created recently. Create new tasks to monitor';
+          'No tasks created in last two weeks. Create new tasks to monitor employees';
         generateDigest.createDigest(user, digest, 'taskCreation', message, function () {
           SendNotification.sendNotification(user.id, user.id,
             message,
