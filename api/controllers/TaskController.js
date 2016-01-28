@@ -97,7 +97,7 @@ module.exports = {
 
   updateTask: function (req, res) {
     var taskUpdateObj = {};
-    console.log(req.params);
+    console.log(req.param);
     taskUpdateObj.id = req.params.id;
     if (req.param('markUpdated')) {
       var id = req.params.id;
