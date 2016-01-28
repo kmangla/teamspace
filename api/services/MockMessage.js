@@ -17,6 +17,7 @@ module.exports = {
             taskIDstoMessage[task.id] = MockMessage.createFixProperTask(task);
             continue;
           }
+          console.log(task);
           if (task.reminderIsDue(task.assignedTo)) {
             if (statusMap[userID].replyPending && statusMap[userID].taskSent == tasks[i].id) {
               taskIDstoMessage[task.id] = MockMessage.createReminderCurrentlySentMessage(task);

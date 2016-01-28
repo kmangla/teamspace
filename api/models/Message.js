@@ -62,6 +62,8 @@ module.exports = {
        if (!task || !task.assignedTo || !task.assignedBy) {
          return;
        }
+       console.log(task);
+       console.log(message);
        if ((message.sentBy == task.assignedBy.id) && !message.systemGenerated) {
          Message.enqueueNotification(message, task, function (shouldForceReminder) {
            var forceReminder = task.forceReminder || shouldForceReminder;
