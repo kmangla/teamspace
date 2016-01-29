@@ -150,7 +150,7 @@ module.exports = {
     for(var j = 0; j < notifications.length; j++) {
       SMS.create({
         phone: user.phone,
-        task: task.id
+        task: task.id,
         forMessage: notifications[j].forMessage,
         timeQueued: new Date(), tokenID: token, message: notifications[j].message
       }, function (err, reminder) {});
