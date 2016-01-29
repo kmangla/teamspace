@@ -42,13 +42,13 @@ module.exports = {
                       taskStatusUpdateObj.timeReminderSent = new Date();
                       taskStatusUpdateObj.reminderCount = taskStatus.reminderCount + 1;
                       TaskStatus.update({id: taskStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
-                      TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
+                      TaskReminders.createSMSForNotifications(user, userStatus.taskSent, notifications, token);
                     });
                   } else if (notifications.length > 0) {
                     var statusUpdateObj = {}; 
                     statusUpdateObj.timeMessageSent = new Date();
                     UserStatus.update({id: userStatus.id}, statusUpdateObj).exec(function (err, userStatusUpdate) {});
-                    TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
+                    TaskReminders.createSMSForNotifications(user, userStatus.taskSent, notifications, token);
                   }
                 });
               });
@@ -116,7 +116,7 @@ module.exports = {
                 TaskStatus.update({id: task.currentStatus.id}, taskStatusUpdateObj).exec(function (err, taskStatusUpdate) {});
                 User.update({id: user.id}, {priorityTask: ''}).exec(function(err, userUpate) {});
                 TaskReminders.updateUserGlobalStatus(user);
-                TaskReminders.createSMSForNotifications(user, userStatus, notifications, token);
+                TaskReminders.createSMSForNotifications(user, task, notifications, token);
               });
             });
           }); 
@@ -146,11 +146,11 @@ module.exports = {
     });
   },
 
-  createSMSForNotifications: function (user, userStatus, notifications, token) {
+  createSMSForNotifications: function (user, task, notifications, token) {
     for(var j = 0; j < notifications.length; j++) {
       SMS.create({
         phone: user.phone,
-        task: userStatus.taskSent.id,
+        task: task.id
         forMessage: notifications[j].forMessage,
         timeQueued: new Date(), tokenID: token, message: notifications[j].message
       }, function (err, reminder) {});
