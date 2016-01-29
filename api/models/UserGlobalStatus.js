@@ -55,6 +55,9 @@ module.exports = {
     shouldSendReminderFromEmployer: function (user) {
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
+      if (this.employeeSMSCount == 0) {
+        return true;
+      }
       if (!((date.hour() >= 11) && (date.hour() <= 17) && (date.day() != 0) && (date.date() != 6))) {
         return false;
       }
