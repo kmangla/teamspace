@@ -22,7 +22,7 @@ module.exports = {
         if (daysSince <= 2) {
           return;
         }
-        generateDigest.checkForPendingUpdates(user, digest);
+        generateDigest.checkForTaskCreation(user, digest);
       }
     });
   },
