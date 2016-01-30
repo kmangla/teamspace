@@ -16,7 +16,7 @@ module.exports = {
         daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
       }
 
-      if (user.notApproved) {
+      if (user.notApproved && daysSince >= 1) {
         generateDigest.checkForProperTask(user, digest);
       } else {
         if (daysSince <= 2) {
