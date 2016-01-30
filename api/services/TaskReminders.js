@@ -2,7 +2,6 @@ module.exports = {
   run : function(user) {
     User.isContactable(user, function (isContactable) {
       if (!isContactable) {
-        Logging.logInfo('schedule_reminders', user.manager.id, user.id, null, 'User is not contactable');
         return;
       }
       UserStatus.findOne({user: user.id}).populate('taskSent').exec(function (err, userStatus) {
@@ -18,7 +17,6 @@ module.exports = {
             return;
           }
           if (userStatus.replyPending && userStatus.taskSent && userStatus.taskSent.status == 'open' && userStatus.taskSent.assignedTo == user.id && !shouldMoveToNextTask && !user.priorityTask) {
-            Logging.logInfo('schedule_reminders', user.manager.id, user.id, userStatus.taskSent.id, 'Keep current task for reminders');
             PushToken.findOrAssignToken(user, function (err, token) {
               if (err) {
                 return;
@@ -31,7 +29,6 @@ module.exports = {
                         return;
                       }
                       TaskReminders.checkShouldSendEmployerReminder(user, userStatus.taskSent.id, function () {});
-                      Logging.logInfo('schedule_reminders', user.manager.id, user.id, userStatus.taskSent.id, 'Reminder sent for task');
                       var statusUpdateObj = {}; 
                       statusUpdateObj.timeReminderSent = new Date();
                       statusUpdateObj.timeMessageSent = new Date();
@@ -55,9 +52,7 @@ module.exports = {
             });
           return;
         }
-        Logging.logInfo('schedule_reminders', user.manager.id, user.id, null, 'Change current task for reminders');
         if (!user.priorityTask && !userStatus.canStartNewTaskThread()) {
-          Logging.logInfo('schedule_reminders', user.manager.id, user.id, null, 'New thread cannot be started for now');
           return;
         }
         var tasksFind = {
@@ -82,7 +77,6 @@ module.exports = {
             return;
           }
           var task = TaskReminders.findMax(dueTasks);
-          Logging.logInfo('schedule_reminders', user.manager.id, user.id, task.id, 'New task selected for sending reminders');
           PushToken.findOrAssignToken(user, function (err, token) {
             if (err) {
               return;
@@ -90,7 +84,6 @@ module.exports = {
             Task.reminderMessageAndNotifications(task, function (err, message, notifications) {
               SMS.create({phone: user.phone, task: task.id, timeQueued: new Date(), tokenID: token, message: message}, function (err, reminder) {
                 TaskReminders.checkShouldSendEmployerReminder(user, task.id, function () {});
-                Logging.logInfo('schedule_reminders', user.manager.id, user.id, task.id, 'Reminder sent for task');
    	            if (err) {
                   return;
                 } 
