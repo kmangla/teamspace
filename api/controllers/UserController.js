@@ -108,7 +108,9 @@ module.exports = {
   listEmployee: function (req, res) {
     User.find({manager: req.session.User.id, accountType: 'employee', accountStatus: 'active'}).exec(function(err, employees) {
       if(err) return res.serverError(err);
-      //employees.push(req.session.User);
+      if (employees.length != 0) {
+        employees.push(req.session.User);
+      }
       return res.json(employees);
     });
   },
