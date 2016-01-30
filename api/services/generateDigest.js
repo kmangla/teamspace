@@ -22,7 +22,7 @@ module.exports = {
         if (daysSince <= 2) {
           return;
         }
-        generateDigest.checkForTaskCreation(user, digest);
+        generateDigest.checkForPendingUpdates(user, digest);
       }
     });
   },
@@ -62,7 +62,7 @@ module.exports = {
           });
           return;
         }
-        generateDigest.checkForEmployeeCreation(user, digest);
+        generateDigest.checkForTaskCreation(user, digest);
       });
     });
   },
