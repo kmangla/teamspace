@@ -213,10 +213,6 @@ module.exports = {
       cb(false);
       return;
     }
-    if (user.manager.notApproved) {
-      cb(false);
-      return;
-    }
     var date = moment(Util.getDateObject()).tz(user.getTZ());
     cb((date.hour() >= 9) && (date.hour() <= 19) && (date.day() != 0) && !(user.phone.indexOf('Dummy') == 0));
   },

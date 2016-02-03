@@ -13,10 +13,6 @@ module.exports = {
         for (var i = 0; i < tasks.length; i++) {
           var task = tasks[i];
           var userID = task.assignedTo.id;
-          if (task.assignedBy.notApproved) {
-            taskIDstoMessage[task.id] = MockMessage.createFixProperTask(task);
-            continue;
-          }
           if (task.reminderIsDue(task.assignedTo)) {
             if (statusMap[userID].replyPending && statusMap[userID].taskSent == tasks[i].id) {
               taskIDstoMessage[task.id] = MockMessage.createReminderCurrentlySentMessage(task);
@@ -34,19 +30,6 @@ module.exports = {
         cb(null, taskIDstoMessage);
       });
     });
-  },
-
-  createFixProperTask: function (task) {
-    var message = {
-      id: 'm_' + task.id,
-      description: 'Task description is incomplete. Please fix',
-      forTask: task.id,
-      sentBy: task.assignedBy,
-      systemGenerated: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }; 
-    return message;
   },
 
   createUpdated: function (task) {

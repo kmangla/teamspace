@@ -16,14 +16,10 @@ module.exports = {
         daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
       }
 
-      if (user.notApproved && daysSince >= 1) {
-        generateDigest.checkForProperTask(user, digest);
-      } else {
-        if (daysSince <= 2) {
-          return;
-        }
-        generateDigest.checkForTaskCreation(user, digest);
+      if (daysSince <= 2) {
+        return;
       }
+      generateDigest.checkForTaskCreation(user, digest);
     });
   },
   
@@ -83,18 +79,6 @@ module.exports = {
         return;
       }
       generateDigest.checkForTaskCreation(user, digest);
-    });
-  },
-
-  checkForProperTask: function (user, digest) {
-    var message = 'Task description is incomplete. Please fix';
-    generateDigest.createDigest(user, digest, 'new_task', message, function () {
-      SendNotification.sendNotification(user.id, user.id,
-        message,
-        null,
-        'fixTask',
-        function (err) {}
-      );
     });
   },
 
