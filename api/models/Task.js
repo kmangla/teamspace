@@ -142,7 +142,7 @@ module.exports = {
 
     reminderIsDue: function(user) {
       var days = this.daysSinceDue(user);
-      return (days >= 1);
+      return (days >= 1) && (this.updateCount > 0);
     },
   },
 
