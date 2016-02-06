@@ -58,6 +58,10 @@ module.exports.policies = {
     sendNotification: ["keyBasedAuth"],
   },
 
+  badge: {
+    getBadgeCount: ["keyBasedAuth"],
+  },
+
   message: {
     create: ["keyOrSMSBasedAuth"],
     list: ["keyBasedAuth"],

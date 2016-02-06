@@ -82,5 +82,7 @@ module.exports.routes = {
   // Error Logging
   'post /error': 'LogController.logClientData',
   // Notification
-  'post /notification': 'NotificationController.sendNotification'
+  'post /notification': 'NotificationController.sendNotification',
+  // Badges
+  'get /badge': 'BadgeController.getBadgeCount'
 };
