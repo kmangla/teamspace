@@ -7,7 +7,7 @@ module.exports = {
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
       // Only send digest between 10 and 12 am
-      if ((date.hour() < 10) || (date.hour() >= 12)) {
+      if ((date.hour() < 10) || (date.hour() >= 18)) {
         return;
       }
       // If a digest was sent, do not send in the same day.
@@ -16,10 +16,10 @@ module.exports = {
         daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
       }
 
-      if (daysSince <= 2) {
+      if (daysSince <= 0) {
         return;
       }
-      generateDigest.checkForTaskCreation(user, digest);
+      generateDigest.checkForPendingUpdates(user, digest);
     });
   },
   
@@ -31,35 +31,32 @@ module.exports = {
           statusesToFetch[tasks[i].assignedTo.id] = 1;
         }
       }
-      UserGlobalStatus.find().where({user: Object.keys(statusesToFetch)}).exec(function (err, statuses) {
-        var statusMap = Util.extractMap(statuses, "user");
-        var updatedTask = [];
-        for (var i = 0; i < tasks.length; i++) {
-          var task = tasks[i];
-          if (tasks[i].assignedTo && (tasks[i].assignedTo.id == tasks[i].assignedBy)) {
-            continue;
-          }
-          if (tasks[i].updateCount && tasks[i].assignedTo) {
-            updatedTask.push(tasks[i]);
-          }
+      var updatedTask = [];
+      for (var i = 0; i < tasks.length; i++) {
+        var task = tasks[i];
+        if (tasks[i].assignedTo && (tasks[i].assignedTo.id == tasks[i].assignedBy)) {
+          continue;
         }
-        if (updatedTask.length) {
-          var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
-          var randomTask = updatedTask[randomNumber];
-          var message =
-            'Update received from ' + randomTask.assignedTo.name;
-          generateDigest.createDigest(user, digest, 'task_update', message, function () {
-            SendNotification.sendNotification(user.id, user.id, 
-              message,
-              null,
-             'digest',
-              function (err) {}
-            );
-          });
-          return;
+        if (tasks[i].updateCount && tasks[i].assignedTo) {
+          updatedTask.push(tasks[i]);
         }
-        generateDigest.checkForTaskCreation(user, digest);
-      });
+      }
+      if (updatedTask.length) {
+        var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
+        var randomTask = updatedTask[randomNumber];
+        var message =
+          updatedTask.length + ' tasks have new updates
+        generateDigest.createDigest(user, digest, 'task_update', message, function () {
+          SendNotification.sendNotification(user.id, user.id, 
+            message,
+            null,
+           'taskList',
+            function (err) {}
+          );
+        });
+        return;
+      }
+      generateDigest.checkForTaskCreation(user, digest);
     });
   },
 
@@ -78,7 +75,6 @@ module.exports = {
         });
         return;
       }
-      generateDigest.checkForTaskCreation(user, digest);
     });
   },
 
