@@ -8,7 +8,7 @@ module.exports = {
       for (var i = 0; i < tasks.length; i++) {
         badgeCount = badgeCount + tasks[i].updateCount;
       }
-      res.json(badgeCount);
+      res.json({'count': badgeCount});
     });
   }
 }
