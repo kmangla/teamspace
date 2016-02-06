@@ -32,6 +32,7 @@ module.exports = {
         }
       }
       var updatedTask = [];
+      var updateCount = 0;
       for (var i = 0; i < tasks.length; i++) {
         var task = tasks[i];
         if (tasks[i].assignedTo && (tasks[i].assignedTo.id == tasks[i].assignedBy)) {
@@ -39,13 +40,14 @@ module.exports = {
         }
         if (tasks[i].updateCount && tasks[i].assignedTo) {
           updatedTask.push(tasks[i]);
+          updateCount = updateCount + tasks[i].updateCount;
         }
       }
       if (updatedTask.length) {
         var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
         var randomTask = updatedTask[randomNumber];
         var message =
-          updatedTask.length + ' tasks have new updates';
+          updateCount + ' tasks have new updates';
         generateDigest.createDigest(user, digest, 'task_update', message, function () {
           SendNotification.sendNotification(user.id, user.id, 
             message,
