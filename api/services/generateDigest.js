@@ -79,6 +79,14 @@ module.exports = {
   },
 
   checkForTaskCreation: function (user, digest) {
+    var daysSince = 100;
+    if (digest) {
+      daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
+    }
+
+    if (daysSince <= 2) {
+      return;
+    }
     var secondDate = new Date();
     secondDate.setDate(secondDate.getDate() - 14);
     Task.find({assignedBy: user.id, createdAt: {'>': secondDate, '<': new Date()}}).exec(function (err, tasks) {
