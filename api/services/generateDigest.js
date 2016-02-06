@@ -45,7 +45,7 @@ module.exports = {
         var randomNumber = RandomNumber.randomInt(0, updatedTask.length);
         var randomTask = updatedTask[randomNumber];
         var message =
-          updatedTask.length + ' tasks have new updates
+          updatedTask.length + ' tasks have new updates';
         generateDigest.createDigest(user, digest, 'task_update', message, function () {
           SendNotification.sendNotification(user.id, user.id, 
             message,
