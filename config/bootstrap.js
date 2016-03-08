@@ -98,6 +98,12 @@ module.exports.bootstrap = function(cb) {
   setInterval(reminder.run, 1000 * 60 * 15);
   setInterval(sender.run, 1000 * 60 * 1);
   setInterval(digest.run, 1000 * 60 * 60);
+
+  var http = require("http");
+  http.get("http://teamspace.herokuapp.com");
+  setInterval(function() {
+    http.get("http://teamspace.herokuapp.com");
+  }, 300000);
   //reports.run();
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
