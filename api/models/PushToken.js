@@ -42,7 +42,8 @@ module.exports = {
           cb(err);
           return;
         }
-        if (!token) {
+        var country = PhoneNumberToCountry.getCountry(user.phone);   
+        if (!token || (token.country != country)) {
           Logging.logInfo('push_token', user.id, null, null, 'Push token not assigned');
           PushToken.assignToken(user, cb);
           return;
