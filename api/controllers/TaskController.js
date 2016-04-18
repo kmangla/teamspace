@@ -17,6 +17,7 @@ module.exports = {
       assignedBy: req.session.User.id,
       lastUpdate: new Date(0),
       updateCount: 0,
+      fav: 0,
     }
    
     Task.create(taskObj, function (err, task) {
@@ -134,6 +135,10 @@ module.exports = {
     if (req.param('forceReminder')) {
       taskUpdateObj.forceReminder = true;
       taskUpdateObj.forceReminderTime = new Date();
+    }
+
+    if (req.param('fav')) {
+      taskUpdateObj.fav = req.param('fav');
     }
     Task.update({id: req.params.id}, taskUpdateObj).exec(function(err, task) {
       if (err) return res.send(err);

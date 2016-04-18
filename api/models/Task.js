@@ -77,6 +77,11 @@ module.exports = {
   		model: 'taskstatus'
   	},
 
+    fav: {
+      type: 'integer',
+      defaultsTo: 0
+    },
+
     // Custom attribute methods
 
     shouldGoBefore: function (task) {
