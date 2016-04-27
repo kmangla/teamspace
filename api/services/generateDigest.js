@@ -58,7 +58,7 @@ module.exports = {
         });
         return;
       }
-      generateDigest.checkForTaskCreation(user, digest);
+      //generateDigest.checkForTaskCreation(user, digest);
     });
   },
 
