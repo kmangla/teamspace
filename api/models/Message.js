@@ -56,6 +56,7 @@ module.exports = {
          var updateCount = task.updateCount;
          if (!message.systemGenerated) {
            updateCount = updateCount+1;
+           Memcache.delete('badgeCount_' + task.assignedBy.id, function (err, success) {});
          }
          Task.update({id: message.forTask}, {updateCount: updateCount, forceReminder: false, lastMessage: message.id, lastUpdate: new Date()}).exec(function(err, updatedTask) {});
        }
