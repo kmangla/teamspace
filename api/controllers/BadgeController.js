@@ -13,7 +13,7 @@ module.exports = {
         for (var i = 0; i < tasks.length; i++) {
           badgeCount = badgeCount + tasks[i].updateCount;
         }
-        Memcache.set('badgeCount_' + userID, badgeCount);
+        Memcache.set('badgeCount_' + userID, badgeCount, function () {});
         res.json({'count': badgeCount});
       });
     })
