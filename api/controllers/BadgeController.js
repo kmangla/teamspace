@@ -14,7 +14,7 @@ module.exports = {
           badgeCount = badgeCount + tasks[i].updateCount;
         }
         Memcache.set('badgeCount_' + userID, badgeCount, function () {});
-        res.json({'count': badgeCount});
+        res.json([{'count': badgeCount}]);
       });
     })
   }
