@@ -86,7 +86,7 @@ module.exports = {
       query = null;
     }
     PrivacyService.task(query, params, function(err, tasks) {
-      var query = Task.find({assignedBy: req.session.User.id, status: 'closed'}).sort({createdAt: 'desc'}).skip(paging).limit(10 - tasks.length);
+      var query = Task.find({assignedTo: req.param('employeeID'), assignedBy: req.session.User.id, status: 'closed'}).sort({createdAt: 'desc'}).skip(paging).limit(10 - tasks.length);
       if (tasks.length >= 10) {
         query = null;
       }
