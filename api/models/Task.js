@@ -118,6 +118,9 @@ module.exports = {
   
     toJSON: function () {
       var obj = this.toObject();
+      if (obj.status == 'closed') {
+        obj.fav = 0;
+      }
       return obj;
     },
 
