@@ -81,6 +81,7 @@ module.exports = {
     var query = Task.find({assignedTo: req.param('employeeID'), assignedBy: req.session.User.id, status: 'open'});
     var params = Util.populateParamToExpand(req);
     params.push('currentStatus');
+    var paging = req.param('paging');
     if (paging) {
       query = null;
     }
