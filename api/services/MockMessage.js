@@ -15,6 +15,7 @@ module.exports = {
           var userID = task.assignedTo.id;
           if (task.status == 'closed') {
             taskIDstoMessage[task.id] = MockMessage.createClosed(task);
+            continue;
           }
           if (task.reminderIsDue(task.assignedTo)) {
             if (statusMap[userID].replyPending && statusMap[userID].taskSent == tasks[i].id) {
