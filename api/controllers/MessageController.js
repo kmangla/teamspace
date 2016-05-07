@@ -50,7 +50,10 @@ module.exports = {
     PrivacyService.message(query, ['sentBy'], function(err, messages) {
       if(err) return res.send(err);
       Task.findOne({id: req.param('taskID')}).populate('assignedTo').populate('currentStatus').exec(function (err, task) {
-        if (task.currentStatus.replyPending) {
+        if (task.status == 'closed') {
+          var message = MockMessage.createClosed(task);
+          messages.push(message);
+        } else if (task.currentStatus.replyPending) {
           var message = MockMessage.createReminderSentMessage(task);
           messages.push(message);
         }

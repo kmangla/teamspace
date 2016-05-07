@@ -39,7 +39,7 @@ module.exports = {
   createClosed: function (task) {
     var message = {
       id: 'm_' + task.id,
-      description: 'Task is completed',
+      description: 'Task is complete',
       forTask: task.id,
       sentBy: task.assignedBy,
       systemGenerated: true,
