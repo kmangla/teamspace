@@ -13,6 +13,9 @@ module.exports = {
         for (var i = 0; i < tasks.length; i++) {
           var task = tasks[i];
           var userID = task.assignedTo.id;
+          if (task.status == 'closed') {
+            taskIDstoMessage[task.id] = MockMessage.createClosed(task);
+          }
           if (task.reminderIsDue(task.assignedTo)) {
             if (statusMap[userID].replyPending && statusMap[userID].taskSent == tasks[i].id) {
               taskIDstoMessage[task.id] = MockMessage.createReminderCurrentlySentMessage(task);
@@ -30,6 +33,19 @@ module.exports = {
         cb(null, taskIDstoMessage);
       });
     });
+  },
+
+  createClosed: function (task) {
+    var message = {
+      id: 'm_' + task.id,
+      description: 'Task is completed',
+      forTask: task.id,
+      sentBy: task.assignedBy,
+      systemGenerated: true,
+      createdAt: task.lastUpdate,
+      updatedAt: task.lastUpdate
+    }; 
+    return message;
   },
 
   createUpdated: function (task) {

@@ -1,5 +1,9 @@
 module.exports = {
   task: function (query, toPopulate, cb) {
+    if (query == null) {
+      cb(null, []);
+      return;
+    }
     query.exec(function (err, tasks) {
       if (err) {
         cb(err, []);
