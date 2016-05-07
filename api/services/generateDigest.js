@@ -7,7 +7,7 @@ module.exports = {
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
       // Only send digest between 10 and 12 am
-      if ((date.hour() < 10) || (date.hour() >= 18)) {
+      if ((date.hour() < 10) || (date.hour() >= 12)) {
         return;
       }
       // If a digest was sent, do not send in the same day.
