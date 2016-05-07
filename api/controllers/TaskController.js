@@ -42,6 +42,9 @@ module.exports = {
     }
     PrivacyService.task(query, params, function(err, tasks) {
       var query = Task.find({assignedBy: req.session.User.id, status: 'closed'}).sort({createdAt: 'desc'}).skip(paging).limit(10 - tasks.length);
+      if (tasks.length >= 10) {
+        query = null;
+      }
       var params = Util.populateParamToExpand(req);
       params.push('currentStatus');
       PrivacyService.task(query, params, function(err, closedTasks) {
@@ -75,10 +78,21 @@ module.exports = {
 
   list: function (req, res) {
     //TODO: req.param('status') is valid, ie its in [open, close]
-    var query = Task.find({assignedTo: req.param('employeeID'), assignedBy: req.session.User.id, status: req.param('status')});
+    var query = Task.find({assignedTo: req.param('employeeID'), assignedBy: req.session.User.id, status: 'open'});
     var params = Util.populateParamToExpand(req);
     params.push('currentStatus');
+    if (paging) {
+      query = null;
+    }
     PrivacyService.task(query, params, function(err, tasks) {
+      var query = Task.find({assignedBy: req.session.User.id, status: 'closed'}).sort({createdAt: 'desc'}).skip(paging).limit(10 - tasks.length);
+      if (tasks.length >= 10) {
+        query = null;
+      }
+      var params = Util.populateParamToExpand(req);
+      params.push('currentStatus');
+      PrivacyService.task(query, params, function(err, closedTasks) {
+        tasks = tasks.concat(closedTasks); 
       var employeeIDs = {};
       for (var j = 0; j < tasks.length; j++) {
         employeeIDs[tasks[j].assignedTo.id] = 1;
@@ -102,6 +116,7 @@ module.exports = {
           return res.json(tasksWithMessages);
         });
       });
+    });
     });
   },
 
