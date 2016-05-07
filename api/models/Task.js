@@ -122,6 +122,9 @@ module.exports = {
     },
 
     taskPriority: function(user, currentStatus, globalStatus) {
+      if (this.status == 'closed') {
+        return 0;
+      }
       var days = this.daysSinceDue(user);
       var isDue = this.reminderIsDue(user);
       if (isDue && (days >= 7)) {
