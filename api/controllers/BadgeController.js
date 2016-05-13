@@ -6,7 +6,7 @@ module.exports = {
     var userID = req.session.User.id;
     Memcache.get('badgeCount_' + userID, function (count) {
       if (count != null) {
-        res.json({'count': count.toString()});
+        res.json([{'count': count.toString()}]);
       }
       Task.find({assignedBy: userID, status: 'open'}).exec(function (err, tasks) {
         var badgeCount = 0;
