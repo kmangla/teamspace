@@ -42,7 +42,7 @@ module.exports = {
     }
     PrivacyService.task(query, params, function(err, tasks) {
       var query = Task.find({assignedBy: req.session.User.id, status: 'closed'}).sort({createdAt: 'desc'}).skip(paging).limit(10 - tasks.length);
-      if (tasks.length >= 10) {
+      if (tasks.length >= 0) {
         query = null;
       }
       var params = Util.populateParamToExpand(req);
@@ -87,7 +87,7 @@ module.exports = {
     }
     PrivacyService.task(query, params, function(err, tasks) {
       var query = Task.find({assignedTo: req.param('employeeID'), assignedBy: req.session.User.id, status: 'closed'}).sort({createdAt: 'desc'}).skip(paging).limit(10 - tasks.length);
-      if (tasks.length >= 10) {
+      if (tasks.length >= 0) {
         query = null;
       }
       var params = Util.populateParamToExpand(req);
