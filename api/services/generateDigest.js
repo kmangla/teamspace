@@ -40,7 +40,7 @@ module.exports = {
                 }
               }
               if (taskIsPending && statuses[i].employerCallNeeded(employee)) {
-                var message = 'No updates received from ' + employee.name + '. Please contact directly.'; 
+                var message = 'No updates received from ' + employee.name + ' on any assigned tasks. Please contact directly.'; 
                 generateDigest.createDigest(user, digest, 'digest', message, function () {
                   SendNotification.sendNotification(user.id, user.id, 
                     message,
