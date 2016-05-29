@@ -7,7 +7,7 @@ module.exports = {
       var moment = require('moment-timezone');
       var date = moment(Util.getDateObject()).tz(user.getTZ());
       // Only send digest between 10 and 12 am
-      if ((date.hour() < 10) || (date.hour() >= 12)) {
+      if ((date.hour() < 10) || (date.hour() >= 14)) {
         return;
       }
       // If a digest was sent, do not send in the same day.
@@ -19,7 +19,43 @@ module.exports = {
       if (daysSince <= 0) {
         return;
       }
-      generateDigest.checkForPendingUpdates(user, digest);
+      generateDigest.checkForNonResponsiveEmployees(user, digest);
+    });
+  },
+
+  checkForNonResponsiveEmployees: function (user, digest) {
+    User.find({manager: user.id}).exec(function (err, employees) {
+      var userMap = Util.extractMap(employees, "id");
+      UserGlobalStatus.find().where({user: Object.keys(userMap)}).exec(function (err, statuses) {
+        Task.find().where({assignedTo: Object.keys(userMap), status: 'open'}).exec(function (err, tasks) {
+          var taskMap = Util.extractMapListBasic(tasks, "assignedTo");
+          for (var i = 0; i < statuses.length; i++) {
+            var employee = userMap[statuses[i].user];
+            var tasks = taskMap[employee.id];
+            if (tasks != null) {
+              var taskIsPending = false;
+              for (var j = 0; j < tasks.length; j++) {
+                if (tasks[j].reminderIsDue(employee)) {
+                  taskIsPending = true;
+                }
+              }
+              if (taskIsPending && statuses[i].employerCallNeeded(employee)) {
+                var message = 'No updates received from ' + employee.name + '. Please contact directly.'; 
+                generateDigest.createDigest(user, digest, 'digest', message, function () {
+                  SendNotification.sendNotification(user.id, user.id, 
+                    message,
+                    null,
+                    'noOwner',
+                    function (err) {}
+                  );
+                });
+              return;
+              }
+            }
+          }
+        });
+        generateDigest.checkForPendingUpdates(user, digest);
+      });
     });
   },
   
@@ -48,17 +84,17 @@ module.exports = {
         var randomTask = updatedTask[randomNumber];
         var message =
           updateCount + ' new updates received';
-        generateDigest.createDigest(user, digest, 'task_update', message, function () {
+        generateDigest.createDigest(user, digest, 'digest', message, function () {
           SendNotification.sendNotification(user.id, user.id, 
             message,
             null,
-           'taskList',
+           'noOwner',
             function (err) {}
           );
         });
         return;
       }
-      //generateDigest.checkForTaskCreation(user, digest);
+      generateDigest.checkForTaskCreation(user, digest);
     });
   },
 
@@ -81,25 +117,15 @@ module.exports = {
   },
 
   checkForTaskCreation: function (user, digest) {
-    var daysSince = 100;
-    if (digest) {
-      daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
-    }
-
-    if (daysSince <= 2) {
-      return;
-    }
-    var secondDate = new Date();
-    secondDate.setDate(secondDate.getDate() - 14);
-    Task.find({assignedBy: user.id, createdAt: {'>': secondDate, '<': new Date()}}).exec(function (err, tasks) {
+    Task.find({assignedBy: user.id, status: 'open'}).exec(function (err, tasks) {
       if (tasks.length == 0) {
         var message = 
-          'No new tasks in last two weeks. Create new tasks to monitor progress.';
-        generateDigest.createDigest(user, digest, 'new_task', message, function () {
+          'All tasks complete. Create new tasks to monitor progress';
+        generateDigest.createDigest(user, digest, 'digest', message, function () {
           SendNotification.sendNotification(user.id, user.id,
             message,
             null,
-            'taskCreation',
+            'noOwner',
             function (err) {}
           );
         });
