@@ -120,7 +120,7 @@ module.exports = {
     Task.find({assignedBy: user.id, status: 'open'}).exec(function (err, tasks) {
       if (tasks.length == 0) {
         var message = 
-          'All tasks complete. Create new tasks to monitor progress';
+          'All tasks complete. Create new tasks to monitor progress.';
         generateDigest.createDigest(user, digest, 'digest', message, function () {
           SendNotification.sendNotification(user.id, user.id,
             message,
