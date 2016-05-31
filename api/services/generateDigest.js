@@ -15,7 +15,6 @@ module.exports = {
       if (digest) {
         daysSince = Util.daysSince(Util.getDateObject(), digest.timeSent, user);
       }
-
       if (daysSince <= 0) {
         return;
       }
@@ -41,7 +40,7 @@ module.exports = {
               }
               if (taskIsPending && statuses[i].employerCallNeeded(employee)) {
                 var message = 'No updates received from ' + employee.name + ' on any assigned tasks. Please contact directly.'; 
-                generateDigest.createDigest(user, digest, 'digest', message, function () {
+                generateDigest.createDigest(user, digest, 'no_update', message, function () {
                   SendNotification.sendNotification(user.id, user.id, 
                     message,
                     null,
@@ -84,7 +83,7 @@ module.exports = {
         var randomTask = updatedTask[randomNumber];
         var message =
           updateCount + ' new updates received';
-        generateDigest.createDigest(user, digest, 'digest', message, function () {
+        generateDigest.createDigest(user, digest, 'task_update', message, function () {
           SendNotification.sendNotification(user.id, user.id, 
             message,
             null,
@@ -98,30 +97,12 @@ module.exports = {
     });
   },
 
-  checkForEmployeeCreation: function (user, digest) {
-    User.count({manager: user.id}).exec(function (error, found) {
-      if (found <= 2 &&  (!digest || (digest.type !== 'employeeCreation'))) {
-        var message = 
-          'Add employees to monitor tasks';
-        generateDigest.createDigest(user, digest, 'employeeCreation', message, function () {
-          SendNotification.sendNotification(user.id, user.id,
-            message,
-            null,
-            'employeeCreation',
-            function (err) {}
-          );
-        });
-        return;
-      }
-    });
-  },
-
   checkForTaskCreation: function (user, digest) {
     Task.find({assignedBy: user.id, status: 'open'}).exec(function (err, tasks) {
       if (tasks.length == 0) {
         var message = 
           'All tasks complete. Create new tasks to monitor progress.';
-        generateDigest.createDigest(user, digest, 'digest', message, function () {
+        generateDigest.createDigest(user, digest, 'new_task', message, function () {
           SendNotification.sendNotification(user.id, user.id,
             message,
             null,

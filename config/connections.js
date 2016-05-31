@@ -59,8 +59,8 @@ module.exports.connections = {
   
    someMongodbServer: {
      adapter: 'sails-mongo',
-     url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ts',
-     //url: 'mongodb://heroku_app35149535:stpk0eqhnu8jkunnr8eprtokkr@ds045531.mongolab.com:45531/heroku_app35149535',
+     //url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ts',
+     url: 'mongodb://heroku_app35149535:stpk0eqhnu8jkunnr8eprtokkr@ds045531.mongolab.com:45531/heroku_app35149535',
    },
 
   // someMongodbServer: {

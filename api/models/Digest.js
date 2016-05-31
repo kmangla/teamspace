@@ -21,7 +21,7 @@ module.exports = {
 
     type: {
   		type: 'string',
-  		enum: ['new_employee', 'new_task', 'task_update']
+  		enum: ['new_employee', 'new_task', 'task_update', 'no_update']
     }
   },
 }
