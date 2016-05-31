@@ -95,8 +95,6 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
-  digest.run();
-
   setInterval(reminder.run, 1000 * 60 * 15);
   setInterval(sender.run, 1000 * 60 * 1);
   setInterval(digest.run, 1000 * 60 * 60);
