@@ -145,7 +145,7 @@ module.exports = {
       var date = Util.getDateObject();
       if (this.forceReminder) {
         var days = Util.daysSince(date, this.forceReminderTime, user);
-        return days;
+        return days+1;
       }
       var days = Util.daysSince(date, this.lastUpdate, user) - Math.floor(this.frequency / 86400);
       return days;
