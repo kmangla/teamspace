@@ -135,6 +135,7 @@ module.exports = {
     var taskUpdateObj = {};
     taskUpdateObj.id = req.params.id;
     if (req.param('markUpdated')) {
+      Logging.logInfo('here');
       var id = req.params.id;
       taskUpdateObj.lastUpdate = new Date();
       taskUpdateObj.forceReminder = false;
@@ -142,7 +143,7 @@ module.exports = {
         if (err) {}
       });
     }
-    if (req.param('sendReminderNow')) {
+    if (req.param('sendReminderNow') == true) {
       Task.findOne({id: req.params.id}).exec(function (err, task) {
         User.update({id: task.assignedTo}, {priorityTask: req.params.id}).exec(function (err, user) {
           Logging.logInfo(user);
