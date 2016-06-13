@@ -8,7 +8,7 @@
 module.exports = {
 
 	create: function(req, res, next) {
-    Logging.logInfo(req.param('sendReminderNow');
+    Logging.logInfo(req.param('sendReminderNow'));
     var taskObj = {
     	title: req.param('title'),
       description: req.param('description'),
@@ -131,7 +131,7 @@ module.exports = {
   },
 
   updateTask: function (req, res) {
-    Logging.logInfo(req.param('sendReminderNow');
+    Logging.logInfo(req.param('sendReminderNow'));
     var taskUpdateObj = {};
     taskUpdateObj.id = req.params.id;
     if (req.param('markUpdated')) {
