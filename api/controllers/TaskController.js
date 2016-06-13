@@ -150,9 +150,11 @@ module.exports = {
       });
     }
     if (req.param('title')) {
+      Logging.logInfo('here');
       taskUpdateObj.title = req.param('title');
     }
     if (req.param('description')) {
+      Logging.logInfo('here');
       taskUpdateObj.description = req.param('description');
     }
     //TODO: check status is in enum list
