@@ -143,6 +143,7 @@ module.exports = {
     if (req.param('sendReminderNow')) {
       Task.findOne({id: req.params.id}).exec(function (err, task) {
         User.update({id: task.assignedTo}, {priorityTask: req.params.id}).exec(function (err, user) {
+          console.log(user);
         });
       });
     }
