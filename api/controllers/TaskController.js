@@ -8,6 +8,7 @@
 module.exports = {
 
 	create: function(req, res, next) {
+    Logging.logInfo(req.params);
     var taskObj = {
     	title: req.param('title'),
       description: req.param('description'),
@@ -130,6 +131,7 @@ module.exports = {
   },
 
   updateTask: function (req, res) {
+    Logging.logInfo(req.params);
     var taskUpdateObj = {};
     taskUpdateObj.id = req.params.id;
     if (req.param('markUpdated')) {
