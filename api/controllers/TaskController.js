@@ -8,7 +8,6 @@
 module.exports = {
 
 	create: function(req, res, next) {
-    Logging.logInfo(req.param('sendReminderNow'));
     var taskObj = {
     	title: req.param('title'),
       description: req.param('description'),
@@ -29,7 +28,11 @@ module.exports = {
       task.employeeName = task.assignedTo.name;
       StatsService.sendStats("task.create_count", 1);
       Logging.logInfo('task_controller', task.assignedBy, task.assignedTo, task.id, 'Task creation succeeded');
-      return res.json(task); 
+      if (req.param('sendReminderNow') == true) {
+        User.update({id: task.assignedTo}, {priorityTask: task.id}).exec(function (err, user) {
+          return res.json(task); 
+        });
+      }
     });
   },
 
@@ -131,7 +134,6 @@ module.exports = {
   },
 
   updateTask: function (req, res) {
-    Logging.logInfo(req.param('sendReminderNow'));
     var taskUpdateObj = {};
     taskUpdateObj.id = req.params.id;
     if (req.param('markUpdated')) {
@@ -143,19 +145,10 @@ module.exports = {
         if (err) {}
       });
     }
-    if (req.param('sendReminderNow') == true) {
-      Task.findOne({id: req.params.id}).exec(function (err, task) {
-        User.update({id: task.assignedTo}, {priorityTask: req.params.id}).exec(function (err, user) {
-          Logging.logInfo(user);
-        });
-      });
-    }
     if (req.param('title')) {
-      Logging.logInfo('here');
       taskUpdateObj.title = req.param('title');
     }
     if (req.param('description')) {
-      Logging.logInfo('here');
       taskUpdateObj.description = req.param('description');
     }
     //TODO: check status is in enum list
